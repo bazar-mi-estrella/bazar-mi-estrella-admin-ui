@@ -8,6 +8,14 @@
     "MENU": {
       "TEXT": "MENÚ"
     },
+    "USERS": {
+      "TEXT": "Usuarios",
+      "BADGE": "Nuevo",
+      "LIST": {
+        "LIST": "Bandeja de Usuarios",
+        "NEW": "Nuevo Usuario"
+      }
+    },
     "DASHBOARD": {
       "TEXT": "Tableros",
       "BADGE": "Nuevo",
@@ -102,7 +110,7 @@
         "HOVERED": "flotando"
       }
     },
-    "PAGES": {
+    "PAGES1": {
       "TEXT": "Paginas"
     },
     "AUTHENTICATION": {
@@ -126,6 +134,9 @@
         "OFFLINE": "Página sin conexión"
       }
     },
+
+  
+
     "PAGES": {
       "TEXT": "Paginas",
       "LIST": {

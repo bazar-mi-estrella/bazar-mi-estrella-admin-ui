@@ -4,9 +4,9 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 // Register Auth
 import { environment } from '../../../environments/environment';
 import { AuthenticationService } from '../../core/services/auth.service';
-import { UserProfileService } from '../../core/services/user.service';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(private formBuilder: UntypedFormBuilder, private router: Router,
     private authenticationService: AuthenticationService,
-    private userService: UserProfileService) { }
+    private userService: UserService) { }
 
   ngOnInit(): void {
     /**

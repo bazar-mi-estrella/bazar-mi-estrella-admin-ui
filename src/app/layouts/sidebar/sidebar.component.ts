@@ -23,7 +23,7 @@ export class SidebarComponent implements OnInit {
     translate.setDefaultLang('en');
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
     // Menu Items
     this.menuItems = MENU;
     this.router.events.subscribe((event) => {

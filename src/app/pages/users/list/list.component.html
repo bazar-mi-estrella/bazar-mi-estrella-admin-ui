@@ -1,0 +1,171 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Bandeja de Usuarios" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card" id="invoiceList">
+            <div class="card-header border-0">
+                <div class="d-flex align-items-center">
+                    <h4 class="card-title mb-0 flex-grow-1">Filtros</h4>
+                    <div class="flex-shrink-0 d-flex gap-2 flex-wrap">
+                        <a class="btn btn-danger" (click)="clear()">
+                            <i class="ri-delete-bin-2-line align-bottom me-1"></i>
+                            Limpiar filtros
+                        </a>
+                        <a class="btn btn-primary" (click)="getDataUsers()">
+                            <i class="ri-equalizer-fill align-bottom me-1"></i>
+                            Aplicar filtros
+                        </a>
+                    </div>
+                </div>
+
+                <form [formGroup]="form" class="row g-2 mb-3">
+                    <div class="col-xxl-4 col-sm-12">
+                        <label for="iconInput" class="form-label">Nombre</label>
+                        <div class="form-icon">
+                            <input type="text" class="form-control form-control-icon"
+                                placeholder="Buscar por nombres o apellidos" formControlName="name">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-4 col-sm-12">
+                        <label for="iconInput" class="form-label">Correo</label>
+                        <div class="form-icon">
+                            <input type="email" class="form-control form-control-icon"
+                                placeholder="Buscar por correo electrónico" formControlName="email">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-4 col-sm-12">
+                        <label for="iconInput" class="form-label">Estado</label>
+                        <div class="form-icon">
+                            <select cl class="form-control form-control-icon" formControlName="stateId">
+                                <option value="" selected>TODOS</option>
+                                <option value="Unpaid">Unpaid</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Cancel">Cancel</option>
+                                <option value="Refund">Refund</option>
+                            </select>
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+
+                    <!--end row-->
+                </form>
+            </div>
+            <div class="card-body bg-light-subtle border border-dashed border-start-0 border-end-0">
+
+
+
+                <div class="card-body">
+                    <div>
+                        <div class="table-responsive table-card">
+                            <table class="table align-middle table-nowrap" id="invoiceTable">
+                                <thead class="text-muted">
+                                    <tr>
+                                        <th class="sort text-uppercase" (click)="onSort('numerodoc')">Número documento
+                                        </th>
+                                        <th class="sort text-uppercase" (click)="onSort('fullname')">Nombres</th>
+                                        <th class="sort text-uppercase" (click)="onSort('email')">Email</th>
+                                        <th class="sort text-uppercase" (click)="onSort('phone')">Teléfono</th>
+                                        <th class="sort text-uppercase" (click)="onSort('date')">Fecha</th>
+                                        <th class="sort text-uppercase" (click)="onSort('stateName')">Estado</th>
+                                        <th class="text-uppercase">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list form-check-all">
+                                    @for (data of users; track $index) {
+                                    <tr id="i_{{data.id}}">
+
+                                        <td>
+                                            {{data.numerodoc}}
+                                        </td>
+                                        <td class="customer_name">
+                                            @if(data.img){
+                                            <div class="d-flex align-items-center">
+                                                <img src="assets/images/users/{{data.img}}"
+                                                    class="avatar-xs rounded-circle me-2" alt="">
+                                                {{data.fullname}}
+                                            </div>
+                                            }@else(){
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 avatar-xs me-2">
+                                                    <div
+                                                        class="avatar-title bg-success-subtle text-success rounded-circle fs-13">
+                                                        {{ data.fullname.charAt(0) }}
+                                                    </div>
+                                                </div>
+                                                {{data.fullname}}
+                                            </div>
+                                            }
+                                        </td>
+                                        <td>
+                                            {{data.email}}
+                                        </td>
+                                        <td>
+                                            {{data.phone}}
+                                        </td>
+                                     
+                                        <td>
+                                                {{data.datecreate | date:'dd/MM/yyyy'}}
+                                        </td>
+                                        <td class="status"><span class="badge text-uppercase"
+                                                [ngClass]=" { 'bg-success-subtle text-success': data.stateId === 'd011b41e-79a0-4c91-85de-4b6c19abfafb', 'bg-warning-subtle text-warning': data.stateId !== 'd011b41e-79a0-4c91-85de-4b6c19abfafb', 'bg-primary-subtle text-primary': data.stateId === 'Refund', 'bg-danger-subtle text-danger': data.stateId === 'Cancel'}">
+                                                {{data.stateName}}</span>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown" ngbDropdown>
+                                                <button class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                                    type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                                    ngbDropdownToggle>
+                                                    <i class="ri-more-fill align-middle"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                                                    <li><a class="dropdown-item" routerLink="/invoices/details"><i
+                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                            View</a></li>
+                                                    <li><a class="dropdown-item" routerLink="/invoices/create"><i
+                                                                class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                            Edit</a></li>
+                                                   
+                                                    <li>
+                                                        <a class="dropdown-item remove-item-btn" data-bs-toggle="modal">
+                                                            <i
+                                                                class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                            Delete
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row justify-content-md-end align-items-md-center mt-3">
+                            <!-- Pagination -->
+                            <div class="col col-sm-6">
+                                <div class="text-sm-right float-sm-end listjs-pagination">
+                                    <ngb-pagination [collectionSize]="users.length">
+                                    </ngb-pagination>
+                                </div>
+                            </div>
+                            <!-- End Pagination -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div >
+                <div class="spinner-border text-primary avatar-sm" role="status" *ngIf="isLoader">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <!--end col-->
+    </div>
+    <!--end row-->

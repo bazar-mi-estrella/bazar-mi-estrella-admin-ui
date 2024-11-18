@@ -23,7 +23,7 @@ export class PaginationService {
     }
 
     // Sort Data
-    onSort(column: any, dataList: any[]) {
+    onSort(column: string, dataList: any[]) {
         if (this.direction == 'asc') {
             this.direction = 'desc';
         } else {
