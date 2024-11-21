@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/cix-tech-mart-ui",
+            "outputPath": "dist/cix-tech-mart-admin",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -127,10 +127,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "cix-tech-mart-ui:build:production"
+              "buildTarget": "cix-tech-mart-admin:build:production"
             },
             "development": {
-              "buildTarget": "cix-tech-mart-ui:build:development"
+              "buildTarget": "cix-tech-mart-admin:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -138,7 +138,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "cix-tech-mart-ui:build"
+            "buildTarget": "cix-tech-mart-admin:build"
           }
         },
         "test": {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 // Range Slider
 import { Options } from 'ngx-slider-v2';
 
@@ -15,6 +15,9 @@ import { deleteProduct, fetchProductListData } from 'src/app/store/Ecommerce/eco
 import { selectDataLoading, selectProductData } from 'src/app/store/Ecommerce/ecommerce_selector';
 import { cloneDeep } from 'lodash';
 import { PaginationService } from 'src/app/core/services/pagination.service';
+import { Product } from 'src/app/core/interfaces/product.interface';
+import { ProductService } from 'src/app/core/services/product.service';
+import { ProductFilter } from 'src/app/core/interfaces/product-filter';
 
 @Component({
   selector: 'app-products',
@@ -31,17 +34,16 @@ export class ProductsComponent {
   breadCrumbItems!: Array<{}>;
 
   url = GlobalComponent.API_URL;
-  products!: any;
+  products: Product[] = [];
   user = [];
   Brand: any = [];
   Rating: any = [];
   discountRates: number[] = [];
-  contactsForm!: UntypedFormGroup;
+  form!: FormGroup;
   total: any;
   totalbrand: any;
   totalrate: any;
   totaldiscount: any;
-  allproduct: any;
 
   allproducts: any;
   activeindex = '1';
@@ -56,16 +58,7 @@ export class ProductsComponent {
   kids: any = 0;
   totalpublish: any = 0;
 
-  // Table data
-  // allproductList: any;
-  searchTerm: any;
-
-  searchproducts: any;
-  publishedproduct: any;
-  ProductFilter: any;
-  productRate: any;
-  productPrice: any;
-  searchResults: any;
+  searchTerm:string=""
 
 
   constructor(private modalService: NgbModal,
@@ -73,104 +66,62 @@ export class ProductsComponent {
     public service: PaginationService,
     private formBuilder: UntypedFormBuilder,
     private store: Store<{ data: RootReducerState }>,
-    public restApiService: restApiService) { }
+    public restApiService: restApiService,
+    private productService: ProductService) { }
 
   ngOnInit(): void {
     /**
     * BreadCrumb
     */
     this.breadCrumbItems = [
-      { label: 'Ecommerce' },
-      { label: 'Products', active: true }
+      { label: 'Productos' },
+      { label: 'Bandeja', active: true }
     ];
 
-    // Fetch Data
-    this.store.dispatch(fetchProductListData());
-    this.store.select(selectDataLoading).subscribe((data) => {
-      if (data == false) {
-        document.getElementById('elmLoader')?.classList.add('d-none');
-      }
-    });
+    this.initForm()
 
-    this.store.select(selectProductData).subscribe((data) => {
-      this.products = data;
-      this.allproduct = cloneDeep(data);
-      this.products = this.service.changePage(this.allproduct)
-    });
+    this.getData()
+  }
 
-    setTimeout(() => {
-      for (var i = 0; i < this.allproducts?.length; i++) {
-        if (this.allproducts[i].category == 'Kitchen Storage & Containers') {
-          this.grocery += 1
-        }
-        if (this.allproducts[i].category == 'Clothes') {
-          this.fashion += 1
-        }
-        if (this.allproducts[i].category == 'Watches') {
-          this.watches += 1
-        } if (this.allproducts[i].category == 'Electronics') {
-          this.electronics += 1
-        } if (this.allproducts[i].category == 'Furniture') {
-          this.furniture += 1
-        } if (this.allproducts[i].category == 'Bike Accessories') {
-          this.accessories += 1
-        }
-        if (this.allproducts[i].category == 'Tableware & Dinnerware') {
-          this.appliance += 1
-        }
-        if (this.allproducts[i].category == 'Bags, Wallets and Luggage') {
-          this.kids += 1
-        }
-        if (this.allproducts[i].status == 'published') {
-          this.totalpublish += 1
-        }
-      }
-    }, 2000);
-
+  initForm(): void {
     /**
-   * Form Validation
-   */
-    this.contactsForm = this.formBuilder.group({
-      subItem: this.formBuilder.array([]),
+    * Form Validation
+    */
+    this.form = this.formBuilder.group({
+        id:['']
     });
+  }
+
+
+  getData() {
+    this.productService.getAllByfilter(this.form.value as ProductFilter).subscribe((response) => {
+
+      this.products = this.service.changePage(response.content)
+      document.getElementById('elmLoader')?.classList.add('d-none');
+
+    })
+
   }
 
   // Search Data
   performSearch(): void {
-    this.searchResults = this.allproduct.filter((item: any) => {
-      return (item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    });
-    // this.orderes = this.searchResults.slice(0, 10);
-    this.products = this.service.changePage(this.searchResults)
+ 
   }
 
   changePage() {
-    this.products = this.service.changePage(this.allproduct)
+    this.products = this.service.changePage(this.products)
   }
 
   /**
 * change navigation
 */
-  onNavChange(changeEvent: NgbNavChangeEvent) {
-    if (changeEvent.nextId === 1) {
-      this.activeindex = '1'
-    }
-    if (changeEvent.nextId === 2) {
-      this.activeindex = '2'
-      this.products = this.allproduct.filter((product: any) => product.status == 'published');
-    }
-    if (changeEvent.nextId === 3) {
-      this.activeindex = '3'
-    }
-  }
 
   /**
   * Sort table data
   * @param param0 sort the column
   *
   */
-  onSort(column: any) {
+  onSort(column: string) {
     this.products = this.service.onSort(column, this.products)
   }
 
@@ -250,92 +201,21 @@ export class ProductsComponent {
   /**
   * Discount Filter
   */
-  changeDiscount(e: any) {
-    if (e.target.checked) {
-      this.discountRates.push(e.target.defaultValue)
 
-      this.products = this.allproduct.filter((product: any) => {
-        return product.rating > e.target.defaultValue;
-      });
-    } else {
-      for (var i = 0; i < this.discountRates.length; i++) {
-        if (this.discountRates[i] === e.target.defaultValue) {
-          this.discountRates.splice(i, 1)
-        }
-      }
-    }
-    this.totaldiscount = this.discountRates.length
-  }
 
 
   /**
    * Rating Filter
    */
-  changeRating(e: any, rate: any) {
-    if (e.target.checked) {
-      this.Rating.push(e.target.defaultValue)
-      this.products = this.allproduct.filter((product: any) => product.rating >= rate);
-    }
-    else {
-      for (var i = 0; i < this.Rating.length; i++) {
-        if (this.Rating[i] === e.target.defaultValue) {
-          this.Rating.splice(i, 1)
-        }
-      }
-      this.productRate = rate;
-    }
-    this.totalrate = this.Rating.length
-  }
-
 
 
   /**
    * Product Filtering  
    */
-  changeProducts(e: any, name: any, category: any) {
-    const iconItems = document.querySelectorAll('.filter-list');
-    iconItems.forEach((item: any) => {
-      var el = item.querySelectorAll('a')
-      el.forEach((item: any) => {
-        var element = item.querySelector('h5').innerHTML
-        if (element == category) {
-          item.classList.add("active");
-        } else {
-          item.classList.remove("active");
-        }
-      })
-    });
-    this.products = this.allproduct.filter((product: any) => product.category == category);
-  }
-
 
   /**
   * Search Product
   */
-  search(value: string) {
-    if (this.activeindex == '1') {
-      if (value) {
-        this.products = this.allproducts.filter((val: any) =>
-          val.category.toLowerCase().includes(value)
-        );
-        this.total = this.products.length;
-      } else {
-        this.products = this.searchproducts
-        this.total = this.allproducts.length;
-      }
-    } else if (this.activeindex == '2') {
-      if (value) {
-        this.publishedproduct = this.publishedproduct.filter((val: any) =>
-          val.category.toLowerCase().includes(value)
-        );
-        this.total = this.publishedproduct.length;
-      } else {
-        this.publishedproduct = this.allpublish
-        this.total = this.publishedproduct.length;
-      }
-    }
-
-  }
 
   /**
   * Range Slider Wise Data Filter
@@ -359,31 +239,7 @@ export class ProductsComponent {
   }
 
   clearall(ev: any) {
-    this.minValue = 0;
-    this.maxValue = 1000;
-    var checkboxes: any = document.getElementsByName('checkAll');
-    for (var i = 0; i < checkboxes.length; i++) {
-      checkboxes[i].checked = false
-    }
-    // this.service.searchTerm = ''
-    this.totalbrand = 0;
-    this.totaldiscount = 0;
-    this.totalrate = 0;
-    this.Brand = []
-    this.Rating = []
-    this.discountRates = []
-    const iconItems = document.querySelectorAll('.filter-list');
-    iconItems.forEach((item: any) => {
-      var el = item.querySelectorAll('a')
-      el.forEach((item: any) => {
-        item.classList.remove("active");
-      })
-    });
-    this.searchTerm = '';
-    this.ProductFilter = '';
-    this.productRate = 0;
-    this.productPrice = 0;
-    this.products = this.allproduct
+  
   }
 
   godetail(id: any) {
