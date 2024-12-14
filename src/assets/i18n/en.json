@@ -21,6 +21,14 @@
         "JOB": "Job"
       }
     },
+
+    "PRODUCTS": {
+      "TEXT": "Productos",
+      "LIST": {
+        "TRAY": "Bandeja de Productos",
+        "NEW": "Nuevo Producto"
+      }
+    },
     "APPS": {
       "TEXT": "Apps",
       "LIST": {

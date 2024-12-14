@@ -161,12 +161,11 @@
         "BLOGGRID": "Vista de cuadrícula"
       }
     },
-    "LANDING": {
-      "TEXT": "Aterrizaje",
+    "PRODUCTS": {
+      "TEXT": "Productos",
       "LIST": {
-        "ONEPAGE": "Una página",
-        "NFTLANDING": "Aterrizaje NFT",
-        "JOB": "TRABAJO"
+        "TRAY": "Bandeja de Productos",
+        "NEW": "Nuevo Producto"
       }
     },
     "COMPONENTS": {

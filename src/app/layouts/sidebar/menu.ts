@@ -886,20 +886,20 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 131,
-    label: 'MENUITEMS.LANDING.TEXT',
+    label: 'MENUITEMS.PRODUCTS.TEXT',
     icon: 'ri-rocket-line',
     isCollapsed: true,
     subItems: [
       {
         id: 85,
-        label: 'MENUITEMS.LANDING.LIST.ONEPAGE',
-        link: '/landing',
+        label: 'MENUITEMS.LANDING.LIST.TRAY',
+        link: '/ecommerce/products',
         parentId: 84
       },
       {
         id: 86,
-        label: 'MENUITEMS.LANDING.LIST.NFTLANDING',
-        link: '/landing/nft',
+        label: 'MENUITEMS.LANDING.LIST.NEW',
+        link: '/ecommerce/add-product',
         parentId: 84,
       },
       {

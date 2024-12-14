@@ -12,6 +12,8 @@ import { TypeMarcaModelService } from 'src/app/core/services/typemarcmodel.servi
 import { ProductService } from '../../../core/services/product.service';
 import { Imgbb } from 'src/app/core/interfaces/imgbb.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DialogSuccessComponent } from 'src/app/shared/dialogs/dialog-success/dialog-success.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-product',
@@ -40,11 +42,13 @@ export class AddProductComponent implements OnInit {
 
   constructor(
     private readonly modalService: NgbModal,
+
     private readonly fb: FormBuilder,
     private readonly masterService: MasterService,
     private readonly typeMarcaModelService: TypeMarcaModelService,
     private readonly imgbbService: ImgbbService,
-    private readonly productService: ProductService
+    private readonly productService: ProductService,
+    private readonly router:Router
   ) { }
 
   ngOnInit(): void {
@@ -78,6 +82,7 @@ export class AddProductComponent implements OnInit {
     })
   }
 
+
   initValues(): void {
     forkJoin({
       publishedList: this.masterService.findByPrefixAndCorrelatives(6),
@@ -86,7 +91,6 @@ export class AddProductComponent implements OnInit {
       next: (response) => {
         this.publishedList = response.publishedList;
         this.typesList = response.typesList
-        console.log('Datos obtenidos:', response);
       },
       error: (error) => {
         console.error('Error al obtener datos:', error);
@@ -127,15 +131,23 @@ export class AddProductComponent implements OnInit {
 
       // Convertir el archivo leído en Base64
       this.base64Image = this.imageURL.split(',')[1]; // Aquí se obtiene solo la parte Base64
-      console.log("base64", this.base64Image);
 
       // Asignar la imagen al elemento img en la página
       (document.getElementById('product-img') as HTMLImageElement).src = this.imageURL;
+
+      this.imgbbService.save(this.base64Image).subscribe((res) => {
+        this.imgurl.setValue(res.data.url)
+      })
     }
+
+
 
     reader.readAsDataURL(file);
   }
 
+  onCkeditorChange(event: any) {
+    this.dataEditor = event.editor.getData();
+  }
 
   save() {
 
@@ -148,8 +160,6 @@ export class AddProductComponent implements OnInit {
     forkJoin(filesRequest)
       .subscribe({
         next: (responses) => {
-          console.log('Todas las respuestas:', responses);
-
           this.saveProduct(responses)
         },
         error: (error) => {
@@ -163,22 +173,25 @@ export class AddProductComponent implements OnInit {
   saveProduct(urls: string[]) {
     this.listimages.setValue(urls.map(url => ({ urlimg: url, codecolor: 'red' })));
     this.description.setValue(this.dataEditor)
-    this.productService.save(this.form.value).subscribe({
-      next(value) {
 
-      }, error(err) {
+    this.productService.save(this.form.value).subscribe({
+      next: (value) => {
+        this.openSuccessModal("Producto guardado correctamente")
+      }, error: (err) => {
 
       },
     })
   }
 
-    /**
-   * Open Success modal
-   * @param successModal Success modal data
-   */
-    successModal(successModal: any) {
-      this.modalService.open(successModal, { centered: true });
-    }
+
+  openSuccessModal(message: string) {
+    const modalRef = this.modalService.open(DialogSuccessComponent, { centered: true });
+    modalRef.componentInstance.message = message; // Mensaje dinámico
+    modalRef.result.then(
+      () => console.log('Modal cerrado'),
+      () => this.router.navigate(['/ecommerce/products'])
+    );
+  }
 
 
   filesData: { name: string, size: number, type: string, base64?: string }[] = [];
@@ -216,6 +229,8 @@ export class AddProductComponent implements OnInit {
   }
 
   disabledSave(): boolean {
+   
+
     if (!this.base64Image) return true;
     if (!this.dataEditor) return true;
     if (this.form.invalid) return true;
@@ -242,5 +257,9 @@ export class AddProductComponent implements OnInit {
 
   get description(): AbstractControl {
     return this.form.controls['description']
+  }
+
+  get imgurl(): AbstractControl {
+    return this.form.controls['imgurl']
   }
 }

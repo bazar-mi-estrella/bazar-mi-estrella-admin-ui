@@ -15,5 +15,6 @@ export interface Product{
     imgurl:string;
     review:any;
     rating:any;
-    dateCreation:string;
+    datepublication:string;
+    datecreate:string;
 }

@@ -33,8 +33,7 @@
           <div class="row align-items-center">
             <div class="col">
               <!-- Nav tabs -->
-              <ul ngbNav #nav="ngbNav" [activeId]="1" 
-                class="nav nav-tabs-custom card-header-tabs border-bottom-0">
+              <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav nav-tabs-custom card-header-tabs border-bottom-0">
                 <li [ngbNavItem]="1">
                   <a ngbNavLink>
                     Todos <span
@@ -55,12 +54,12 @@
                                 <th scope="col" class="sort" (click)="onSort('price')">
                                   Precio</th>
                                 <th scope="col" class="sort" (click)="onSort('orders')">
-                                  Orders</th>
+                                  Tipo</th>
                                 <th scope="col" class="sort" (click)="onSort('rating')">
-                                  Rating</th>
+                                  Fecha creación</th>
                                 <th scope="col" class="sort" (click)="onSort('publishedDate')">
-                                  Published</th>
-                                <th scope="col">Action</th>
+                                  Publicación</th>
+                                <th scope="col">Acciones</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -82,7 +81,7 @@
                                         <h5 class="fs-14 mb-1">
                                           <a routerLink="/ecommerce/product-detail/" class="text-body">{{data.name}}</a>
                                         </h5>
-                                        <p class="text-muted mb-0">Category :
+                                        <p class="text-muted mb-0">Categoria :
                                           <span class="fw-medium">{{data.typeName}}</span>
                                         </p>
                                       </div>
@@ -96,13 +95,16 @@
                                     [term]="searchTerm"></ngb-highlight>
                                 </td>
                                 <td>
-                                  <ngb-highlight [result]="'0'" [term]="searchTerm"></ngb-highlight>
+                                  <span class="badge bg-light text-body fs-12 fw-medium"><i
+                                      class="mdi mdi-star text-warning me-1"></i>{{data.marcaName}}
+                                  </span>
                                 </td>
-                                <td><span class="badge bg-light text-body fs-12 fw-medium"><i
-                                      class="mdi mdi-star text-warning me-1"></i>{{data.rating}}</span></td>
+                                <td>
+                                  {{data.datecreate | date :'dd-MM-yyyy'}}
+                                </td>
                                 <td>
                                   <span>
-                                    {{data.dateCreation | date :'longDate'}}
+                                    {{data.datepublication | date :'dd-MM-yyyy'}}
                                   </span>
                                 </td>
                                 <td>
@@ -180,9 +182,9 @@
             <div class="col-auto">
               <div id="selection-element">
                 <div class="my-n1 d-flex align-items-center text-muted">
-                  Select <div id="select-content" class="text-body fw-semibold px-1">1</div> Result <button
+                  Seleccionar <div id="select-content" class="text-body fw-semibold px-1">1</div> Resultado <button
                     type="button" class="btn btn-link link-danger p-0 ms-3" data-bs-toggle="modal"
-                    data-bs-target="#removeItemModal" (click)="confirm(content,'')">Remove</button>
+                    data-bs-target="#removeItemModal" (click)="confirm(content,'')">Eliminar</button>
                 </div>
               </div>
 
