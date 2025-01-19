@@ -13,7 +13,11 @@ import { ProductService } from '../../../core/services/product.service';
 import { Imgbb } from 'src/app/core/interfaces/imgbb.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DialogSuccessComponent } from 'src/app/shared/dialogs/dialog-success/dialog-success.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ValidatorUtil } from 'src/app/core/utils/validator.util';
+import { Constants } from 'src/app/core/utils/constants';
+import { ProductDescriptionAditional } from 'src/app/core/interfaces/product_description_aditional.interface';
+import { Product } from 'src/app/core/interfaces/product.interface';
 
 @Component({
   selector: 'app-add-product',
@@ -27,7 +31,11 @@ import { Router } from '@angular/router';
 export class AddProductComponent implements OnInit {
 
   form!: FormGroup
-
+  formMetadata!: FormGroup
+  ValidatorUtil = ValidatorUtil
+  Constants = Constants
+  listMetadata: ProductDescriptionAditional[] = [];
+  monolith: string = "";
   // bread crumb items
   breadCrumbItems!: Array<{}>;
   public Editor = ClassicEditor;
@@ -35,34 +43,45 @@ export class AddProductComponent implements OnInit {
   publishedList: Master[] = []
   typesList: TypeMarcModel[] = []
   marcList: TypeMarcModel[] = []
+  product: Product = {} as Product
 
   modelList: TypeMarcModel[] = []
 
   dataEditor: string = "";
+  title: string = ''
+  mode: string = ''
+  id: string = this.activatedRoute.snapshot.params["id"];
 
   constructor(
     private readonly modalService: NgbModal,
-
+    private readonly activatedRoute: ActivatedRoute,
     private readonly fb: FormBuilder,
     private readonly masterService: MasterService,
     private readonly typeMarcaModelService: TypeMarcaModelService,
     private readonly imgbbService: ImgbbService,
     private readonly productService: ProductService,
-    private readonly router:Router
+    private readonly router: Router
   ) { }
 
   ngOnInit(): void {
-    /**
-    * BreadCrumb
-    */
-    this.breadCrumbItems = [
-      { label: 'Ecommerce' },
-      { label: 'Create Product', active: true }
-    ];
 
+    this.initDataRoute()
     this.initForm();
-
+    this.initFormMetadata()
     this.initValues()
+
+  }
+
+  initDataRoute() {
+    this.activatedRoute.data.subscribe(data => {
+      this.title = data['title'];
+      this.mode = data['mode'];
+    });
+
+    this.breadCrumbItems = [
+      { label: 'Productos' },
+      { label: this.title, active: true }
+    ];
   }
 
   initForm() {
@@ -82,6 +101,13 @@ export class AddProductComponent implements OnInit {
     })
   }
 
+  initFormMetadata() {
+    this.formMetadata = this.fb.group({
+      key: ['', [Validators.required]],
+      value: ['', [Validators.required]]
+    })
+  }
+
 
   initValues(): void {
     forkJoin({
@@ -91,6 +117,7 @@ export class AddProductComponent implements OnInit {
       next: (response) => {
         this.publishedList = response.publishedList;
         this.typesList = response.typesList
+        if (this.mode === 'edit') this.getById()
       },
       error: (error) => {
         console.error('Error al obtener datos:', error);
@@ -109,6 +136,15 @@ export class AddProductComponent implements OnInit {
     this.typeMarcaModelService
       .models(marcaID)
       .subscribe(res => this.modelList = res)
+  }
+
+  getById(): void {
+    this.productService.getProductById(this.id).subscribe((res: Product) => {
+      this.product = res
+      this.form.patchValue(res)
+      this.dataEditor = res.description
+      this.listMetadata=res.descripaditionals
+    })
   }
 
   /**
@@ -170,10 +206,19 @@ export class AddProductComponent implements OnInit {
 
   }
 
+
+  addMetadata() {
+    this.listMetadata.push({ id: '', key: this.metaName.value, value: this.metaValue.value })
+    this.formMetadata.reset()
+  }
+  deleteMetadata(index: number) {
+    this.listMetadata.splice(index, 1); // Elimina 1 elemento desde el índice especificado
+
+  }
   saveProduct(urls: string[]) {
     this.listimages.setValue(urls.map(url => ({ urlimg: url, codecolor: 'red' })));
     this.description.setValue(this.dataEditor)
-
+    this.listdescripaditionals.setValue(this.listMetadata)
     this.productService.save(this.form.value).subscribe({
       next: (value) => {
         this.openSuccessModal("Producto guardado correctamente")
@@ -188,7 +233,7 @@ export class AddProductComponent implements OnInit {
     const modalRef = this.modalService.open(DialogSuccessComponent, { centered: true });
     modalRef.componentInstance.message = message; // Mensaje dinámico
     modalRef.result.then(
-      () => console.log('Modal cerrado'),
+      () => this.router.navigate(['/ecommerce/products']),
       () => this.router.navigate(['/ecommerce/products'])
     );
   }
@@ -229,7 +274,7 @@ export class AddProductComponent implements OnInit {
   }
 
   disabledSave(): boolean {
-   
+
 
     if (!this.base64Image) return true;
     if (!this.dataEditor) return true;
@@ -251,8 +296,15 @@ export class AddProductComponent implements OnInit {
   }
 
 
+  get name(): AbstractControl {
+    return this.form.controls["name"]
+  }
   get listimages(): AbstractControl {
     return this.form.controls['listimages']
+  }
+
+  get listdescripaditionals(): AbstractControl {
+    return this.form.controls['listdescripaditionals']
   }
 
   get description(): AbstractControl {
@@ -261,5 +313,13 @@ export class AddProductComponent implements OnInit {
 
   get imgurl(): AbstractControl {
     return this.form.controls['imgurl']
+  }
+
+  get metaName(): AbstractControl {
+    return this.formMetadata.controls['key']
+  }
+
+  get metaValue(): AbstractControl {
+    return this.formMetadata.controls['value']
   }
 }

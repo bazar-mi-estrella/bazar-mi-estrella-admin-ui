@@ -48,6 +48,7 @@ import { SellersComponent } from './sellers/sellers.component';
 import { SellerDetailsComponent } from './seller-details/seller-details.component';
 
 import { DatePipe } from '@angular/common';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: 'https://httpbin.org/post',
@@ -88,6 +89,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     NgSelectModule,
     NgApexchartsModule,
     CountUpModule,
+    ColorPickerModule,
     EcommerceRoutingModule,
     SharedModule,
     NgxMaskDirective,

@@ -1,8 +1,5 @@
 <!-- Start Breadcrumbs -->
-<app-breadcrumbs
-  title="Crear Producto"
-  [breadcrumbItems]="breadCrumbItems"
-></app-breadcrumbs>
+<app-breadcrumbs [title]="title+' Producto'" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
 <!-- End Breadcrumbs -->
 <form [formGroup]="form">
   <div class="row">
@@ -10,14 +7,14 @@
       <div class="card">
         <div class="card-body">
           <div class="mb-3">
-            <label class="form-label" for="product-title-input"
-              >Nombre de Producto</label
-            >
-            <input type="text" class="form-control" formControlName="name" />
+            <label class="form-label" for="product-title-input">Nombre de Producto</label>
+            <input type="text" class="form-control" formControlName="name"
+              (input)="ValidatorUtil.onInputValidate(name,[Constants.REGEX_NOT_START_BLANK],100)"
+              (paste)="ValidatorUtil.onPasteValidate($event,name,[Constants.REGEX_NOT_START_BLANK],100)" />
           </div>
           <div>
             <label>Descripción del Producto</label>
-            <ckeditor [editor]="Editor" (change)="onCkeditorChange($event)">
+            <ckeditor [editor]="Editor" [data]="dataEditor"  (change)="onCkeditorChange($event)">
             </ckeditor>
           </div>
         </div>
@@ -30,35 +27,19 @@
         </div>
         <div class="card-body">
           <div class="mb-4">
-            <h5 class="fs-14 mb-1">Imagen del producto</h5>
             <p class="text-muted">Añadir imagen principal del producto.</p>
             <div class="text-center">
               <div class="position-relative d-inline-block">
-                <div
-                  class="position-absolute top-100 start-100 translate-middle"
-                >
-                  <label
-                    for="product-image-input"
-                    class="mb-0"
-                    placement="right"
-                    ngbTooltip="Cargar imagen"
-                  >
+                <div class="position-absolute top-100 start-100 translate-middle">
+                  <label for="product-image-input" class="mb-0" placement="right" ngbTooltip="Cargar imagen">
                     <div class="avatar-xs">
-                      <div
-                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
-                      >
+                      <div class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
                         <i class="ri-image-fill"></i>
                       </div>
                     </div>
                   </label>
-                  <input
-                    class="form-control d-none"
-                    value=""
-                    id="product-image-input"
-                    type="file"
-                    accept="image/png, image/gif, image/jpeg"
-                    (change)="fileChange($event)"
-                  />
+                  <input class="form-control d-none" value="" id="product-image-input" type="file"
+                    accept="image/png, image/gif, image/jpeg" (change)="fileChange($event)" />
                 </div>
                 <div class="avatar-lg">
                   <div class="avatar-title bg-light rounded">
@@ -69,12 +50,9 @@
             </div>
           </div>
           <div>
-            <h5 class="fs-14 mb-1">Galería de productos</h5>
-            <p class="text-muted">Añadir imagen principal del producto.</p>
-            <dropzone
-              class="dropzone_sec"
-              (addedFiles)="onFilesAdded($event)"
-            ></dropzone>
+            <p class="text-muted">Añadir imagenes secundarias del producto.</p>
+
+            <dropzone class="dropzone_sec" (addedFiles)="onFilesAdded($event)"></dropzone>
             <!-- end dropzon-preview -->
           </div>
         </div>
@@ -83,11 +61,7 @@
 
       <!-- end card -->
       <div class="text-end mb-3">
-        <button
-          (click)="save()"
-          class="btn btn-dark"
-          [disabled]="disabledSave()"
-        >
+        <button (click)="save()" class="btn btn-dark" [disabled]="disabledSave()">
           Guardar
         </button>
       </div>
@@ -101,17 +75,10 @@
         </div>
         <div class="card-body">
           <div class="mb-3">
-            <label for="choices-publish-status-input" class="form-label"
-              >Estado</label
-            >
+            <label for="choices-publish-status-input" class="form-label">Estado</label>
 
-            <select
-              class="form-select"
-              id="choices-publish-status-input"
-              data-choices
-              data-choices-search-false
-              formControlName="statusId"
-            >
+            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false
+              formControlName="statusId">
               <option *ngFor="let item of publishedList" [value]="item.id">
                 {{ item.name }}
               </option>
@@ -130,23 +97,11 @@
         <div class="card-body">
           <p class="text-muted mb-2">Seleccione la categoría del producto</p>
           <div class="mb-3">
-            <label for="choices-publish-status-input" class="form-label"
-              >Tipo</label
-            >
+            <label for="choices-publish-status-input" class="form-label">Tipo</label>
 
-            <select
-              class="form-select"
-              id="choices-publish-status-input"
-              data-choices
-              data-choices-search-false
-              formControlName="typeId"
-              (change)="onSelectionChangeType($event)"
-            >
-              <option
-                value="Published"
-                *ngFor="let item of typesList"
-                [value]="item.id"
-              >
+            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false
+              formControlName="typeId" (change)="onSelectionChangeType($event)">
+              <option value="Published" *ngFor="let item of typesList" [value]="item.id">
                 {{ item.name }}
               </option>
               >
@@ -154,18 +109,10 @@
           </div>
 
           <div class="mb-3">
-            <label for="choices-publish-status-input" class="form-label"
-              >Marca</label
-            >
+            <label for="choices-publish-status-input" class="form-label">Marca</label>
 
-            <select
-              class="form-select"
-              id="choices-publish-status-input"
-              data-choices
-              data-choices-search-false
-              formControlName="marcaId"
-              (change)="onSelectionChangeMarca($event)"
-            >
+            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false
+              formControlName="marcaId" (change)="onSelectionChangeMarca($event)">
               <option *ngFor="let item of marcList" [value]="item.id">
                 {{ item.name }}
               </option>
@@ -174,17 +121,10 @@
           </div>
 
           <div class="mb-3">
-            <label for="choices-publish-status-input" class="form-label"
-              >Modelo</label
-            >
+            <label for="choices-publish-status-input" class="form-label">Modelo</label>
 
-            <select
-              class="form-select"
-              id="choices-publish-status-input"
-              data-choices
-              data-choices-search-false
-              formControlName="modeloId"
-            >
+            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false
+              formControlName="modeloId">
               <option *ngFor="let item of modelList" [value]="item.id">
                 {{ item.name }}
               </option>
@@ -198,67 +138,32 @@
 
       <div class="card">
         <div class="card-header">
-          <ul
-            ngbNav
-            #customNav="ngbNav"
-            [activeId]="1"
-            class="nav nav-tabs-custom card-header-tabs border-bottom-0"
-            role="tablist"
-          >
+          <ul ngbNav #customNav="ngbNav" [activeId]="1" class="nav nav-tabs-custom card-header-tabs border-bottom-0"
+            role="tablist">
             <li [ngbNavItem]="1" class="nav-item">
               <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
                 Información General
               </a>
               <ng-template ngbNavContent>
-                <div
-                  class="tab-pane active"
-                  id="addproduct-general-info"
-                  role="tabpanel"
-                >
+                <div class="tab-pane active" id="addproduct-general-info" role="tabpanel">
                   <div class="row">
                     <div class="col-sm-6">
                       <div class="mb-3">
-                        <label class="form-label" for="product-price-input"
-                          >Precio</label
-                        >
+                        <label class="form-label" for="product-price-input">Precio</label>
                         <div class="input-group mb-3">
-                          <span
-                            class="input-group-text"
-                            id="product-price-addon"
-                            >S/</span
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="product-price-input"
-                            placeholder="Ingresar precio"
-                            aria-label="Price"
-                            aria-describedby="product-price-addon"
-                            formControlName="price"
-                          />
+                          <span class="input-group-text" id="product-price-addon">S/</span>
+                          <input type="number" class="form-control" placeholder="Ingresar precio"
+                            formControlName="price" />
                         </div>
                       </div>
                     </div>
                     <div class="col-sm-6">
                       <div class="mb-3">
-                        <label class="form-label" for="product-discount-input"
-                          >Stock</label
-                        >
+                        <label class="form-label" for="product-discount-input">Stock</label>
                         <div class="input-group mb-3">
-                          <span
-                            class="input-group-text"
-                            id="product-discount-addon"
-                            >unid</span
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="product-discount-input"
-                            placeholder="Enter discount"
-                            aria-label="discount"
-                            aria-describedby="product-discount-addon"
-                            formControlName="stock"
-                          />
+                          <span class="input-group-text" id="product-discount-addon">unid</span>
+                          <input type="number" class="form-control" id="product-discount-input"
+                            placeholder="Ingresa stock" formControlName="stock" />
                         </div>
                       </div>
                     </div>
@@ -274,36 +179,56 @@
               </a>
               <ng-template ngbNavContent>
                 <div class="tab-pane" id="addproduct-metadata" role="tabpanel">
-                  <div class="row">
+
+                  <form [formGroup]="formMetadata" class="row">
                     <div class="col-lg-6">
                       <div class="mb-3">
-                        <label class="form-label" for="meta-title-input"
-                          >Meta Nombre</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          placeholder="Enter meta title"
-                          id="meta-title-input"
-                        />
+                        <label class="form-label" for="meta-title-input">Meta Nombre</label>
+                        <input type="text" class="form-control" placeholder="Ingrese nombre" formControlName="key"
+                          (input)="ValidatorUtil.onInputValidate(metaName,[Constants.REGEX_NOT_START_BLANK],50)"
+                          (paste)="ValidatorUtil.onPasteValidate($event,metaName,[Constants.REGEX_NOT_START_BLANK],50)" />
                       </div>
                     </div>
                     <!-- end col -->
 
                     <div class="col-lg-6">
                       <div class="mb-3">
-                        <label class="form-label" for="meta-keywords-input"
-                          >Meta Valor</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          placeholder="Enter meta keywords"
-                          id="meta-keywords-input"
-                        />
+                        <label class="form-label" for="meta-keywords-input">Meta Valor</label>
+                        <input type="text" class="form-control" placeholder="Ingrese valor" formControlName="value"
+                          (input)="ValidatorUtil.onInputValidate(metaValue,[Constants.REGEX_NOT_START_BLANK],50)"
+                          (paste)="ValidatorUtil.onPasteValidate($event,metaValue,[Constants.REGEX_NOT_START_BLANK],50)" />
                       </div>
                     </div>
                     <!-- end col -->
+                    <button type="button" class="btn btn-primary create-btn" (click)="addMetadata()"
+                      [disabled]="formMetadata.invalid">Agregar</button>
+                  </form>
+
+                  <div class="row">
+                    <ngx-simplebar data-simplebar style="height: 155px;" class="mx-n3">
+
+                      <ul class="list list-group list-group-flush mb-0">
+                        @for(data of listMetadata;track $index){
+                        <li class="list-group-item" data-id="01">
+                          <div class="d-flex align-items-start">
+
+
+                            <div class="flex-grow-1 overflow-hidden">
+                              <h5 class="contact-name fs-13 mb-1"><a href="#" class="link text-body">{{data.key}}</a>
+                              </h5>
+                              <p class="contact-born text-muted mb-0">{{data.value}}</p>
+                            </div>
+
+                            <div class="flex-shrink-0 ms-2">
+                              <div class="fs-11 text-muted cursor-pointer" (click)="deleteMetadata($index)">Eliminar
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        }
+                        <!-- end list item -->
+                      </ul>
+                    </ngx-simplebar>
                   </div>
                   <!-- end row -->
                 </div>

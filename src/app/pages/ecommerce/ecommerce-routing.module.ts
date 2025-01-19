@@ -19,19 +19,26 @@ const routes: Routes = [
     component: ProductsComponent
   },
   {
-    path: "product-detail",
+    path: "product-detail/:id",
     component: ProductDetailComponent
   },
   {
+    path: "edit-product/:id",
+    component: AddProductComponent,
+    data: { title: 'Editar', mode: 'edit' }
+  },
+  {
     path: "add-product",
-    component: AddProductComponent
+    component: AddProductComponent,
+    data: { title: 'Nuevo', mode: 'new' }
+
   },
   {
     path: "orders",
     component: OrdersComponent
   },
   {
-    path: "order-details",
+    path: "order-details/:id",
     component: OrdersDetailsComponent
   },
   {
@@ -58,7 +65,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
-export class EcommerceRoutingModule {}
+export class EcommerceRoutingModule { }

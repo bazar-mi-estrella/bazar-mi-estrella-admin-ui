@@ -1,127 +1,80 @@
 <!-- Start Breadcrumbs -->
-<app-breadcrumbs title="Order Details" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<app-breadcrumbs title="Detalle del Pedido" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
 <!-- End Breadcrumbs -->
 
 <div class="row">
     <div class="col-xl-9">
         <div class="card">
             <div class="card-header">
+                @if(isLoader){
+                <ngx-skeleton-loader count="2" appearance="line" />
+                }@else {
                 <div class="d-flex align-items-center">
-                    <h5 class="card-title flex-grow-1 mb-0">Order #VL2667</h5>
+                    <h5 class="card-title flex-grow-1 mb-0">Pedido {{order.code}}</h5>
                     <div class="flex-shrink-0">
-                        <a routerLink="/invoices/details" class="btn btn-success btn-sm"><i class="ri-download-2-fill align-middle me-1"></i> Invoice</a>
+                        <a routerLink="/invoices/details" class="btn btn-success btn-sm"><i
+                                class="ri-download-2-fill align-middle me-1"></i> Invoice</a>
                     </div>
                 </div>
+                }
+
             </div>
             <div class="card-body">
                 <div class="table-responsive table-card">
                     <table class="table table-nowrap align-middle table-borderless mb-0">
                         <thead class="table-light text-muted">
                             <tr>
-                                <th scope="col">Product Details</th>
-                                <th scope="col">Item Price</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Rating</th>
-                                <th scope="col" class="text-end">Total Amount</th>
+                                <th scope="col">Detalle del producto</th>
+                                <th scope="col">Modelo</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col" class="text-end">Total </th>
                             </tr>
                         </thead>
                         <tbody>
+
                             <tr>
+                                @for (item of order.listdetails; track $index) {
                                 <td>
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
-                                            <img src="assets/images/products/img-8.png" alt="" class="img-fluid d-block">
+                                            <img src="assets/images/products/img-8.png" alt=""
+                                                class="img-fluid d-block">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <h5 class="fs-15"><a routerLink="/ecommerce/product-detail/" class="link-primary">Sweatshirt for Men (Pink)</a></h5>
-                                            <p class="text-muted mb-0">Color: <span class="fw-medium">Pink</span></p>
-                                            <p class="text-muted mb-0">Size: <span class="fw-medium">M</span></p>
+                                            <h5 class="fs-15"><a routerLink="/ecommerce/product-detail/"
+                                                    class="link-primary">{{item.productName}}</a></h5>
+                                            <p class="text-muted mb-0">Tipo: <span class="fw-medium">Pink</span></p>
+                                            <p class="text-muted mb-0">Marca: <span class="fw-medium">M</span></p>
                                         </div>
                                     </div>
                                 </td>
+                                <td>{{item.modelo}}</td>
                                 <td>$119.99</td>
-                                <td>02</td>
-                                <td>
-                                    <div class="text-warning fs-15">
-                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-half-fill"></i>
-                                    </div>
-                                </td>
+                                <td>{{item.quantity}}</td>
                                 <td class="fw-medium text-end">
-                                    $239.98
+                                    {{item.total | number:'1.2-2'}}
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
-                                            <img src="assets/images/products/img-7.png" alt="" class="img-fluid d-block">
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h5 class="fs-15"><a routerLink="/ecommerce/product-detail/" class="link-primary">Noise NoiseFit Endure Smart Watch</a></h5>
-                                            <p class="text-muted mb-0">Color: <span class="fw-medium">Black</span></p>
-                                            <p class="text-muted mb-0">Size: <span class="fw-medium">32.5mm</span></p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>$94.99</td>
-                                <td>01</td>
-                                <td>
-                                    <div class="text-warning fs-15">
-                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-half-fill"></i>
-                                    </div>
-                                </td>
-                                <td class="fw-medium text-end">
-                                    $94.99
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
-                                            <img src="assets/images/products/img-3.png" alt="" class="img-fluid d-block">
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h5 class="fs-15"><a routerLink="/ecommerce/product-detail/" class="link-primary">350 ml Glass Grocery Container</a></h5>
-                                            <p class="text-muted mb-0">Color: <span class="fw-medium">White</span></p>
-                                            <p class="text-muted mb-0">Size: <span class="fw-medium">350 ml</span></p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>$24.99</td>
-                                <td>01</td>
-                                <td>
-                                    <div class="text-warning fs-15">
-                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-half-fill"></i><i class="ri-star-line"></i><i class="ri-star-line"></i>
-                                    </div>
-                                </td>
-                                <td class="fw-medium text-end">
-                                    $24.99
-                                </td>
+                                }
                             </tr>
                             <tr class="border-top border-top-dashed">
                                 <td colspan="3"></td>
                                 <td colspan="2" class="fw-medium p-0">
                                     <table class="table table-borderless mb-0">
                                         <tbody>
+
+                                            <tr>
+                                                <td>IGV <span class="text-muted">(18%)</span> :</td>
+                                                <td class="text-end">{{order.igv | number:'1.2-2'}}</td>
+                                            </tr>
                                             <tr>
                                                 <td>Sub Total :</td>
-                                                <td class="text-end">$359.96</td>
+                                                <td class="text-end">{{order.subtotal | number:'1.2-2'}}</td>
                                             </tr>
-                                            <tr>
-                                                <td>Discount <span class="text-muted">(VELZON15)</span> : :</td>
-                                                <td class="text-end">-$53.99</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Shipping Charge :</td>
-                                                <td class="text-end">$65.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Estimated Tax :</td>
-                                                <td class="text-end">$44.99</td>
-                                            </tr>
+
                                             <tr class="border-top border-top-dashed">
-                                                <th scope="row">Total (USD) :</th>
-                                                <th class="text-end">$415.96</th>
+                                                <th scope="row">Total (PEN) :</th>
+                                                <th class="text-end">{{order.total | number:'1.2-2'}}</th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -139,9 +92,11 @@
                     <h5 class="card-title flex-grow-1 mb-0">Order Status</h5>
                     <div class="flex-shrink-0 mt-2 mt-sm-0">
                         <div class="d-flex gap-1">
-                            <a href="javascript:void(0);" class="btn btn-soft-info btn-sm mt-2 mt-sm-0" (click)="openModal(content)"><i class="ri-map-pin-line align-middle me-1"></i> Change
+                            <a href="javascript:void(0);" class="btn btn-soft-info btn-sm mt-2 mt-sm-0"
+                                (click)="openModal(content)"><i class="ri-map-pin-line align-middle me-1"></i> Change
                                 Address</a>
-                            <a href="javascript:void(0);" class="btn btn-soft-danger btn-sm mt-2 mt-sm-0"><i class="mdi mdi-archive-remove-outline align-middle me-1"></i> Cancel Order</a>
+                            <a href="javascript:void(0);" class="btn btn-soft-danger btn-sm mt-2 mt-sm-0"><i
+                                    class="mdi mdi-archive-remove-outline align-middle me-1"></i> Cancel Order</a>
                         </div>
                     </div>
                 </div>
@@ -151,7 +106,8 @@
                     <div ngbAccordion #accordion="ngbAccordion">
                         <div ngbAccordionItem [collapsed]="false">
                             <h2 ngbAccordionHeader>
-                                <button ngbAccordionButton class="accordion-button p-2 shadow-none" aria-expanded="true">
+                                <button ngbAccordionButton class="accordion-button p-2 shadow-none"
+                                    aria-expanded="true">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0 avatar-xs">
                                             <div class="avatar-title bg-success rounded-circle">
@@ -179,7 +135,8 @@
                         </div>
                         <div ngbAccordionItem id="static-2" [collapsed]="false">
                             <div ngbAccordionHeader>
-                                <button ngbAccordionButton class="accordion-button p-2 shadow-none" aria-expanded="false">
+                                <button ngbAccordionButton class="accordion-button p-2 shadow-none"
+                                    aria-expanded="false">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0 avatar-xs">
                                             <div class="avatar-title bg-success rounded-circle">
@@ -202,7 +159,8 @@
                         </div>
                         <div ngbAccordionItem id="static-3" [collapsed]="false">
                             <div ngbAccordionHeader>
-                                <button ngbAccordionButton class="accordion-button p-2 shadow-none" aria-expanded="false">
+                                <button ngbAccordionButton class="accordion-button p-2 shadow-none"
+                                    aria-expanded="false">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0 avatar-xs">
                                             <div class="avatar-title bg-success rounded-circle">
@@ -226,7 +184,8 @@
                         </div>
                         <div ngbAccordionItem [disabled]="true" id="static-4">
                             <div ngbAccordionHeader>
-                                <a class="accordion-button p-2 shadow-none" href="javascript:void(0);" aria-expanded="false">
+                                <a class="accordion-button p-2 shadow-none" href="javascript:void(0);"
+                                    aria-expanded="false">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0 avatar-xs">
                                             <div class="avatar-title bg-light text-success rounded-circle">
@@ -249,7 +208,8 @@
                         </div>
                         <div ngbAccordionItem [disabled]="true" id="static-5">
                             <div ngbAccordionHeader>
-                                <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="javascript:void(0);" aria-expanded="false">
+                                <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse"
+                                    href="javascript:void(0);" aria-expanded="false">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0 avatar-xs">
                                             <div class="avatar-title bg-light text-success rounded-circle">
@@ -281,7 +241,8 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex">
-                    <h5 class="card-title flex-grow-1 mb-0"><i class="mdi mdi-truck-fast-outline align-middle me-1 text-muted"></i> Logistics Details</h5>
+                    <h5 class="card-title flex-grow-1 mb-0"><i
+                            class="mdi mdi-truck-fast-outline align-middle me-1 text-muted"></i> Logistics Details</h5>
                     <div class="flex-shrink-0">
                         <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Track Order</a>
                     </div>
@@ -289,7 +250,8 @@
             </div>
             <div class="card-body">
                 <div class="text-center">
-                    <lord-icon src="https://cdn.lordicon.com/uetqnvvg.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:80px;height:80px"></lord-icon>
+                    <lord-icon src="https://cdn.lordicon.com/uetqnvvg.json" trigger="loop"
+                        colors="primary:#405189,secondary:#0ab39c" style="width:80px;height:80px"></lord-icon>
                     <h5 class="fs-16 mt-2">RQK Logistics</h5>
                     <p class="text-muted mb-0">ID: MFDS1400457854</p>
                     <p class="text-muted mb-0">Payment Mode : Debit Card</p>
@@ -301,7 +263,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex">
-                    <h5 class="card-title flex-grow-1 mb-0">Customer Details</h5>
+                    <h5 class="card-title flex-grow-1 mb-0">Detalle del cliente</h5>
                     <div class="flex-shrink-0">
                         <a href="javascript:void(0);" routerLink="/pages/profile" class="link-secondary">View
                             Profile</a>
@@ -313,23 +275,34 @@
                     <li>
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
+                                @if(isLoader){
+                                <ngx-skeleton-loader count="1" appearance="circle" />
+                                }@else {
                                 <img src="assets/images/users/avatar-3.jpg" alt="" class="avatar-sm rounded">
+                                }
                             </div>
                             <div class="flex-grow-1 ms-3">
+                                @if(isLoader){
+                                <ngx-skeleton-loader count="2" appearance="line" />
+                                }@else {
                                 <h6 class="fs-14 mb-1">Joseph Parkers</h6>
-                                <p class="text-muted mb-0">Customer</p>
+                                <p class="text-muted mb-0">Cliente</p>
+                                }
+
                             </div>
                         </div>
                     </li>
                     <li><i class="ri-mail-line me-2 align-middle text-muted fs-16"></i>josephparker&#64;gmail.com</li>
-                    <li><i class="ri-phone-line me-2 align-middle text-muted fs-16"></i>+(256) 245451 441</li>
+                    <li><i class="ri-phone-line me-2 align-middle text-muted fs-16"></i>{{order.phone}}</li>
                 </ul>
             </div>
         </div>
         <!--end card-->
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0"><i class="ri-map-pin-line align-middle me-1 text-muted"></i> Billing Address
+                <h5 class="card-title mb-0">
+                    <i class="ri-map-pin-line align-middle me-1 text-muted"></i>
+                    Dirección de Envío
                 </h5>
             </div>
             <div class="card-body">
@@ -343,27 +316,14 @@
             </div>
         </div>
         <!--end card-->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0"><i class="ri-map-pin-line align-middle me-1 text-muted"></i> Shipping
-                    Address</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled vstack gap-2 fs-13 mb-0">
-                    <li class="fw-medium fs-14">Joseph Parker</li>
-                    <li>+(256) 245451 451</li>
-                    <li>2186 Joyce Street Rocky Mount</li>
-                    <li>California - 24567</li>
-                    <li>United States</li>
-                </ul>
-            </div>
-        </div>
-        <!--end card-->
+
 
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0"><i class="ri-secure-payment-line align-bottom me-1 text-muted"></i> Payment
-                    Details</h5>
+                <h5 class="card-title mb-0">
+                    <i class="ri-secure-payment-line align-bottom me-1 text-muted"></i>
+                    Detalles de pago
+                </h5>
             </div>
             <div class="card-body">
                 <div class="d-flex align-items-center mb-2">
@@ -417,7 +377,8 @@
 <ng-template #content role="document" let-modal>
     <div class="modal-header">
         <h5 class="modal-title" id="addAddressModalLabel">Address</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
         <div>
@@ -446,7 +407,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modal.close('Close click')">Close</button>
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="modal.dismiss('Cross click')">Save</button>
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal"
+            (click)="modal.close('Close click')">Close</button>
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+            (click)="modal.dismiss('Cross click')">Save</button>
     </div>
 </ng-template>

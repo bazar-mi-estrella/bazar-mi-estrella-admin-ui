@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 // Date Format
-import { DatePipe } from '@angular/common';
 
 // Csv File Export
 import { ngxCsv } from 'ngx-csv/ngx-csv';
@@ -11,13 +10,20 @@ import { ngxCsv } from 'ngx-csv/ngx-csv';
 import Swal from 'sweetalert2';
 
 // Rest Api Service
-import { restApiService } from "../../../core/services/rest-api.service";
 import { addOrder, deleteOrder, fetchorderListData, updateOrder } from 'src/app/store/Ecommerce/ecommerce_action';
 import { RootReducerState } from 'src/app/store';
 import { Store } from '@ngrx/store';
 import { selectDataLoading, selectOrderData } from 'src/app/store/Ecommerce/ecommerce_selector';
 import { cloneDeep } from 'lodash';
 import { PaginationService } from 'src/app/core/services/pagination.service';
+import { ValidatorUtil } from 'src/app/core/utils/validator.util';
+import { Constants } from 'src/app/core/utils/constants';
+import { MasterService } from 'src/app/core/services/master.service';
+import { forkJoin } from 'rxjs';
+import { OrderService } from 'src/app/core/services/order.service';
+import { Order } from 'src/app/core/interfaces/order.interface';
+import { Master } from 'src/app/core/interfaces/master.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-orders',
@@ -29,10 +35,14 @@ import { PaginationService } from 'src/app/core/services/pagination.service';
  * Orders Component
  */
 export class OrdersComponent {
+  ValidatorUtil = ValidatorUtil
+  Constants = Constants
+  isLoader: boolean = true
+  stateList: Master[] = []
+  form!: FormGroup;
 
   // bread crumb items
   breadCrumbItems!: Array<{}>;
-  ordersForm!: UntypedFormGroup;
   submitted = false;
   masterSelected!: boolean;
   checkedList: any;
@@ -55,84 +65,89 @@ export class OrdersComponent {
   page: any = 1;
   pageSize: any = 8;
 
-  allorderes: any;
+  allorderes: Order[] = [];
   searchResults: any;
   searchTerm: any;
 
-  constructor(private modalService: NgbModal, private formBuilder: UntypedFormBuilder,
+  constructor(
+    private readonly router: Router,
+    private readonly modalService: NgbModal,
+    private readonly formBuilder: UntypedFormBuilder,
+    private readonly masterService: MasterService,
+    private readonly orderService: OrderService,
     public service: PaginationService,
-    private store: Store<{ data: RootReducerState }>) {
+  ) {
   }
 
   ngOnInit(): void {
-    /**
-    * BreadCrumb
-    */
+
     this.breadCrumbItems = [
-      { label: 'Ecommerce' },
-      { label: 'Orders', active: true }
+      { label: 'Pedidos' },
+      { label: 'Bandeja', active: true }
     ];
 
-    /**
-     * Form Validation
-     */
-    this.ordersForm = this.formBuilder.group({
+    this.initForm()
+    this.initValues()
+    this.getData()
+
+  }
+
+  initForm(): void {
+    this.form = this.formBuilder.group({
       orderId: [''],
-      // _id: "#1",
       _id: [''],
-      customer: ['', [Validators.required]],
-      product: ['', [Validators.required]],
+      clientfullname: ['', [Validators.required]],
+      code: ['', [Validators.required]],
       orderDate: ['', [Validators.required]],
       amount: ['', [Validators.required]],
       payment: ['', [Validators.required]],
       status: ['', [Validators.required]]
     });
 
-    // Fetch Data
-    this.store.dispatch(fetchorderListData());
-    this.store.select(selectDataLoading).subscribe((data) => {
-      if (data == false) {
-        document.getElementById('elmLoader')?.classList.add('d-none');
-      }
-    });
+  }
 
-    this.store.select(selectOrderData).subscribe((data) => {
-      this.orderes = data;
-      this.allorderes = cloneDeep(data);
-      this.orderes = this.service.changePage(this.allorderes)
+  initValues(): void {
+    forkJoin({
+      stateList: this.masterService.findByPrefixAndCorrelatives(Constants.PREFIX_STATE_CLIENT),
+    }).subscribe({
+      next: (response) => {
+        this.stateList = response.stateList;
+      },
+      error: (error) => {
+        console.error('Error al obtener datos:', error);
+      },
     });
+  }
+
+  getData(): void {
+    this.isLoader = true;
+    this.orderService.getAllByfilter(this.form.value).subscribe((response) => {
+
+      this.allorderes = this.service.changePage(response.content)
+      this.isLoader = false;
+    })
+
+  }
+
+  clear(): void {
+    this.initForm()
+    this.getData()
   }
 
   changePage() {
-    this.orderes = this.service.changePage(this.allorderes)
+    this.allorderes = this.service.changePage(this.allorderes)
   }
 
   onSort(column: any) {
-    this.orderes = this.service.onSort(column, this.orderes)
+    this.allorderes = this.service.onSort(column, this.allorderes)
   }
 
-  // Search Data
-  performSearch(): void {
-    this.searchResults = this.allorderes.filter((item: any) => {
-      return (
-        item.customer.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.product.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.orderDate.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.payment.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.status.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    });
-    // this.orderes = this.searchResults.slice(0, 10);
-    this.orderes = this.service.changePage(this.searchResults)
-    // if (this.searchResults.length == 0) {
-    //   (document.querySelector('.noresult') as HTMLElement).style.display = 'block'
-    // } else {
-    //   (document.querySelector('.noresult') as HTMLElement).style.display = 'none'
-    // }
+
+  getPathNavigateView(id: string): string {
+    return "/ecommerce/order-details/" + id
   }
 
   onNavChange(changeEvent: NgbNavChangeEvent) {
-    // this.orderes = this.allorderes.filter(country => country.status == status);
 
     if (changeEvent.nextId === 1) {
       this.orderes = this.allorderes
@@ -161,71 +176,6 @@ export class OrdersComponent {
   }
 
   /**
-  * Form data get
-  */
-  get form() {
-    return this.ordersForm.controls;
-  }
-
-  /**
-  * Save user
-  */
-  saveUser() {
-    if (this.ordersForm.valid) {
-      if (this.ordersForm.get('orderId')?.value) {
-        const updatedData = this.ordersForm.value;
-        this.store.dispatch(updateOrder({ updatedData }));
-        this.modalService.dismissAll();
-      }
-      else {
-        const orderId = (this.allorderes.length + 1).toString();
-        this.ordersForm.controls['orderId'].setValue(orderId);
-        const newData = this.ordersForm.value;
-        this.store.dispatch(addOrder({ newData }));
-        this.modalService.dismissAll();
-        let timerInterval: any;
-        Swal.fire({
-          title: 'Order inserted successfully!',
-          icon: 'success',
-          timer: 2000,
-          timerProgressBar: true,
-          willClose: () => {
-            clearInterval(timerInterval);
-          },
-        }).then((result) => {
-          /* Read more about handling dismissals below */
-          if (result.dismiss === Swal.DismissReason.timer) {
-          }
-        });
-      }
-    }
-    this.ordersForm.reset();
-    this.submitted = true
-  }
-
-  /**
-   * Open Edit modal
-   * @param content modal content
-   */
-  editDataGet(id: any, content: any) {
-    this.submitted = false;
-    this.modalService.open(content, { size: 'md', centered: true });
-    var modelTitle = document.querySelector('.modal-title') as HTMLAreaElement;
-    modelTitle.innerHTML = 'Edit Order';
-    var updateBtn = document.getElementById('add-btn') as HTMLAreaElement;
-    updateBtn.innerHTML = "Update";
-    this.econtent = this.allorderes[id];
-    this.ordersForm.controls['customer'].setValue(this.econtent.customer);
-    this.ordersForm.controls['product'].setValue(this.econtent.product);
-    this.ordersForm.controls['orderDate'].setValue(this.econtent.orderDate);
-    this.ordersForm.controls['amount'].setValue(this.econtent.amount);
-    this.ordersForm.controls['payment'].setValue(this.econtent.payment);
-    this.ordersForm.controls['status'].setValue(this.econtent.status);
-    this.ordersForm.controls['orderId'].setValue(this.econtent.orderId);
-
-  }
-
-  /**
   * Delete Model Open
   */
   deleteId: any;
@@ -234,105 +184,15 @@ export class OrdersComponent {
     this.modalService.open(content, { centered: true });
   }
 
-  // Delete Data
-  deleteData(id: any) {
-    if (id) {
-      this.store.dispatch(deleteOrder({ id: this.deleteId.toString() }));
-    } else {
-      this.store.dispatch(deleteOrder({ id: this.checkedValGet.toString() }));
-    }
-    this.deleteId = ''
-    this.masterSelected = false
-  }
 
-  /**
-  * Multiple Delete
-  */
-  checkedValGet: any[] = [];
-  deleteMultiple(content: any) {
-    var checkboxes: any = document.getElementsByName('checkAll');
-    var result
-    var checkedVal: any[] = [];
-    for (var i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i].checked) {
-        result = checkboxes[i].value;
-        checkedVal.push(result);
-      }
-    }
-    if (checkedVal.length > 0) {
-      this.modalService.open(content, { centered: true });
-    }
-    else {
-      Swal.fire({ text: 'Please select at least one checkbox', confirmButtonColor: '#299cdb', });
-    }
-    this.checkedValGet = checkedVal;
-  }
-
-  // The master checkbox will check/ uncheck all items
-  checkUncheckAll(ev: any) {
-    this.orderes.forEach((x: { state: any; }) => x.state = ev.target.checked)
-    var checkedVal: any[] = [];
-    var result
-    for (var i = 0; i < this.orderes.length; i++) {
-      if (this.orderes[i].state == true) {
-        result = this.orderes[i];
-        checkedVal.push(result);
-      }
-    }
-    this.checkedValGet = checkedVal
-    checkedVal.length > 0 ? (document.getElementById("remove-actions") as HTMLElement).style.display = "block" : (document.getElementById("remove-actions") as HTMLElement).style.display = "none";
+  get code(): AbstractControl {
+    return this.form.controls['code']
   }
 
 
-  // Select Checkbox value Get
-  onCheckboxChange(e: any) {
-    var checkedVal: any[] = [];
-    var result
-    for (var i = 0; i < this.orderes.length; i++) {
-      if (this.orderes[i].state == true) {
-        result = this.orderes[i];
-        checkedVal.push(result);
-      }
-    }
-    this.checkedValGet = checkedVal
-    checkedVal.length > 0 ? (document.getElementById("remove-actions") as HTMLElement).style.display = "block" : (document.getElementById("remove-actions") as HTMLElement).style.display = "none";
+  get client(): AbstractControl {
+    return this.form.controls['clientfullname']
   }
 
-  // Csv File Export
-  csvFileExport() {
-    var orders = {
-      fieldSeparator: ',',
-      quoteStrings: '"',
-      decimalseparator: '.',
-      showLabels: true,
-      showTitle: true,
-      title: 'Order Data',
-      useBom: true,
-      noDownload: false,
-      headers: ["id", "order Id", "customer", "product", "orderDate", "amount", "payment", "status"]
-    };
-    new ngxCsv(this.orderes, "orders", orders);
-  }
-  /**
-  * Sort table data
-  * @param param0 sort the column
-  *
-  */
-
-  PaymentFiletr() {
-    if (this.payment != '') {
-      this.orderes = this.allorderes.filter((order: any) => order.payment == this.payment);
-    } else {
-      this.orderes = this.service.changePage(this.allorderes)
-    }
-  }
-
-  filterStatus() {
-    if (this.status != '') {
-      this.orderes = this.allorderes.filter((order: any) => order.status == this.status);
-    } else {
-      this.orderes = this.service.changePage(this.allorderes)
-    }
-  }
 
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AbstractControl, FormGroup, UntypedFormBuilder } from '@angular/forms';
 // Range Slider
 import { Options } from 'ngx-slider-v2';
 
@@ -11,13 +11,18 @@ import { GlobalComponent } from '../../../global-component';
 import { Router } from '@angular/router';
 import { RootReducerState } from 'src/app/store';
 import { Store } from '@ngrx/store';
-import { deleteProduct, fetchProductListData } from 'src/app/store/Ecommerce/ecommerce_action';
-import { selectDataLoading, selectProductData } from 'src/app/store/Ecommerce/ecommerce_selector';
-import { cloneDeep } from 'lodash';
+import { deleteProduct } from 'src/app/store/Ecommerce/ecommerce_action';
 import { PaginationService } from 'src/app/core/services/pagination.service';
 import { Product } from 'src/app/core/interfaces/product.interface';
 import { ProductService } from 'src/app/core/services/product.service';
 import { ProductFilter } from 'src/app/core/interfaces/product-filter';
+import { ValidatorUtil } from 'src/app/core/utils/validator.util';
+import { Constants } from 'src/app/core/utils/constants';
+import { forkJoin } from 'rxjs';
+import { MasterService } from 'src/app/core/services/master.service';
+import { TypeMarcaModelService } from 'src/app/core/services/typemarcmodel.service';
+import { Master } from 'src/app/core/interfaces/master.interface';
+import { TypeMarcModel } from 'src/app/core/interfaces/typemarcmodel.interface';
 
 @Component({
   selector: 'app-products',
@@ -33,7 +38,14 @@ export class ProductsComponent {
   // bread crumb items
   breadCrumbItems!: Array<{}>;
 
+  ValidatorUtil = ValidatorUtil
+  Constants = Constants
+
   url = GlobalComponent.API_URL;
+  publishedList: Master[] = []
+  typesList: TypeMarcModel[] = []
+  marcList: TypeMarcModel[] = []
+
   products: Product[] = [];
   user = [];
   Brand: any = [];
@@ -58,16 +70,22 @@ export class ProductsComponent {
   kids: any = 0;
   totalpublish: any = 0;
 
-  searchTerm:string=""
+  searchTerm: string = ""
+  isLoader: boolean = true;
 
 
-  constructor(private modalService: NgbModal,
-    private router: Router,
+  constructor(
+    private readonly modalService: NgbModal,
+    private readonly masterService: MasterService,
+    private readonly router: Router,
     public service: PaginationService,
-    private formBuilder: UntypedFormBuilder,
-    private store: Store<{ data: RootReducerState }>,
+    private readonly formBuilder: UntypedFormBuilder,
+    private readonly store: Store<{ data: RootReducerState }>,
     public restApiService: restApiService,
-    private productService: ProductService) { }
+    private readonly productService: ProductService,
+    private readonly typeMarcaModelService: TypeMarcaModelService,
+
+  ) { }
 
   ngOnInit(): void {
     /**
@@ -79,34 +97,61 @@ export class ProductsComponent {
     ];
 
     this.initForm()
-
+    this.initValues()
     this.getData()
   }
 
   initForm(): void {
-    /**
-    * Form Validation
-    */
     this.form = this.formBuilder.group({
-        id:['']
+      id: [''],
+      name: [''],
+      type: [''],
+      marca: ['']
     });
   }
 
+  clear(): void {
+    this.initForm()
+    this.getData()
+  }
 
   getData() {
+    this.isLoader = true;
     this.productService.getAllByfilter(this.form.value as ProductFilter).subscribe((response) => {
 
       this.products = this.service.changePage(response.content)
-      document.getElementById('elmLoader')?.classList.add('d-none');
-
+      this.isLoader = false;
     })
 
   }
 
-  // Search Data
-  performSearch(): void {
- 
+  initValues(): void {
+    forkJoin({
+      publishedList: this.masterService.findByPrefixAndCorrelatives(6),
+      typesList: this.typeMarcaModelService.types()
+    }).subscribe({
+      next: (response) => {
+        this.publishedList = response.publishedList;
+        this.typesList = response.typesList
+      },
+      error: (error) => {
+        console.error('Error al obtener datos:', error);
+      },
+    });
   }
+
+  getMarcas(typeId: string): void {
+    this.typeMarcaModelService
+      .marcas(typeId)
+      .subscribe(res => this.marcList = res)
+  }
+
+
+  onSelectionChangeType(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    //this.getMarcas(value)
+  }
+
 
   changePage() {
     this.products = this.service.changePage(this.products)
@@ -167,87 +212,20 @@ export class ProductsComponent {
   // Check Box Checked Value Get
   checkedValGet: any[] = [];
   // Select Checkbox value Get
-  onCheckboxChange(e: any) {
-    var checkboxes: any = document.getElementsByName('checkAll');
-    var checkedVal: any[] = [];
-    var result
-    for (var i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i].checked) {
-        result = checkboxes[i].value;
-        checkedVal.push(result);
-      }
-    }
-    this.checkedValGet = checkedVal
-    var checkBoxCount: any = document.getElementById('select-content') as HTMLElement;
-    checkBoxCount.innerHTML = checkedVal.length;
-    checkedVal.length > 0 ? (document.getElementById("selection-element") as HTMLElement).style.display = "block" : (document.getElementById("selection-element") as HTMLElement).style.display = "none";
-  }
-  /**
-    * Brand Filter
-    */
-  changeBrand(e: any) {
-    if (e.target.checked) {
-      this.Brand.push(e.target.defaultValue)
-    } else {
-      for (var i = 0; i < this.Brand.length; i++) {
-        if (this.Brand[i] === e.target.defaultValue) {
-          this.Brand.splice(i, 1)
-        }
-      }
-    }
-    this.totalbrand = this.Brand.length
+
+
+  godetail(id: string) {
+    this.router.navigate(['/ecommerce/product-detail/' + id])
   }
 
-  /**
-  * Discount Filter
-  */
-
-
-
-  /**
-   * Rating Filter
-   */
-
-
-  /**
-   * Product Filtering  
-   */
-
-  /**
-  * Search Product
-  */
-
-  /**
-  * Range Slider Wise Data Filter
-  */
-  valueChange(value: number, boundary: boolean): void {
-    if (value > 0 && value < 1000) {
-      if (this.activeindex == '1') {
-        if (boundary) {
-          this.minValue = value;
-        } else {
-          this.maxValue = value;
-        }
-      } else if (this.activeindex == '2') {
-        if (boundary) {
-          this.minValue = value;
-        } else {
-          this.maxValue = value;
-        }
-      }
-    }
-  }
-
-  clearall(ev: any) {
-  
-  }
-
-  godetail(id: any) {
-    this.router.navigate(['/ecommerce/product-detail'])
-  }
 
   gopublishdetail(id: any) {
     this.router.navigate(['/ecommerce/product-detail/'])
   }
+
+  get name(): AbstractControl {
+    return this.form.controls["name"]
+  }
+
 
 }
