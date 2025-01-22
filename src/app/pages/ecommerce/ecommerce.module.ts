@@ -1,10 +1,10 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule,DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbPaginationModule, NgbTypeaheadModule, NgbDropdownModule, NgbNavModule, NgbAccordionModule, NgbRatingModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 // Mask
-import { NgxMaskDirective, NgxMaskPipe, provideNgxMask, IConfig } from 'ngx-mask'
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 // Range Slider
 import { NgxSliderModule } from 'ngx-slider-v2';
@@ -16,9 +16,8 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
 // Ck Editer
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 // File Uploads
-import { DropzoneModule } from 'ngx-dropzone-wrapper';
-import { DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
-import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import { DropzoneModule,DROPZONE_CONFIG,DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+
 // Flat Picker
 import { FlatpickrModule } from 'angularx-flatpickr';
 // Ng Select
@@ -47,8 +46,6 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { SellersComponent } from './sellers/sellers.component';
 import { SellerDetailsComponent } from './seller-details/seller-details.component';
 
-import { DatePipe } from '@angular/common';
-import { ColorPickerModule } from 'ngx-color-picker';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: 'https://httpbin.org/post',
@@ -89,7 +86,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     NgSelectModule,
     NgApexchartsModule,
     CountUpModule,
-    ColorPickerModule,
+
     EcommerceRoutingModule,
     SharedModule,
     NgxMaskDirective,

@@ -118,7 +118,7 @@
                           </a>
                         </td>
                         <td>
-                          <ngb-highlight [result]="data.datecreate" [term]="searchTerm"></ngb-highlight>
+                          {{data.datecreate | date:'d \'de\' MMMM \'de\' y, h:mm a'}}
                         </td>
                         <td>
                           {{data.clientfullname}}

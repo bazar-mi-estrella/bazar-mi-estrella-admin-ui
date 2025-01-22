@@ -9,6 +9,9 @@
                 <div class="row gx-lg-5">
                     <div class="col-xl-4 col-md-8 mx-auto">
                         <div class="product-img-slider sticky-side-div" dir="ltr">
+                            @if(isLoader){
+                            <ngx-skeleton-loader count="10" appearance="line" />
+                            }@else{
                             <ngx-slick-carousel [config]="config" class="carousel" #slickModal="slick-carousel"
                                 (afterChange)="slickChange($event)">
                                 @for(i of product.images;track $index){
@@ -27,6 +30,7 @@
                                 </div>
                                 }
                             </ngx-slick-carousel>
+                            }
                         </div>
 
                     </div>
@@ -36,7 +40,11 @@
                         <div class="mt-xl-0 mt-5">
                             <div class="d-flex">
                                 <div class="flex-grow-1">
+                                    @if (isLoader) {
+                                    <ngx-skeleton-loader count="1" appearance="line" />
+                                    }@else {
                                     <h4>{{product.name}}</h4>
+                                    }
                                     <div class="hstack gap-3 flex-wrap">
                                         <div><a class="text-primary d-block">{{product.typeName}}</a></div>
                                         <div class="vr"></div>
@@ -115,13 +123,21 @@
 
                             <div class="mt-4 text-muted">
                                 <h5 class="fs-14">Descripción :</h5>
+                                @if (isLoader) {
+                                <ngx-skeleton-loader count="5" appearance="line" />
+                                }@else {
                                 <div [innerHTML]="product.description"></div>
+
+                                }
                             </div>
 
                             <div class="product-content mt-5">
                                 <h5 class="fs-14 mb-3">Especificaciones :</h5>
 
                                 <div class="table-responsive">
+                                    @if (isLoader) {
+                                    <ngx-skeleton-loader count="5" appearance="line" />
+                                    }@else {
                                     <table class="table mb-0">
                                         <tbody>
 
@@ -134,6 +150,7 @@
 
                                         </tbody>
                                     </table>
+                                    }
                                 </div>
                             </div>
 

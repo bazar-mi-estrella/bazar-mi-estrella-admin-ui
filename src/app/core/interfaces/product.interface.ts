@@ -1,3 +1,6 @@
+import { ProductDescriptionAditional } from "./product_description_aditional.interface";
+import { ProductImages } from "./product_images.interface";
+
 export interface Product{
     id: string;
     marcaId: string;
@@ -17,4 +20,6 @@ export interface Product{
     rating:any;
     datepublication:string;
     datecreate:string;
+    images:ProductImages[];
+    descripaditionals:ProductDescriptionAditional[]
 }

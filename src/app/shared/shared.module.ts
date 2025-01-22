@@ -41,6 +41,8 @@ import { BlogComponent } from './landing/job/blog/blog.component';
 import { JobcategoriesComponent } from './landing/job/jobcategories/jobcategories.component';
 import { JobFooterComponent } from './landing/job/job-footer/job-footer.component';
 
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+
 
 @NgModule({
   declarations: [
@@ -79,11 +81,13 @@ import { JobFooterComponent } from './landing/job/job-footer/job-footer.componen
     NgbAccordionModule,
     NgbDropdownModule,
     SlickCarouselModule,
-    CountUpModule
+    CountUpModule,
+
   ],
-  schemas:[CUSTOM_ELEMENTS_SCHEMA],
-  exports: [BreadcrumbsComponent, ClientLogoComponent, ServicesComponent, CollectionComponent, CtaComponent, DesignedComponent, PlanComponent, FaqsComponent, ReviewComponent, CounterComponent, WorkProcessComponent, TeamComponent, ContactComponent, FooterComponent, 
-    WalletComponent, MarketPlaceComponent, FeaturesComponent, CategoriesComponent, DiscoverComponent, TopCreatorComponent,   ScrollspyDirective,
-    LandingScrollspyDirective, ProcessComponent, FindjobsComponent, CandidatesComponent, BlogComponent, JobcategoriesComponent, JobFooterComponent]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  exports: [BreadcrumbsComponent, ClientLogoComponent, ServicesComponent, CollectionComponent, CtaComponent, DesignedComponent, PlanComponent, FaqsComponent, ReviewComponent, CounterComponent, WorkProcessComponent, TeamComponent, ContactComponent, FooterComponent,
+    WalletComponent, MarketPlaceComponent, FeaturesComponent, CategoriesComponent, DiscoverComponent, TopCreatorComponent, ScrollspyDirective,
+    LandingScrollspyDirective, ProcessComponent, FindjobsComponent, CandidatesComponent, BlogComponent, JobcategoriesComponent, JobFooterComponent, NgxSkeletonLoaderModule,
+  ]
 })
 export class SharedModule { }

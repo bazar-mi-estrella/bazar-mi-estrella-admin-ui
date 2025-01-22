@@ -76,6 +76,7 @@ $value in $theme-colors {
         }
     }
     .sort {
+        cursor: pointer;
         position: relative;
         &::before {
             content: "\f035d";

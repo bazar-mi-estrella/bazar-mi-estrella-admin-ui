@@ -85,6 +85,7 @@
     "ngx-masonry": "^14.0.1",
     "ngx-nestable": "^0.9.4",
     "ngx-pipes": "^3.2.2",
+    "ngx-skeleton-loader": "^9.0.0",
     "ngx-slick-carousel": "^17.0.0",
     "ngx-slider-v2": "^17.0.0",
     "ngx-ui-switch": "^15.0.0",

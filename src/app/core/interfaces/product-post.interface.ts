@@ -1,3 +1,5 @@
+import { ProductImages } from "./product_images.interface";
+
 export interface ProductPost{
 
     id: string; // UUID - Clave primaria
@@ -16,11 +18,7 @@ export interface ProductPost{
     datecreate: string; // Fecha de creación en formato "yyyy-MM-dd HH:mm:ss"
     datepublication: string; // Fecha de publicación en formato "yyyy-MM-dd HH:mm:ss"
   
-    images: any[]; // Lista de imágenes del producto
+    images: ProductImages[]; // Lista de imágenes del producto
     descripaditionals: any[]; // Lista de descripciones adicionales
 }
 
-export interface ImgnsxProduct{
-    id?:string;
-    urlimg:string;
-}

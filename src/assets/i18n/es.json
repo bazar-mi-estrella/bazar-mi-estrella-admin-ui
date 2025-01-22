@@ -134,9 +134,6 @@
         "OFFLINE": "Página sin conexión"
       }
     },
-
-  
-
     "PAGES": {
       "TEXT": "Paginas",
       "LIST": {
@@ -166,6 +163,20 @@
       "LIST": {
         "TRAY": "Bandeja de Productos",
         "NEW": "Nuevo Producto"
+      }
+    },
+    "CUSTOMERS": {
+      "TEXT": "Clientes",
+      "LIST": {
+        "TRAY": "Bandeja de Clientes",
+        "NEW": "Nuevo Cliente"
+      }
+    },
+    "ORDERS": {
+      "TEXT": "Pedidos",
+      "LIST": {
+        "TRAY": "Bandeja de Pedidos",
+        "NEW": "Nuevo Pedido"
       }
     },
     "COMPONENTS": {

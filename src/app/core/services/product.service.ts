@@ -33,7 +33,7 @@ export class ProductService {
 
 
     let httpParams = Object.entries(params)
-      .filter(([_, value]) => value !== null && value !== undefined) // Filtra los valores definidos
+      .filter(([_, value]) => value !== null && value !== undefined && value !=="") // Filtra los valores definidos
       .reduce((acc, [key, value]) => acc.append(key, value as string), new HttpParams()); // Crea HttpParams directamente
 
     if (!params.size) httpParams = httpParams.append("size", 20)
@@ -43,7 +43,7 @@ export class ProductService {
   }
 
   // Get Products By id
-  public getProductById(id: string): Observable<Product | undefined> {
+  public getProductById(id: string): Observable<Product> {
     return this.httpClient.get<Product>(this.API.concat("/").concat(id))
   }
 

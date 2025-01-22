@@ -18,6 +18,7 @@ import { InvoicesRoutingModule } from '../invoices/invoices-routing.module';
     ListComponent
   ],
   imports: [
+
     CommonModule,
     UsersRoutingModule,
     FormsModule,

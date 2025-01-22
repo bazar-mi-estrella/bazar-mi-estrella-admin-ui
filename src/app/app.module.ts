@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID,NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 // search module
@@ -44,6 +44,7 @@ import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es'; // Importa español
 
 registerLocaleData(localeEs, 'es'); // Registra español como idioma
+
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
@@ -94,7 +95,7 @@ if (environment.defaultauth === 'firebase') {
     PagesModule,
     NgPipesModule
   ], providers: [
-    { provide: 'LOCALE_ID', useValue: 'es' }, // Configura el idioma predeterminado
+    { provide: LOCALE_ID, useValue: 'es' }, // Configura el idioma predeterminado
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { User } from 'src/app/core/interfaces/users.interface';
 import { PaginationService } from 'src/app/core/services/pagination.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { Constants } from 'src/app/core/utils/constants';
+import { ValidatorUtil } from 'src/app/core/utils/validator.util';
 import { InvoiceListModel } from 'src/app/store/Invoice/invoice_model';
 
 @Component({
@@ -11,6 +13,9 @@ import { InvoiceListModel } from 'src/app/store/Invoice/invoice_model';
   styleUrl: './list.component.scss'
 })
 export class ListComponent implements OnInit {
+
+  ValidatorUtil = ValidatorUtil
+  Constants = Constants
 
   form!: FormGroup;
   users: User[] = []
@@ -29,9 +34,9 @@ export class ListComponent implements OnInit {
   CustomersData!: InvoiceListModel[];
   masterSelected!: boolean;
   checkedList: any;
- 
 
-  isLoader:boolean=true;
+
+  isLoader: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -56,10 +61,10 @@ export class ListComponent implements OnInit {
 
 
   getDataUsers() {
-    this.isLoader=true;
+    this.isLoader = true;
     this.userService.getAll(this.form.value).subscribe(res => {
       this.users = res.content
-      this.isLoader=false;
+      this.isLoader = false;
     })
   }
 
@@ -73,16 +78,20 @@ export class ListComponent implements OnInit {
 
 
 
-clear(){
-  this.initForm()
-  this.getDataUsers()
-}
+  clear() {
+    this.initForm()
+    this.getDataUsers()
+  }
 
 
 
   // Sort Data
   onSort(column: string) {
     this.users = this.service.onSort(column, this.users)
+  }
+
+  get name(): AbstractControl {
+    return this.form.controls["name"]
   }
 
 }

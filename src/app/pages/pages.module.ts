@@ -2,14 +2,13 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  NgbToastModule, NgbProgressbarModule
+  NgbToastModule, NgbProgressbarModule, NgbDropdownModule
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { CountUpModule } from 'ngx-countup';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { SimplebarAngularModule } from 'simplebar-angular';
 
 // Swiper Slider
@@ -37,6 +36,7 @@ import { EcommerceModule } from "./ecommerce/ecommerce.module";
     ToastsContainer
   ],
   imports: [
+
     CommonModule,
     FormsModule,
     NgbToastModule,

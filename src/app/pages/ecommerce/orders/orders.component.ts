@@ -1,20 +1,13 @@
 import { Component } from '@angular/core';
 import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { AbstractControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 // Date Format
 
 // Csv File Export
-import { ngxCsv } from 'ngx-csv/ngx-csv';
 
 // Sweet Alert
-import Swal from 'sweetalert2';
 
 // Rest Api Service
-import { addOrder, deleteOrder, fetchorderListData, updateOrder } from 'src/app/store/Ecommerce/ecommerce_action';
-import { RootReducerState } from 'src/app/store';
-import { Store } from '@ngrx/store';
-import { selectDataLoading, selectOrderData } from 'src/app/store/Ecommerce/ecommerce_selector';
-import { cloneDeep } from 'lodash';
 import { PaginationService } from 'src/app/core/services/pagination.service';
 import { ValidatorUtil } from 'src/app/core/utils/validator.util';
 import { Constants } from 'src/app/core/utils/constants';

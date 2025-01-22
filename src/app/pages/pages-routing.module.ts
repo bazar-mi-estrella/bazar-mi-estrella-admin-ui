@@ -21,18 +21,7 @@ const routes: Routes = [
   {
     path: 'invoices', loadChildren: () => import('./invoices/invoices.module').then(m => m.InvoicesModule)
   },
-  {
-    path: 'ui', loadChildren: () => import('./ui/ui.module').then(m => m.UiModule)
-  },
-  {
-    path: 'forms', loadChildren: () => import('./form/form.module').then(m => m.FormModule)
-  },
-  {
-    path: 'tables', loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule)
-  },
-  {
-    path: 'icons', loadChildren: () => import('./icons/icons.module').then(m => m.IconsModule)
-  },
+  
 
   {
     path: 'marletplace', loadChildren: () => import('./nft-marketplace/nft-marketplace.module').then(m => m.NftMarketplaceModule)

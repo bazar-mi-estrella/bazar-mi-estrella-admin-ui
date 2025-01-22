@@ -21,6 +21,7 @@ export class ProductDetailComponent implements OnInit {
 
   // bread crumb items
   breadCrumbItems!: Array<{}>;
+  isLoader:boolean=true;
   // isImage;
   defaultSelect = 2;
   readonly = false;
@@ -44,9 +45,11 @@ export class ProductDetailComponent implements OnInit {
 
 
   getById(): void {
+    this.isLoader=true
     this.productService.getProductById(this.id).subscribe((res: Product) => {
       this.product = res
       this.product.images.unshift({ urlimg: res.imgurl })
+      this.isLoader=false
     })
   }
 
