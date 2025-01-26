@@ -2,18 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Page } from '../interfaces/page.interface';
-import { User } from '../interfaces/users.interface';
+import { WorkerTray } from '../interfaces/worker-tray.interface';
 import { Observable } from 'rxjs';
+import { WorkerFilter } from '../interfaces/worker-filter.interface';
 
 @Injectable({ providedIn: 'root' })
-export class UserService {
+export class WorkerService {
 
-    private API = environment.API
-    constructor(private http: HttpClient) { }
-    /***
-     * Get All User
-     */
-    getAll(values: User): Observable<Page<User>> {
+    API = environment.API.concat("/worker")
+    constructor(private readonly http: HttpClient) { }
+
+    getAll(values: WorkerFilter): Observable<Page<WorkerTray>> {
         let httparams = new HttpParams()
         httparams = httparams.append('page', 0)
         httparams = httparams.append('size', 20)
@@ -22,13 +21,13 @@ export class UserService {
         if (values.email) httparams = httparams.append('email', values.email)
 
 
-        return this.http.get<Page<User>>(this.API + `/user/bandeja`, { params: httparams });
+        return this.http.get<Page<WorkerTray>>(this.API + `/bandeja`, { params: httparams });
     }
 
     /***
      * Facked User Register
      */
-    register(user: User) {
+    register(user: WorkerTray) {
         return this.http.post(`/users/register`, user);
     }
 }

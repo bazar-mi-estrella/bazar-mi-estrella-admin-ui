@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
-import { User } from 'src/app/core/interfaces/users.interface';
+import { WorkerTray } from 'src/app/core/interfaces/worker-tray.interface';
 import { PaginationService } from 'src/app/core/services/pagination.service';
-import { UserService } from 'src/app/core/services/user.service';
+import { WorkerService } from 'src/app/core/services/user.service';
 import { Constants } from 'src/app/core/utils/constants';
 import { ValidatorUtil } from 'src/app/core/utils/validator.util';
 import { InvoiceListModel } from 'src/app/store/Invoice/invoice_model';
@@ -18,7 +18,7 @@ export class ListComponent implements OnInit {
   Constants = Constants
 
   form!: FormGroup;
-  users: User[] = []
+  users: WorkerTray[] = []
   num: number = 0;
 
   option = {
@@ -39,9 +39,9 @@ export class ListComponent implements OnInit {
   isLoader: boolean = true;
 
   constructor(
-    private fb: FormBuilder,
+    private readonly fb: FormBuilder,
     public service: PaginationService,
-    private userService: UserService
+    private readonly workerService: WorkerService
   ) {
   }
 
@@ -50,7 +50,7 @@ export class ListComponent implements OnInit {
     * BreadCrumb
     */
     this.breadCrumbItems = [
-      { label: 'Usuarios' },
+      { label: 'Trabajadores' },
       { label: 'Bandeja', active: true }
     ];
 
@@ -62,7 +62,7 @@ export class ListComponent implements OnInit {
 
   getDataUsers() {
     this.isLoader = true;
-    this.userService.getAll(this.form.value).subscribe(res => {
+    this.workerService.getAll(this.form.value).subscribe(res => {
       this.users = res.content
       this.isLoader = false;
     })

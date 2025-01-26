@@ -1,5 +1,5 @@
 <!-- Start Breadcrumbs -->
-<app-breadcrumbs title="Bandeja de Usuarios" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<app-breadcrumbs title="Bandeja de Trabajadores" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
 <!-- End Breadcrumbs -->
 
 
@@ -30,17 +30,14 @@
                     </div>
 
                     <div class="col-xxl-4 col-sm-12">
-                        <label for="iconInput" class="form-label">Estado</label>
-                        <div class="form-icon">
-                            <select cl class="form-control form-control-icon" formControlName="stateId">
+                        <label for="1" class="form-label">Correo</label>
+                            <select cl class="form-select" formControlName="stateId">
                                 <option value="" selected>TODOS</option>
                                 <option value="Unpaid">Unpaid</option>
                                 <option value="Paid">Paid</option>
                                 <option value="Cancel">Cancel</option>
                                 <option value="Refund">Refund</option>
                             </select>
-                            <i class="ri-search-line search-icon"></i>
-                        </div>
                     </div>
 
                     <!--end row-->
@@ -72,14 +69,16 @@
                             <table class="table align-middle table-nowrap" id="invoiceTable">
                                 <thead class="text-muted">
                                     <tr>
-                                        <th class="sort text-uppercase" (click)="onSort('numerodoc')">Número documento
+                                        <th class="sort" (click)="onSort('numerodoc')">Número documento
                                         </th>
-                                        <th class="sort text-uppercase" (click)="onSort('fullname')">Nombres</th>
-                                        <th class="sort text-uppercase" (click)="onSort('email')">Correo electrónico
+                                        <th class="sort" (click)="onSort('fullname')">Nombres</th>
+                                        <th class="sort" (click)="onSort('email')">Correo electrónico
                                         </th>
-                                        <th class="sort text-uppercase" (click)="onSort('phone')">Teléfono</th>
-                                        <th class="sort text-uppercase" (click)="onSort('date')">Fecha</th>
-                                        <th class="sort text-uppercase" (click)="onSort('stateName')">Estado</th>
+                                        <th class="sort" (click)="onSort('typeName')" (keypress)="onSort('typeName')">
+                                            Rol
+                                        </th>
+                                        <th class="sort" (click)="onSort('date')">Fecha</th>
+                                        <th class="sort" (click)="onSort('stateName')">Estado</th>
                                         <th class="text-uppercase">Acciones</th>
                                     </tr>
                                 </thead>
@@ -91,9 +90,9 @@
                                             {{data.numerodoc}}
                                         </td>
                                         <td class="customer_name">
-                                            @if(data.img){
+                                            @if(data.photo){
                                             <div class="d-flex align-items-center">
-                                                <img src="assets/images/users/{{data.img}}"
+                                                <img src="assets/images/users/{{data.photo}}"
                                                     class="avatar-xs rounded-circle me-2" alt="">
                                                 {{data.fullname}}
                                             </div>
@@ -113,13 +112,13 @@
                                             {{data.email}}
                                         </td>
                                         <td>
-                                            {{data.phone}}
+                                            {{data.typeName}}
                                         </td>
 
                                         <td>
                                             {{data.datecreate | date:'dd/MM/yyyy'}}
                                         </td>
-                                        <td class="status"><span class="badge text-uppercase"
+                                        <td class="status"><span class="badge"
                                                 [ngClass]=" { 'bg-success-subtle text-success': data.stateId === 'd011b41e-79a0-4c91-85de-4b6c19abfafb', 'bg-warning-subtle text-warning': data.stateId !== 'd011b41e-79a0-4c91-85de-4b6c19abfafb', 'bg-primary-subtle text-primary': data.stateId === 'Refund', 'bg-danger-subtle text-danger': data.stateId === 'Cancel'}">
                                                 {{data.stateName}}</span>
                                         </td>
@@ -169,7 +168,7 @@
 
 
             </div>
-            
+
         </div>
         <!--end col-->
     </div>

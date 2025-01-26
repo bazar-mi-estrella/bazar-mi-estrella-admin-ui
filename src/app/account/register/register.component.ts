@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { AuthenticationService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { UserService } from 'src/app/core/services/user.service';
+import { WorkerService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(private formBuilder: UntypedFormBuilder, private router: Router,
     private authenticationService: AuthenticationService,
-    private userService: UserService) { }
+    private userService: WorkerService) { }
 
   ngOnInit(): void {
     /**

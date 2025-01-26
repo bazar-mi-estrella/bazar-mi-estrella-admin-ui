@@ -5,6 +5,9 @@ export const Constants = {
     REGEX_DECIMAL_NUMBER: /^\d+(\.\d+)?$/,
     REGEX_NOT_START_BLANK: /^\S/,
 
+    PREFIX_TYPE_DOCUMENT:1,
+    
+    PREFIX_STATE_WORKER:2,
 
     //Prefijo 4 (Estados del cliente)
     PREFIX_STATE_CLIENT:4,

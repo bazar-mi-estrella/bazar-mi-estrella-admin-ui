@@ -1,0 +1,141 @@
+<!-- Contacts Create Model -->
+<div class="modal-content">
+
+    <div class="modal-header bg-info-subtle p-3">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar Trabajador</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+            (click)="close()"></button>
+    </div>
+    <form (ngSubmit)="saveUser()" [formGroup]="form" class="tablelist-form" autocomplete="off">
+        <div class="modal-body">
+            <input type="hidden" id="id-field" />
+            <div class="row g-3">
+                <div class="col-lg-12">
+                    <div class="text-center">
+                        <div class="position-relative d-inline-block">
+                            <div class="position-absolute  bottom-0 end-0">
+                                <label for="customer-image-input" class="mb-0" data-bs-toggle="tooltip"
+                                    data-bs-placement="right" title="Select Image">
+                                    <div class="avatar-xs cursor-pointer">
+                                        <div class="avatar-title bg-light border rounded-circle text-muted">
+                                            <i class="ri-image-fill"></i>
+                                        </div>
+                                    </div>
+                                </label>
+                                <input class="form-control d-none" id="customer-image-input" type="file"
+                                    accept="image/png, image/gif, image/jpeg" formControlName="photo"
+                                    [ngClass]="{ 'is-invalid': submitted && photo.errors }"
+                                    (change)="fileChange($event)">
+                                @if(submitted && photo.errors){
+                                <div class="invalid-feedback" align="left">
+                                    @if(photo.errors['required']){
+                                    <div>Foto es requerida</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                            <div class="avatar-lg p-1">
+                                <div class="avatar-title bg-light rounded-circle">
+                                    <img src="assets/images/users/user-dummy-img.jpg" id="customer-img"
+                                        class="avatar-md rounded-circle object-fit-cover" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="name-field" class="form-label">Nombre</label>
+                        <input type="text" id="customername-field" class="form-control" placeholder="Introducir nombre"
+                            required formControlName="name" [ngClass]="{ 'is-invalid': submitted && name.errors }" />
+                        @if(submitted && name.errors){
+                        <div class="invalid-feedback" align="left">
+                            @if(name.errors['required']){
+                            <div>Nombre es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div>
+                        <label for="name-field" class="form-label">Apellido Paterno</label>
+                        <input type="text" id="customername-field" class="form-control"
+                            placeholder="Introducir Apellido Paterno" required formControlName="firstname"
+                            [ngClass]="{ 'is-invalid': submitted && firstname.errors }" />
+                        @if(submitted && firstname.errors){
+                        <div class="invalid-feedback" style="text-align: left;">
+                            @if(firstname.errors['required']){
+                            <div>Apellido Paterno es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div>
+                        <label for="name-field" class="form-label">Apellido Materno</label>
+                        <input type="text" id="customername-field" class="form-control"
+                            placeholder="Introducir Apellido Materno" required formControlName="lastname"
+                            [ngClass]="{ 'is-invalid': submitted && lastname.errors }" />
+                        @if(submitted && lastname.errors){
+                        <div class="invalid-feedback" style="text-align: left;">
+                            @if(lastname.errors['required']){
+                            <div>Apellido Materno es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div>
+                        <label for="email_id-field" class="form-label">Correo</label>
+                        <input type="text" id="email_id-field" class="form-control" placeholder="Introducir correo"
+                            required formControlName="email" [ngClass]="{ 'is-invalid': submitted && email.errors }" />
+                        @if(submitted && email.errors){
+                        <div class="invalid-feedback" style="text-align: left;">
+                            @if(email.errors['required']){
+                            <div>Correo es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-12">
+                    <div>
+                        <label for="taginput-choices" class="form-label font-size-13 text-muted">Tipo Documento</label>
+                        @if(isLoader){
+                        <ngx-skeleton-loader count="1" appearance="line" />
+                        }@else {
+                        <ng-select [items]="typeDocumentList" formControlName="typedocumentId" bindLabel="name"
+                            bindValue="id" [ngClass]="{ 'is-invalid': submitted && typedocumentId.errors }"></ng-select>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-12">
+                    <div>
+                        <label for="numerodoc-field" class="form-label">Número documento</label>
+                        <input type="text" id="numerodoc-field" class="form-control" placeholder="Introducir Número"
+                            formControlName="numerodoc" [ngClass]="{ 'is-invalid': submitted && numerodoc.errors }" />
+                        @if(submitted && numerodoc.errors){
+                        <div class="invalid-feedback" style="text-align: left;">
+                            @if(numerodoc.errors['required']){
+                            <div>Número documento es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="hstack gap-2 justify-content-end">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="close()">Close</button>
+                <button type="submit" class="btn btn-success" id="add-btn">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
