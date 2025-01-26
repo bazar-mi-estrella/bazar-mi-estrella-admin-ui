@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { AbstractControl, FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-// Date Format
-
-// Csv File Export
-
-// Sweet Alert
+import { AbstractControl, FormGroup, UntypedFormBuilder } from '@angular/forms';
 
 // Rest Api Service
 import { PaginationService } from 'src/app/core/services/pagination.service';
@@ -17,6 +12,8 @@ import { OrderService } from 'src/app/core/services/order.service';
 import { Order } from 'src/app/core/interfaces/order.interface';
 import { Master } from 'src/app/core/interfaces/master.interface';
 import { Router } from '@angular/router';
+import { Spanish } from 'flatpickr/dist/l10n/es.js';
+import { DateFormatUtil } from 'src/app/core/utils/date-format.util';
 
 @Component({
   selector: 'app-orders',
@@ -48,7 +45,6 @@ export class OrdersComponent {
   Returns = 'Returns';
   Delivered = 'Delivered';
   payment: any = '';
-  date: any;
   status: any = '';
 
   // Api Data
@@ -84,24 +80,41 @@ export class OrdersComponent {
     this.getData()
 
   }
+  locale = Spanish
+
+
+  flatpickrOptions: any = {
+    mode: 'range',
+    altInput: true,
+    dateFormat: 'dd/MM/yyyy',
+    altFormat: 'dd/MM/yyyy',
+  };
+  DAY = 86400000;
+
+  startOptions: any = {
+    locale: Spanish,
+    mode: 'range',
+    dateFormat: 'd M, Y',
+    altFormat: 'd M, Y',
+    maxDate: new Date(),
+  };
 
   initForm(): void {
     this.form = this.formBuilder.group({
-      orderId: [''],
-      _id: [''],
-      clientfullname: ['', [Validators.required]],
-      code: ['', [Validators.required]],
-      orderDate: ['', [Validators.required]],
-      amount: ['', [Validators.required]],
-      payment: ['', [Validators.required]],
-      status: ['', [Validators.required]]
+      personfullname: [''],
+      code: [''],
+      orderDate: ['25-01-2023'],
+      stateId: [''],
+      statepagoId: [''],
+      datestart: [''],
+      dateend: [''],
     });
 
   }
 
   initValues(): void {
     forkJoin({
-      stateList: this.masterService.findByPrefixAndCorrelatives(Constants.PREFIX_STATE_CLIENT),
+      stateList: this.masterService.findByPrefixAndCorrelatives(Constants.PREFIX_STATE_PAYMENT),
     }).subscribe({
       next: (response) => {
         this.stateList = response.stateList;
@@ -131,33 +144,48 @@ export class OrdersComponent {
     this.allorderes = this.service.changePage(this.allorderes)
   }
 
-  onSort(column: any) {
-    this.allorderes = this.service.onSort(column, this.allorderes)
+
+  onDateChange(event: any) {
+    let selectDates: any[] = event.selectedDates
+    let dateStart: string = DateFormatUtil.start(selectDates[0])
+    let dateEnd: string = DateFormatUtil.end(selectDates[1])
+
+    this.datestart.setValue(dateStart)
+    this.dateEnd.setValue(dateEnd)
+
+  }
+
+  onNavChange(changeEvent: NgbNavChangeEvent): void {
+    const actions: { [key: number]: () => void } = {
+      1: () => {
+        this.stateId.reset();
+        this.getData();
+      },
+      2: () => {
+        this.stateId.setValue(Constants.STATE_ORDER_DELIVERED);
+        this.getData();
+      },
+      3: () => {
+        this.stateId.setValue(Constants.STATE_ORDER_IN_TRANSIT);
+        this.getData();
+      },
+      4: () => {
+        this.orderes = this.allorderes.filter((order: any) => order.status === 'Returns');
+      },
+      5: () => {
+        this.orderes = this.allorderes.filter((order: any) => order.status === 'Cancelled');
+      },
+      6: () => {
+        this.stateId.setValue(Constants.STATE_ORDER_PREPARING_SHIPMENT);
+        this.getData();
+      },
+    };
+
+    // Ejecuta la acción correspondiente si existe
+    actions[changeEvent.nextId]?.();
   }
 
 
-  getPathNavigateView(id: string): string {
-    return "/ecommerce/order-details/" + id
-  }
-
-  onNavChange(changeEvent: NgbNavChangeEvent) {
-
-    if (changeEvent.nextId === 1) {
-      this.orderes = this.allorderes
-    }
-    if (changeEvent.nextId === 2) {
-      this.orderes = this.allorderes.filter((order: any) => order.status == 'Delivered');
-    }
-    if (changeEvent.nextId === 3) {
-      this.orderes = this.allorderes.filter((order: any) => order.status == 'Pickups');
-    }
-    if (changeEvent.nextId === 4) {
-      this.orderes = this.allorderes.filter((order: any) => order.status == 'Returns');
-    }
-    if (changeEvent.nextId === 5) {
-      this.orderes = this.allorderes.filter((order: any) => order.status == 'Cancelled');
-    }
-  }
 
   /**
    * Open modal
@@ -182,10 +210,21 @@ export class OrdersComponent {
     return this.form.controls['code']
   }
 
-
-  get client(): AbstractControl {
-    return this.form.controls['clientfullname']
+  get stateId(): AbstractControl {
+    return this.form.controls['stateId']
   }
 
+  get client(): AbstractControl {
+    return this.form.controls['personfullname']
+  }
+
+  get datestart(): AbstractControl {
+    return this.form.controls['datestart']
+  }
+
+  get dateEnd(): AbstractControl {
+    return this.form.controls['dateend']
+  }
 
 }
+

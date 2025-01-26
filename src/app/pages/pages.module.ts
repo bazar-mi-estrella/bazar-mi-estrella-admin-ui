@@ -28,6 +28,7 @@ import { DashboardComponent } from './dashboards/dashboard/dashboard.component';
 import { ToastsContainer } from './dashboards/dashboard/toasts-container.component';
 import { DashboardsModule } from "./dashboards/dashboards.module";
 import { EcommerceModule } from "./ecommerce/ecommerce.module";
+import { PipesModule } from '../core/pipes/pipes.module';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { EcommerceModule } from "./ecommerce/ecommerce.module";
     ToastsContainer
   ],
   imports: [
+    PipesModule,
 
     CommonModule,
     FormsModule,

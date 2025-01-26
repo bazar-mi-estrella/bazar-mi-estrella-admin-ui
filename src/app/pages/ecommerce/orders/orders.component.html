@@ -8,7 +8,7 @@
       <div class="card-header border-0">
 
         <form [formGroup]="form" class="row g-2 mb-3">
-          <div class="col-xxl-4 col-sm-12">
+          <div class="col-xxl-3 col-sm-12">
             <label for="iconInput" class="form-label">Código</label>
             <div class="form-icon">
               <input type="text" class="form-control form-control-icon" placeholder="Buscar por código"
@@ -19,22 +19,23 @@
             </div>
           </div>
 
-          <div class="col-xxl-4 col-sm-12">
-            <label for="iconInput" class="form-label">Nombre cliente</label>
+          <div class="col-xxl-3 col-sm-12">
+            <label for="iconInput" class="form-label">Nombre Persona</label>
             <div class="form-icon">
               <input type="text" class="form-control form-control-icon" placeholder="Buscar por nombre del cliente"
-                formControlName="clientfullname"
+                formControlName="personfullname"
                 (input)="ValidatorUtil.onInputValidate(client,[Constants.REGEX_NOT_START_BLANK],100)"
                 (paste)="ValidatorUtil.onPasteValidate($event,client,[Constants.REGEX_NOT_START_BLANK],100)">
               <i class="ri-search-line search-icon"></i>
             </div>
           </div>
 
-          <div class="col-xxl-4 col-sm-12">
-            <label for="iconInput" class="form-label">Estado</label>
+          <div class="col-xxl-3 col-sm-12">
+            <label for="iconInput" class="form-label">Estado del Pago</label>
             <div class="form-icon">
 
-              <select cl class="form-control form-control-icon" formControlName="status">
+              <select cl class="form-control form-control-icon" formControlName="statepagoId">
+                <option value="">TODOS</option>
                 @for (item of stateList; track $index){
                 <option [value]="item.id">{{item.name}}</option>
                 }
@@ -43,13 +44,20 @@
               <i class="ri-search-line search-icon"></i>
             </div>
           </div>
-
+          <div class="col-xxl-3 col-sm-12">
+            <label for="iconInput" class="form-label">Fecha de creación</label>
+            <div class="form-icon">
+              <input class="form-control bg-light border-light" type="text" mwlFlatpickr [altInput]="true"
+                [convertModelValue]="true" [options]="startOptions" formControlName="orderDate"
+                (flatpickrValueUpdate)="onDateChange($event)">
+            </div>
+          </div>
           <!--end row-->
         </form>
 
-        <div class="d-flex align-items-center">
-          <h4 class="card-title mb-0 flex-grow-1">Lista</h4>
-          <div class="flex-shrink-0 d-flex gap-2 flex-wrap">
+        <div class="d-flex flex-wrap align-items-center justify-content-between">
+          <h4 class="card-title mb-2 mb-md-0 flex-grow-1">Lista</h4>
+          <div class="d-flex flex-wrap gap-2 justify-content-md-end justify-content-center">
             <a class="btn btn-danger" (click)="clear()">
               <i class="ri-delete-bin-2-line align-bottom me-1"></i>
               Limpiar filtros
@@ -60,6 +68,7 @@
             </a>
           </div>
         </div>
+
       </div>
 
       <div class="card-body pt-0">
@@ -76,632 +85,71 @@
                 @if(isLoader){
                 <ngx-skeleton-loader count="5" appearance="line" />
                 }@else{
-                <div class="table-responsive table-card mb-0">
-                  <table class="table">
-                    <thead>
-                      <tr class="bg-light text-muted text-uppercase">
-
-                        <th class="sort" (click)="onSort('code')">
-                          Código
-                        </th>
-                        <th class="sort" (click)="onSort('datecreate')">
-                          Fecha de registro
-                        </th>
-                        <th class="sort" (click)="onSort('clientfullname')">
-                          Cliente
-                        </th>
-                        <th class="sort" (click)="onSort('igv')">
-                          IGV
-                        </th>
-                        <th class="sort" (click)="onSort('subtotal')">
-                          Subtotal
-                        </th>
-                        <th class="sort" (click)="onSort('total')">
-                          Total
-                        </th>
-
-                        <th class="sort" (click)="onSort('payment')">
-                          Payment Method
-                        </th>
-                        <th class="sort" (click)="onSort('status')">
-                          Delivery Status
-                        </th>
-                        <th class="sort">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (data of allorderes; track $index) {
-                      <tr id="o_{{ data.id }}">
-                        <td>
-                          <a [routerLink]="getPathNavigateView(data.id)">
-                            <ngb-highlight [result]="data.code" [term]="searchTerm"></ngb-highlight>
-                          </a>
-                        </td>
-                        <td>
-                          {{data.datecreate | date:'d \'de\' MMMM \'de\' y, h:mm a'}}
-                        </td>
-                        <td>
-                          {{data.clientfullname}}
-                        </td>
-                        <td>
-                          {{data.subtotal | number:'1.2-2'}}
-                        </td>
-                        <td>
-                          {{data.igv | number:'1.2-2'}}
-                        </td>
-                        <td>
-                          {{data.total | number:'1.2-2'}}
-                        </td>
-                        <td>
-                          {{data.datedelivery}}
-                        </td>
-                        <td class="status">
-                          <span class="badge text-uppercase" [ngClass]="{
-                              'bg-warning-subtle text-warning':
-                                data.stateId === Constants.STATE_ORDER_PREPARING_SHIPMENT,
-                              'bg-danger-subtle text-danger':
-                                data.stateId === 'Cancelled',
-                              'bg-secondary-subtle text-secondary':
-                                data.stateId === 'Inprogress',
-                              'bg-info-subtle text-info':
-                                data.stateId === 'Pickups',
-                              'bg-primary-subtle text-primary':
-                                data.stateId === 'Returns',
-                              'bg-success-subtle text-success':
-                                data.stateId === 'Delivered'
-                            }">{{ data.stateName }}</span>
-                        </td>
-                        <td>
-                          <ul class="list-inline hstack gap-2 mb-0">
-                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="Ver" placement="top">
-                              <a [routerLink]="getPathNavigateView(data.id)" class="text-primary d-inline-block">
-                                <i class="ri-eye-fill fs-16"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="Edit" placement="top">
-                              <a href="javascript:void(0);" data-bs-toggle="modal"
-                                class="text-primary d-inline-block edit-item-btn" data-bs-toggle="modal" id="create-btn"
-                                data-bs-target="#showModal">
-                                <i class="ri-pencil-fill fs-16"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item me-0" ngbTooltip="Remove" placement="top"
-                              data-bs-toggle="tooltip" data-bs-trigger="hover">
-                              <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal"
-                                data-bs-target="#deleteOrder">
-                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                              </a>
-                            </li>
-                          </ul>
-                        </td>
-                      </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-                <div class="row justify-content-md-between align-items-md-center gy-2">
-                  <div class="col col-sm-6">
-                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
-                      Mostrando
-                      {{ service.startIndex }} a {{ service.endIndex }} de
-                      {{ allorderes.length }}
-                      entradas
-                    </div>
-                  </div>
-                  <!-- Pagination -->
-                  <div class="col col-sm-6">
-                    <div class="text-sm-right float-end listjs-pagination">
-                      <ngb-pagination [collectionSize]="allorderes.length" [(page)]="service.page"
-                        [pageSize]="service.pageSize" (pageChange)="changePage()">
-                      </ngb-pagination>
-                    </div>
-                  </div>
-                  <!-- End Pagination -->
-                </div>
+                <app-orders-table [allorderes]="allorderes"></app-orders-table>
+                }
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="6">
+              <a ngbNavLink>
+                <i class=" ri-home-gear-line me-1 align-bottom"></i>
+                Preparando Envio
+              </a>
+              <ng-template ngbNavContent>
+                @if(isLoader){
+                <ngx-skeleton-loader count="5" appearance="line" />
+                }@else{
+                <app-orders-table [allorderes]="allorderes"></app-orders-table>
                 }
               </ng-template>
             </li>
             <li [ngbNavItem]="2">
               <a ngbNavLink>
                 <i class="ri-checkbox-circle-line me-1 align-bottom"></i>
-                Delivered
+                Entregado
               </a>
               <ng-template ngbNavContent>
-                <div class="table-responsive table-card mb-0">
-                  <table class="table">
-                    <thead>
-                      <tr class="bg-light text-muted text-uppercase">
-
-                        <th class="sort" (click)="onSort('orderId')">
-                          Order ID
-                        </th>
-                        <th class="sort" (click)="onSort('customer')">
-                          Customer
-                        </th>
-                        <th class="sort" (click)="onSort('product')">
-                          Product
-                        </th>
-                        <th class="sort" (click)="onSort('orderDate')">
-                          Order Date
-                        </th>
-                        <th class="sort" (click)="onSort('amount')">Amount</th>
-                        <th class="sort" (click)="onSort('payment')">
-                          Payment Method
-                        </th>
-                        <th class="sort" (click)="onSort('status')">
-                          Delivery Status
-                        </th>
-                        <th class="sort">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (data of orderes; track $index) {
-                      <tr>
-
-                        <td>
-                          <a routerLink="/ecommerce/order-details">
-                            <ngb-highlight [result]="data.orderId" [term]="searchTerm"></ngb-highlight>
-                          </a>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.customer" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.product" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.orderDate | date : 'longDate'" [term]="searchTerm">
-                          </ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.amount" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.payment" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td class="status">
-                          <span class="badge text-uppercase" [ngClass]="{
-                              'bg-warning-subtle text-warning':
-                                data.status === 'Pending',
-                              'bg-danger-subtle text-danger':
-                                data.status === 'Cancelled',
-                              'bg-secondary-subtle text-secondary':
-                                data.status === 'Inprogress',
-                              'bg-info-subtle text-info':
-                                data.status === 'Pickups',
-                              'bg-primary-subtle text-primary':
-                                data.status === 'Returns',
-                              'bg-success-subtle text-success':
-                                data.status === 'Delivered'
-                            }">{{ data.status }}</span>
-                        </td>
-                        <td>
-                          <ul class="list-inline hstack gap-2 mb-0">
-                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="View" placement="top">
-                              <a routerLink="/ecommerce/order-details" class="text-primary d-inline-block">
-                                <i class="ri-eye-fill fs-16"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="Edit" placement="top">
-                              <a href="javascript:void(0);" data-bs-toggle="modal"
-                                class="text-primary d-inline-block edit-item-btn" data-bs-toggle="modal" id="create-btn"
-                                data-bs-target="#showModal">
-                                <i class="ri-pencil-fill fs-16"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item" ngbTooltip="Remove" placement="top" data-bs-toggle="tooltip"
-                              data-bs-trigger="hover">
-                              <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal"
-                                data-bs-target="#deleteOrder">
-                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                              </a>
-                            </li>
-                          </ul>
-                        </td>
-                      </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-                <div class="row justify-content-md-between align-items-md-center gy-2">
-                  <div class="col col-sm-6">
-                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
-                      Showing
-                      {{ service.startIndex }} to {{ service.endIndex }} of
-                      {{ allorderes.length }}
-                      entries
-                    </div>
-                  </div>
-                  <!-- Pagination -->
-                  <div class="col col-sm-6">
-                    <div class="text-sm-right float-end listjs-pagination">
-                      <ngb-pagination [collectionSize]="allorderes.length" [(page)]="service.page"
-                        [pageSize]="service.pageSize" (pageChange)="changePage()">
-                      </ngb-pagination>
-                    </div>
-                  </div>
-                  <!-- End Pagination -->
-                </div>
+                @if(isLoader){
+                <ngx-skeleton-loader count="5" appearance="line" />
+                }@else{
+                <app-orders-table [allorderes]="allorderes"></app-orders-table>
+                }
               </ng-template>
             </li>
             <li [ngbNavItem]="3">
               <a ngbNavLink>
-                <i class="ri-truck-line me-1 align-bottom"></i> Pickups
-                <span class="badge bg-danger align-middle ms-1">{{
-                  orderes?.length
-                  }}</span>
+                <i class="ri-truck-line me-1 align-bottom"></i> En Tránsito
               </a>
               <ng-template ngbNavContent>
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead>
-                      <tr class="bg-light text-muted text-uppercase">
-
-                        <th class="sort" (click)="onSort('orderId')">
-                          Order ID
-                        </th>
-                        <th class="sort" (click)="onSort('customer')">
-                          Customer
-                        </th>
-                        <th class="sort" (click)="onSort('product')">
-                          Product
-                        </th>
-                        <th class="sort" (click)="onSort('orderDate')">
-                          Order Date
-                        </th>
-                        <th class="sort" (click)="onSort('amount')">Amount</th>
-                        <th class="sort" (click)="onSort('payment')">
-                          Payment Method
-                        </th>
-                        <th class="sort" (click)="onSort('status')">
-                          Delivery Status
-                        </th>
-                        <th class="sort">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (data of orderes; track $index) {
-                      <tr>
-
-                        <td>
-                          <a routerLink="/ecommerce/order-details">
-                            <ngb-highlight [result]="data.orderId" [term]="searchTerm"></ngb-highlight>
-                          </a>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.customer" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.product" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.orderDate | date : 'longDate'" [term]="searchTerm">
-                          </ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.amount" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.payment" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td class="status">
-                          <span class="badge text-uppercase" [ngClass]="{
-                              'bg-warning-subtle text-warning':
-                                data.status === 'Pending',
-                              'bg-danger-subtle text-danger':
-                                data.status === 'Cancelled',
-                              'bg-secondary-subtle text-secondary':
-                                data.status === 'Inprogress',
-                              'bg-info-subtle text-info':
-                                data.status === 'Pickups',
-                              'bg-primary-subtle text-primary':
-                                data.status === 'Returns',
-                              'bg-success-subtle text-success':
-                                data.status === 'Delivered'
-                            }">{{ data.status }}</span>
-                        </td>
-                        <td>
-                          <ul class="list-inline hstack gap-2 mb-0">
-                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="View" placement="top">
-                              <a routerLink="/ecommerce/order-details" class="text-primary d-inline-block">
-                                <i class="ri-eye-fill fs-16"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="Edit" placement="top">
-                              <a href="javascript:void(0);" data-bs-toggle="modal"
-                                class="text-primary d-inline-block edit-item-btn" data-bs-toggle="modal" id="create-btn"
-                                data-bs-target="#showModal">
-                                <i class="ri-pencil-fill fs-16"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item" ngbTooltip="Remove" placement="top" data-bs-toggle="tooltip"
-                              data-bs-trigger="hover">
-                              <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal"
-                                data-bs-target="#deleteOrder">
-                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                              </a>
-                            </li>
-                          </ul>
-                        </td>
-                      </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-                <div class="row justify-content-md-between align-items-md-center gy-2">
-                  <div class="col col-sm-6">
-                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
-                      Showing
-                      {{ service.startIndex }} to {{ service.endIndex }} of
-                      {{ allorderes.length }}
-                      entries
-                    </div>
-                  </div>
-                  <!-- Pagination -->
-                  <div class="col col-sm-6">
-                    <div class="text-sm-right float-end listjs-pagination">
-                      <ngb-pagination [collectionSize]="allorderes.length" [(page)]="service.page"
-                        [pageSize]="service.pageSize" (pageChange)="changePage()">
-                      </ngb-pagination>
-                    </div>
-                  </div>
-                  <!-- End Pagination -->
-                </div>
+                @if(isLoader){
+                <ngx-skeleton-loader count="5" appearance="line" />
+                }@else{
+                <app-orders-table [allorderes]="allorderes"></app-orders-table>
+                }
               </ng-template>
             </li>
             <li [ngbNavItem]="4">
               <a ngbNavLink>
                 <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>
-                Returns
+                Devuelto
               </a>
               <ng-template ngbNavContent>
-                <div class="table-responsive table-card mb-0">
-                  <table class="table">
-                    <thead>
-                      <tr class="bg-light text-muted text-uppercase">
-
-                        <th class="sort" (click)="onSort('orderId')">
-                          Order ID
-                        </th>
-                        <th class="sort" (click)="onSort('customer')">
-                          Customer
-                        </th>
-                        <th class="sort" (click)="onSort('product')">
-                          Product
-                        </th>
-                        <th class="sort" (click)="onSort('orderDate')">
-                          Order Date
-                        </th>
-                        <th class="sort" (click)="onSort('amount')">Amount</th>
-                        <th class="sort" (click)="onSort('payment')">
-                          Payment Method
-                        </th>
-                        <th class="sort" (click)="onSort('status')">
-                          Delivery Status
-                        </th>
-                        <th class="sort">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (data of orderes; track $index) {
-                      <tr>
-
-                        <td>
-                          <a routerLink="/ecommerce/order-details">
-                            <ngb-highlight [result]="data.orderId" [term]="searchTerm"></ngb-highlight>
-                          </a>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.customer" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.product" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.orderDate | date : 'longDate'" [term]="searchTerm">
-                          </ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.amount" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.payment" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td class="status">
-                          <span class="badge text-uppercase" [ngClass]="{
-                              'bg-warning-subtle text-warning':
-                                data.status === 'Pending',
-                              'bg-danger-subtle text-danger':
-                                data.status === 'Cancelled',
-                              'bg-secondary-subtle text-secondary':
-                                data.status === 'Inprogress',
-                              'bg-info-subtle text-info':
-                                data.status === 'Pickups',
-                              'bg-primary-subtle text-primary':
-                                data.status === 'Returns',
-                              'bg-success-subtle text-success':
-                                data.status === 'Delivered'
-                            }">{{ data.status }}</span>
-                        </td>
-                        <td>
-                          <ul class="list-inline hstack gap-2 mb-0">
-                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="View" placement="top">
-                              <a routerLink="/ecommerce/order-details" class="text-primary d-inline-block">
-                                <i class="ri-eye-fill fs-16"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="Edit" placement="top">
-                              <a href="javascript:void(0);" data-bs-toggle="modal"
-                                class="text-primary d-inline-block edit-item-btn" data-bs-toggle="modal" id="create-btn"
-                                data-bs-target="#showModal">
-                                <i class="ri-pencil-fill fs-16"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item" ngbTooltip="Remove" placement="top" data-bs-toggle="tooltip"
-                              data-bs-trigger="hover">
-                              <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal"
-                                data-bs-target="#deleteOrder">
-                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                              </a>
-                            </li>
-                          </ul>
-                        </td>
-                      </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-                <div class="row justify-content-md-between align-items-md-center gy-2">
-                  <div class="col col-sm-6">
-                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
-                      Showing
-                      {{ service.startIndex }} to {{ service.endIndex }} of
-                      {{ allorderes.length }}
-                      entries
-                    </div>
-                  </div>
-                  <!-- Pagination -->
-                  <div class="col col-sm-6">
-                    <div class="text-sm-right float-end listjs-pagination">
-                      <ngb-pagination [collectionSize]="allorderes.length" [(page)]="service.page"
-                        [pageSize]="service.pageSize" (pageChange)="changePage()">
-                      </ngb-pagination>
-                    </div>
-                  </div>
-                  <!-- End Pagination -->
-                </div>
+                @if(isLoader){
+                <ngx-skeleton-loader count="5" appearance="line" />
+                }@else{
+                <app-orders-table [allorderes]="allorderes"></app-orders-table>
+                }
               </ng-template>
             </li>
             <li [ngbNavItem]="5">
               <a ngbNavLink>
-                <i class="ri-close-circle-line me-1 align-bottom"></i> Cancelled
+                <i class="ri-close-circle-line me-1 align-bottom"></i> Cancelado
               </a>
               <ng-template ngbNavContent>
-                <div class="table-responsive table-card mb-0">
-                  <table class="table">
-                    <thead>
-                      <tr class="bg-light text-muted text-uppercase">
-
-                        <th class="sort" (click)="onSort('orderId')">
-                          Order ID
-                        </th>
-                        <th class="sort" (click)="onSort('customer')">
-                          Customer
-                        </th>
-                        <th class="sort" (click)="onSort('product')">
-                          Product
-                        </th>
-                        <th class="sort" (click)="onSort('orderDate')">
-                          Order Date
-                        </th>
-                        <th class="sort" (click)="onSort('amount')">Amount</th>
-                        <th class="sort" (click)="onSort('payment')">
-                          Payment Method
-                        </th>
-                        <th class="sort" (click)="onSort('status')">
-                          Delivery Status
-                        </th>
-                        <th class="sort">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (data of orderes; track $index) {
-                      <tr>
-
-                        <td>
-                          <a routerLink="/ecommerce/order-details">
-                            <ngb-highlight [result]="data.orderId" [term]="searchTerm"></ngb-highlight>
-                          </a>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.customer" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.product" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.orderDate | date : 'longDate'" [term]="searchTerm">
-                          </ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.amount" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td>
-                          <ngb-highlight [result]="data.payment" [term]="searchTerm"></ngb-highlight>
-                        </td>
-                        <td class="status">
-                          <span class="badge text-uppercase" [ngClass]="{
-                              'bg-warning-subtle text-warning':
-                                data.status === 'Pending',
-                              'bg-danger-subtle text-danger':
-                                data.status === 'Cancelled',
-                              'bg-secondary-subtle text-secondary':
-                                data.status === 'Inprogress',
-                              'bg-info-subtle text-info':
-                                data.status === 'Pickups',
-                              'bg-primary-subtle text-primary':
-                                data.status === 'Returns',
-                              'bg-success-subtle text-success':
-                                data.status === 'Delivered'
-                            }">{{ data.status }}</span>
-                        </td>
-                        <td>
-                          <ul class="list-inline hstack gap-2 mb-0">
-                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="View" placement="top">
-                              <a routerLink="/ecommerce/order-details" class="text-primary d-inline-block">
-                                <i class="ri-eye-fill fs-16"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="Edit" placement="top">
-                              <a href="javascript:void(0);" data-bs-toggle="modal"
-                                class="text-primary d-inline-block edit-item-btn" data-bs-toggle="modal" id="create-btn"
-                                data-bs-target="#showModal">
-                                <i class="ri-pencil-fill fs-16"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item" ngbTooltip="Remove" placement="top" data-bs-toggle="tooltip"
-                              data-bs-trigger="hover">
-                              <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal"
-                                data-bs-target="#deleteOrder">
-                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                              </a>
-                            </li>
-                          </ul>
-                        </td>
-                      </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-                <div class="row justify-content-md-between align-items-md-center gy-2">
-                  <div class="col col-sm-6">
-                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
-                      Showing
-                      {{ service.startIndex }} to {{ service.endIndex }} of
-                      {{ allorderes.length }}
-                      entries
-                    </div>
-                  </div>
-                  <!-- Pagination -->
-                  <div class="col col-sm-6">
-                    <div class="text-sm-right float-end listjs-pagination">
-                      <ngb-pagination [collectionSize]="allorderes.length" [(page)]="service.page"
-                        [pageSize]="service.pageSize" (pageChange)="changePage()">
-                      </ngb-pagination>
-                    </div>
-                  </div>
-                  <!-- End Pagination -->
-                </div>
+                @if(isLoader){
+                  <ngx-skeleton-loader count="5" appearance="line" />
+                  }@else{
+                  <app-orders-table [allorderes]="allorderes"></app-orders-table>
+                  }
               </ng-template>
             </li>
           </ul>

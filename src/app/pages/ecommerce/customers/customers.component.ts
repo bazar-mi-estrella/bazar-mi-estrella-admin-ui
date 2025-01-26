@@ -72,7 +72,7 @@ export class CustomersComponent {
       id: [''],
       fullname: ['', [Validators.required]],
       email: ['', [Validators.required]],
-      status: ['', [Validators.required]]
+      stateId: ['', [Validators.required]]
     });
   }
 

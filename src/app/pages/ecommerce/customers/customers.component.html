@@ -35,7 +35,8 @@
                         <label for="iconInput" class="form-label">Estado</label>
                         <div class="form-icon">
 
-                            <select cl class="form-control form-control-icon" formControlName="status">
+                            <select cl class="form-control form-control-icon" formControlName="stateId">
+                                <option value="">TODOS</option>
                                 @for (item of stateList; track $index){
                                 <option [value]="item.id">{{item.name}}</option>
                                 }
@@ -73,14 +74,21 @@
                         <table class="table">
                             <thead class="table-light text-muted">
                                 <tr>
+                                    <th class="sort" (click)="onSort('fullname')" (keypress)="onSort('fullname')">
+                                        Cliente
+                                    </th>
+                                    <th class="sort" (click)="onSort('email')" (keypress)="onSort('email')">Email</th>
+                                    <th class="sort" (click)="onSort('districtName')"
+                                        (keypress)="onSort('districtName')">
+                                        Distrito
+                                    </th>
+                                    <th class="sort" (click)="onSort('address')" (keypress)="onSort('address')">
+                                        Dirección
+                                    </th>
+                                    <th class="sort" (click)="onSort('stateName')" (keypress)="onSort('stateName')">
+                                        Estado
+                                    </th>
 
-                                    <th class="sort" (click)="onSort('fullname')">Cliente
-                                    </th>
-                                    <th class="sort" (click)="onSort('email')">Email</th>
-                                    <th class="sort" (click)="onSort('districtName')">Distrito</th>
-                                    <th class="sort" (click)="onSort('status')">Estado
-                                    </th>
-                                    <th class="sort" (click)="onSort('address')">Dirección</th>
 
                                     <th class="sort">Action</th>
                                 </tr>
@@ -90,24 +98,27 @@
                                 <tr id="c_{{data.id}}">
 
                                     <td>
-                                        {{data.fullname}}
+                                        @if(data.photo){
+                                        <div class="d-flex align-items-center">
+                                            <img [src]="data.photo" class="avatar-xs rounded-circle me-2"
+                                                [alt]="data.fullname">{{data.fullname}}
+                                        </div>
+                                        }@else(){
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 avatar-xs me-2">
+                                                <div
+                                                    class="avatar-title bg-success-subtle text-success rounded-circle fs-13">
+                                                    {{ data.photo.charAt(0) }}
+                                                </div>
+                                            </div>
+                                            {{data.fullname}}
+                                        </div>
+                                        }
                                     </td>
-                                    <td>
-                                        {{data.email}}
-                                    </td>
-                                    <td>
-                                        {{data.districtName}}
-                                    </td>
-
-                                    <td class="status">
-                                        <span class="badge text-uppercase"
-                                            [ngClass]=" { 'bg-success-subtle text-success': data.stateName === 'Active', 'bg-danger-subtle text-danger': data.stateName === 'Block' }">
-                                            {{data.stateName}}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        {{data.address}}
-                                    </td>
+                                    <td>{{data.email}}</td>
+                                    <td>{{data.districtName}}</td>
+                                    <td>{{data.address}}</td>
+                                    <td>{{data.stateName}}</td>
                                     <td>
                                         <ul class="list-inline hstack gap-2 mb-0">
                                             <li class="list-inline-item edit" ngbTooltip="Edit" placement="top">
@@ -127,7 +138,7 @@
                     <div class="row justify-content-md-between align-items-md-center">
                         <div class="col col-sm-5">
                             <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
-                                Mostrando 
+                                Mostrando
                                 {{service.startIndex}} a
                                 {{service.endIndex}} de {{customers.length}}
                                 entradas

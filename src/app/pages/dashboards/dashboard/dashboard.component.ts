@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ToastService } from './toast-service';
 
 import { circle, latLng, tileLayer } from 'leaflet';
@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
   SalesCategoryChart!: ChartType;
   statData!: any;
   currentDate: any;
+  greetingDate: Date = new Date();
   // Current Date
   // currentDate: Date = new Date();
 
@@ -196,7 +197,7 @@ export class DashboardComponent implements OnInit {
       fill: {
         opacity: [0.1, 0.9, 1],
       },
-      labels: ['01/01/2003', '02/01/2003', '03/01/2003', '04/01/2003', '05/01/2003', '06/01/2003', '07/01/2003', '08/01/2003', '09/01/2003', '10/01/2003', '11/01/2003'],
+      labels: ['01/01/2003', '01/01/2003', '03/01/2003', '04/01/2003', '05/01/2003', '06/01/2003', '07/01/2003', '08/01/2003', '09/01/2003', '10/01/2003', '11/01/2003'],
       markers: {
         size: [0, 0, 0],
         strokeWidth: 2,

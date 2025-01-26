@@ -2,7 +2,7 @@ export interface Order {
     id: string;
     firstname: string;
     lastname: string;
-    clientfullname:string;
+    personfullname:string;
     phone: string;
     address: string;
     subtotal: number;
@@ -20,4 +20,23 @@ export interface Order {
     listdetails: any []; // Cambiar `any` según la estructura de detalles si es conocida
 
     datecreate:string;
+
+    //Cliente
+    clientFullname:string;
+    clientPhoto:string;
+    clientEmail:string;
+
+    distritoName:string;
+    distritoProvinceName:string;
+    distritoProvinceDepartmentName:string;
+
+    //Pago
+    statepagoName:string;
+    statepagoId:string;
+    codetransaction: string; // Código único de la transacción
+    paymentmethod: "card" | "cash" | "other"; // Método de pago (puedes expandir opciones)
+    cardholder: string; // Nombre del titular de la tarjeta
+    numbercard: string; // Número de tarjeta enmascarado
+    totalmount: number; // Monto total de la transacción
+
 }
