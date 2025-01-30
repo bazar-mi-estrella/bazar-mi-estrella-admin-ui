@@ -34,23 +34,23 @@ export class LoginComponent implements OnInit {
   // set the current year
   year: number = new Date().getFullYear();
 
-  constructor(private formBuilder: UntypedFormBuilder,private authenticationService: AuthenticationService,private router: Router,
+  constructor(private formBuilder: UntypedFormBuilder, private authenticationService: AuthenticationService, private router: Router,
     private authFackservice: AuthfakeauthenticationService, private route: ActivatedRoute, public toastService: ToastService,
     private store: Store) {
-      // redirect to home if already logged in
-      if (this.authenticationService.currentUserValue) {
-        this.router.navigate(['/']);
-      }
-     }
+    // redirect to home if already logged in
+    if (this.authenticationService.currentUserValue) {
+      this.router.navigate(['/']);
+    }
+  }
 
   ngOnInit(): void {
-    if(sessionStorage.getItem('currentUser')) {
+    if (sessionStorage.getItem('currentUser')) {
       this.router.navigate(['/']);
     }
     /**
      * Form Validatyion
      */
-     this.loginForm = this.formBuilder.group({
+    this.loginForm = this.formBuilder.group({
       email: ['admin@themesbrand.com', [Validators.required, Validators.email]],
       password: ['123456', [Validators.required]],
     });
@@ -64,11 +64,11 @@ export class LoginComponent implements OnInit {
   /**
    * Form submit
    */
-   onSubmit() {
+  onSubmit() {
     this.submitted = true;
 
-     // Login Api
-     this.store.dispatch(login({ email: this.f['email'].value, password: this.f['password'].value }));
+    // Login Api
+    this.store.dispatch(login({ email: this.f['email'].value, password: this.f['password'].value }));
     // this.authenticationService.login(this.f['email'].value, this.f['password'].value).subscribe((data:any) => { 
     //   if(data.status == 'success'){
     //     sessionStorage.setItem('toast', 'true');
@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit {
   /**
    * Password Hide/Show
    */
-   toggleFieldTextType() {
+  toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
   }
 

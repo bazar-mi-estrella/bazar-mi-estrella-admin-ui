@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { WorkerTray } from 'src/app/core/interfaces/worker-tray.interface';
 import { PaginationService } from 'src/app/core/services/pagination.service';
-import { WorkerService } from 'src/app/core/services/user.service';
+import { WorkerService } from 'src/app/core/services/worker.service';
 import { Constants } from 'src/app/core/utils/constants';
 import { ValidatorUtil } from 'src/app/core/utils/validator.util';
 import { InvoiceListModel } from 'src/app/store/Invoice/invoice_model';

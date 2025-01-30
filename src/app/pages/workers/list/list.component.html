@@ -9,7 +9,7 @@
                 <div class="d-flex align-items-center flex-wrap gap-2">
                     <div class="flex-grow-1">
                         <button class="btn btn-info add-btn" data-bs-toggle="modal" data-bs-target="#showModal"
-                            (click)="openModal()"><i class="ri-add-fill me-1 align-bottom"></i>
+                            (click)="navigateNew()"><i class="ri-add-fill me-1 align-bottom"></i>
                             Agregar trabajador
                         </button>
                     </div>
@@ -95,11 +95,11 @@
                         <table class="table">
                             <thead>
                                 <tr class="bg-light">
-                                    <th class="sort" (click)="onSort('name')">Nombre</th>
-                                    <th class="sort" (click)="onSort('company')">Número documento</th>
+                                    <th class="sort" (click)="onSort('fullname')">Nombre</th>
+                                    <th class="sort" (click)="onSort('numerodoc')">Número documento</th>
                                     <th class="sort" (click)="onSort('email')">Email ID</th>
-                                    <th class="sort" (click)="onSort('tags')">Rol</th>
-                                    <th class="sort" (click)="onSort('date')">Fecha creación</th>
+                                    <th class="sort" (click)="onSort('typeName')">Rol</th>
+                                    <th class="sort" (click)="onSort('datecreate')">Fecha creación</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -108,12 +108,24 @@
                                 <!-- <tr *ngFor="let data of contacts | sortBy:sortBy:sortField" id="c_{{data._id}}"> -->
                                 <tr id="c_{{data.id}}">
 
-                                    <td class="name">
+
+                                    <td>
+                                        @if(data.photo){
                                         <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0"><img src="assets/images/users/{{data.photo}}"
-                                                    alt="" class="avatar-xs rounded-circle"></div>
-                                            <div class="flex-grow-1 ms-2 name">{{data.fullname}}</div>
+                                            <img [src]="data.photo" class="avatar-xs rounded-circle me-2"
+                                                [alt]="data.fullname">{{data.fullname}}
                                         </div>
+                                        }@else(){
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 avatar-xs me-2">
+                                                <div
+                                                    class="avatar-title bg-success-subtle text-success rounded-circle fs-13">
+                                                    {{ data.fullname.charAt(0) }}
+                                                </div>
+                                            </div>
+                                            {{data.fullname}}
+                                        </div>
+                                        }
                                     </td>
                                     <td>
                                         <ngb-highlight [result]="data.numerodoc" [term]="searchTerm">
@@ -133,7 +145,7 @@
                                     <td class="date">{{data.datecreate | date :'longDate'}}</td>
                                     <td>
                                         <ul class="list-inline hstack gap-2 mb-0">
-                                    
+
                                             <li class="list-inline-item">
                                                 <div class="dropdown" ngbDropdown>
                                                     <button class="btn btn-soft-secondary btn-sm dropdown arrow-none"
@@ -182,12 +194,21 @@
         <div class="card" id="contact-view-detail">
             <div class="card-body text-center contact-details">
                 <div class="position-relative d-inline-block">
-                    <img src="assets/images/users/avatar-10.jpg" alt="" class="avatar-lg rounded-circle img-thumbnail">
+                    @if (isLoader) {
+                    <ngx-skeleton-loader count="1" appearance="circle" />
+                    }@else {
+                    <img [src]="worker.photo" alt="" class="avatar-lg rounded-circle img-thumbnail">
+                    }
                     <span class="contact-active position-absolute rounded-circle bg-success"></span><span
                         class="visually-hidden"></span>
                 </div>
-                <h5 class="mt-4 mb-1">Tonya Noble</h5>
-                <p class="text-muted">Nesta Technologies</p>
+
+                @if (isLoader) {
+                <ngx-skeleton-loader count="2" appearance="line" />
+                }@else {
+                <h5 class="mt-4 mb-1">{{worker.fullname}}</h5>
+                <p class="text-muted">{{worker.typeName}}</p>
+                }
 
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item avatar-xs">
@@ -208,45 +229,47 @@
                 </ul>
             </div>
             <div class="card-body">
-                <h6 class="text-muted text-uppercase fw-semibold mb-3">Personal Information</h6>
-                <p class="text-muted mb-4">Hello, I'm Tonya Noble, The most effective objective is one that is tailored
-                    to the job you are applying for. It states what kind of career you are seeking, and what skills and
-                    experiences.</p>
+                @if (isLoader) {
+                <ngx-skeleton-loader count="5" appearance="line" />
+                }@else {
                 <div class="table-responsive table-card">
                     <table class="table table-borderless mb-0">
                         <tbody>
                             <tr>
-                                <td class="fw-medium" scope="row">Designation</td>
-                                <td class="designation">Lead Designer / Developer</td>
+                                <td class="fw-medium">Estado</td>
+                                <td class="designation">{{worker.stateName}}</td>
                             </tr>
                             <tr>
-                                <td class="fw-medium" scope="row">Email ID</td>
-                                <td class="email">tonyanoble&#64;velzon.com</td>
+                                <td class="fw-medium">Email</td>
+                                <td class="email">{{worker.email}}</td>
                             </tr>
                             <tr>
-                                <td class="fw-medium" scope="row">Phone No</td>
-                                <td class="phone">414-453-5725</td>
+                                <td class="fw-medium">Documento</td>
+                                <td class="phone">{{worker.numerodoc}}</td>
                             </tr>
                             <tr>
-                                <td class="fw-medium" scope="row">Lead Score</td>
-                                <td class="l_score">154</td>
-                            </tr>
-                            <tr>
-                                <td class="fw-medium" scope="row">Tags</td>
+                                <td class="fw-medium">Rol</td>
                                 <td class="tags-list">
                                     <div class="d-flex gap-1">
-                                        <span class="badge bg-primary-subtle text-primary">Lead</span>
-                                        <span class="badge bg-primary-subtle text-primary">Partner</span>
+                                        <span class="badge bg-primary-subtle text-primary">
+                                            {{worker.typeName}}
+                                        </span>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="fw-medium" scope="row">Last Contacted</td>
-                                <td class="contacted_date">15 Dec, 2021 <small class="text-muted">08:58AM</small></td>
+                                <td class="fw-medium">Fecha creación</td>
+                                <td class="contacted_date">
+                                    {{worker.datecreate | date:'dd MMM, yyyy'}}
+                                    <small class="text-muted">
+                                        {{worker.datecreate | date:' hh:mm a'}}
+                                    </small>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                }
             </div>
         </div>
         <!--end card-->

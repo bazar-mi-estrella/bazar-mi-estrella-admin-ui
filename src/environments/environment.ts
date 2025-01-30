@@ -11,16 +11,12 @@ export const environment = {
   API_KEY_IMGBB: "50f687b8e7e2c39d7de8e7ad813ca6ff",
   production: false,
   defaultauth: 'fakebackend',
-  firebaseConfig: {
-    apiKey: '',
-    authDomain: '',
-    databaseURL: '',
-    projectId: '',
-    storageBucket: '',
-    messagingSenderId: '',
-    appId: '',
-    measurementId: ''
-  }
+  firebase: {
+    apiKey: "AIzaSyAEGQs70EvgHpJUm9tZhk8RApx6EkMVvoc",
+    authDomain: "cix-tech-mart-2c1dc.firebaseapp.com",
+    projectId: "cix-tech-mart-2c1dc",
+  },
+  firebaseConfig:{}
 };
 
 /*

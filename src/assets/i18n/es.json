@@ -16,6 +16,16 @@
         "NEW": "Nuevo Usuario"
       }
     },
+
+    "WORKERS": {
+      "TEXT": "Trabajadores",
+      "BADGE": "Nuevo",
+      "LIST": {
+        "TRAY": "Bandeja de Trabajadores",
+        "NEW": "Nuevo Trabajador"
+      }
+    },
+
     "DASHBOARD": {
       "TEXT": "Tableros",
       "BADGE": "Nuevo",

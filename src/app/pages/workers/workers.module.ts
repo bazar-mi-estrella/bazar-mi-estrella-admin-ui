@@ -12,13 +12,15 @@ import { WorkersRoutingModule } from './workers-routing.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DialogAddComponent } from './dialog-add/dialog-add.component';
 import { ListComponent } from './list/list.component';
+import { NewComponent } from './new/new.component';
 
 
 
 @NgModule({
   declarations: [
     ListComponent,
-    DialogAddComponent
+    DialogAddComponent,
+    NewComponent
   ],
   imports: [
 

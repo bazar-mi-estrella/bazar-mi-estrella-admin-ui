@@ -1,4 +1,4 @@
-import { LOCALE_ID,NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 // search module
@@ -14,8 +14,6 @@ import { PagesModule } from "./pages/pages.module";
 import { HttpClient, HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from '../environments/environment';
-import { initFirebaseBackend } from './authUtils';
-import { FakeBackendInterceptor } from './core/helpers/fake-backend';
 import { ErrorInterceptor } from './core/helpers/error.interceptor';
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
 
@@ -42,6 +40,9 @@ import { ApikeyEffects } from './store/APIKey/apikey_effect';
 import { AuthenticationEffects } from './store/Authentication/authentication.effects';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es'; // Importa español
+//firebae
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideAuth, getAuth } from '@angular/fire/auth';
 
 registerLocaleData(localeEs, 'es'); // Registra español como idioma
 
@@ -49,11 +50,6 @@ export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
 
-if (environment.defaultauth === 'firebase') {
-  initFirebaseBackend(environment.firebaseConfig);
-} else {
-  FakeBackendInterceptor;
-}
 
 @NgModule({
   declarations: [
@@ -61,7 +57,8 @@ if (environment.defaultauth === 'firebase') {
   ],
   bootstrap: [AppComponent],
 
-  imports: [TranslateModule.forRoot({
+  imports: [
+    TranslateModule.forRoot({
     defaultLanguage: 'es',
     loader: {
       provide: TranslateLoader,
@@ -98,8 +95,10 @@ if (environment.defaultauth === 'firebase') {
     { provide: LOCALE_ID, useValue: 'es' }, // Configura el idioma predeterminado
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
     provideHttpClient(withInterceptorsFromDi()),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+
   ]
 })
 export class AppModule { }

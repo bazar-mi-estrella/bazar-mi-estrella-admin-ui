@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { AuthenticationService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { WorkerService } from 'src/app/core/services/user.service';
+import { WorkerService } from 'src/app/core/services/worker.service';
 
 @Component({
   selector: 'app-register',

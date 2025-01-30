@@ -1,0 +1,205 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Registrar Trabajador" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="card">
+    <div class="card-body">
+        <form [formGroup]="form" class="tablelist-form" autocomplete="off">
+            @if (isLoader) {
+            <ngx-skeleton-loader count="5" appearance="line" />
+
+            }@else{
+
+            <div>
+                <input type="hidden" id="id-field" />
+                <div class="row g-3">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <div class="position-relative d-inline-block">
+                                <div class="position-absolute  bottom-0 end-0">
+                                    <label for="customer-image-input" class="mb-0" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" title="Select Image" aria-label="Select Image">
+                                        <div class="avatar-xs cursor-pointer">
+                                            <div class="avatar-title bg-light border rounded-circle text-muted">
+                                                <i class="ri-image-fill"></i>
+                                            </div>
+                                        </div>
+                                    </label>
+                                    <input class="form-control d-none" id="customer-image-input" type="file"
+                                        accept="image/png, image/gif, image/jpeg" formControlName="imgurl"
+                                        [ngClass]="{ 'is-invalid': submitted && photo.errors }"
+                                        (change)="fileChange($event)">
+                                    @if(submitted && photo.errors){
+                                    <div class="invalid-feedback text-left">
+                                        @if(photo.errors['required']){
+                                        <div>Foto es requerida</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                                <div class="avatar-lg p-1">
+                                    <div class="avatar-title bg-light rounded-circle">
+                                        <img src="assets/images/users/user-dummy-img.jpg" id="customer-img"
+                                            alt="customer-img" class="avatar-md rounded-circle object-fit-cover" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-12">
+                        <label for="name-field" class="form-label text-muted">Nombre</label>
+                        <input type="text" id="customername-field" class="form-control" placeholder="Introducir nombre"
+                            required formControlName="name" [ngClass]="{ 'is-invalid': submitted && name.errors }"
+                            (input)="ValidatorUtil.onInputValidate(name,[Constants.REGEX_NOT_START_BLANK],100)"
+                            (paste)="ValidatorUtil.onPasteValidate($event,name,[Constants.REGEX_NOT_START_BLANK],100)" />
+                        @if(submitted && name.errors){
+                        <div class="invalid-feedback text-left">
+                            @if(name.errors['required']){
+                            <div>Nombre es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+
+                    <div class="col-lg-4 col-12">
+                        <div>
+                            <label for="name-field" class="form-label text-muted">Apellido Paterno</label>
+                            <input type="text" id="customername-field" class="form-control"
+                                placeholder="Introducir Apellido Paterno" required formControlName="firstname"
+                                [ngClass]="{ 'is-invalid': submitted && firstname.errors }"
+                                (input)="ValidatorUtil.onInputValidate(firstname,[Constants.REGEX_NOT_START_BLANK],100)"
+                                (paste)="ValidatorUtil.onPasteValidate($event,firstname,[Constants.REGEX_NOT_START_BLANK],100)" />
+                            @if(submitted && firstname.errors){
+                            <div class="invalid-feedback" style="text-align: left;">
+                                @if(firstname.errors['required']){
+                                <div>Apellido Paterno es requerido</div>
+                                }
+                            </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-12">
+                        <div>
+                            <label for="name-field" class="form-label text-muted">Apellido Materno</label>
+                            <input type="text" id="customername-field" class="form-control"
+                                placeholder="Introducir Apellido Materno" required formControlName="lastname"
+                                [ngClass]="{ 'is-invalid': submitted && lastname.errors }"
+                                (input)="ValidatorUtil.onInputValidate(lastname,[Constants.REGEX_NOT_START_BLANK],100)"
+                                (paste)="ValidatorUtil.onPasteValidate($event,lastname,[Constants.REGEX_NOT_START_BLANK],100)" />
+                            @if(submitted && lastname.errors){
+                            <div class="invalid-feedback" style="text-align: left;">
+                                @if(lastname.errors['required']){
+                                <div>Apellido Materno es requerido</div>
+                                }
+                            </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-12">
+                        <div>
+                            <label for="taginput-choices" class="form-label font-size-13 text-muted">Tipo
+                                Documento</label>
+                            @if(isLoaderInit){
+                            <ngx-skeleton-loader count="1" appearance="line" />
+                            }@else {
+                            <ng-select [items]="typeDocumentList" formControlName="typedocumentId" bindLabel="name"
+                                bindValue="id"
+                                [ngClass]="{ 'is-invalid': submitted && typedocumentId.errors }"></ng-select>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-12">
+                        <div>
+                            <label for="numerodoc-field" class="form-label text-muted">Número documento</label>
+                            <input type="text" id="numerodoc-field" class="form-control" placeholder="Introducir Número"
+                                formControlName="numerodoc" [ngClass]="{ 'is-invalid': submitted && numerodoc.errors }"
+                                (input)="ValidatorUtil.onInputValidate(numerodoc,[Constants.REGEX_ONLY_NUMBERS],11)"
+                                (paste)="ValidatorUtil.onPasteValidate($event,numerodoc,[Constants.REGEX_ONLY_NUMBERS],11)" />
+                            @if(submitted && numerodoc.errors){
+                            <div class="invalid-feedback" style="text-align: left;">
+                                @if(numerodoc.errors['required']){
+                                <div>Número documento es requerido</div>
+                                }
+                            </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-12">
+                        <label for="email_id-field" class="form-label text-muted">Correo</label>
+                        <input type="text" id="email_id-field" class="form-control" placeholder="Introducir correo"
+                            required formControlName="email" [ngClass]="{ 'is-invalid': submitted && email.errors }"
+                            (input)="ValidatorUtil.onInputValidate(email,[Constants.REGEX_NOT_START_BLANK],100)"
+                            (paste)="ValidatorUtil.onPasteValidate($event,email,[Constants.REGEX_NOT_START_BLANK],100)" />
+                        @if(submitted && email.errors){
+                        <div class="invalid-feedback" style="text-align: left;">
+                            @if(email.errors['required']){
+                            <div>Correo es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+
+                    <div class="col-lg-4 col-12">
+                        <div>
+                            <label for="taginput-choices" class="form-label font-size-13 text-muted">Rol</label>
+                            @if(isLoaderInit){
+                            <ngx-skeleton-loader count="1" appearance="line" />
+                            }@else {
+                            <ng-select [items]="roleList" formControlName="typeId" bindLabel="name" bindValue="id"
+                                [ngClass]="{ 'is-invalid': submitted && typeId.errors }"></ng-select>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-12">
+                        <label for="phone-field" class="form-label text-muted">Teléfono</label>
+                        <input type="text" id="phone-field" class="form-control" placeholder="Introducir número"
+                            formControlName="phone" [ngClass]="{ 'is-invalid': submitted && phone.errors }" 
+                            (input)="ValidatorUtil.onInputValidate(phone,[Constants.REGEX_NOT_START_BLANK],100)"
+                            (paste)="ValidatorUtil.onPasteValidate($event,phone,[Constants.REGEX_NOT_START_BLANK],100)"/>
+                        @if(submitted && phone.errors){
+                        <div class="invalid-feedback" style="text-align: left;">
+                            @if(phone.errors['required']){
+                            <div>Télefono es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+
+                    <div class="col-lg-4 col-12">
+                        <label for="address-field" class="form-label text-muted">Dirección</label>
+                        <input type="text" id="address-field" class="form-control" placeholder="Introducir Número"
+                            formControlName="address" [ngClass]="{ 'is-invalid': submitted && address.errors }" 
+                            (input)="ValidatorUtil.onInputValidate(address,[Constants.REGEX_NOT_START_BLANK],200)"
+                            (paste)="ValidatorUtil.onPasteValidate($event,address,[Constants.REGEX_NOT_START_BLANK],200)"/>
+                        @if(submitted && address.errors){
+                        <div class="invalid-feedback" style="text-align: left;">
+                            @if(address.errors['required']){
+                            <div>Dirección es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+        </form>
+    </div>
+
+    <div class="card-footer">
+        <div class="hstack gap-2 justify-content-end">
+            <button type="button" class="btn btn-light" (click)="back()">Regresar</button>
+            @if (isLoader) {
+            <button type="button" class="btn btn-success" [disabled]="true">Guardando...</button>
+            }@else {
+            <button type="button" class="btn btn-success" (click)="beforeSave()">Guardar</button>
+
+            }
+        </div>
+    </div>
+</div>
