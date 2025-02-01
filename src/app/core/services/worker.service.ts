@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { WorkerFilter } from '../interfaces/worker-filter.interface';
 import { WorkerPost } from '../interfaces/worker-post.interface';
 import { Response } from '../interfaces/response.interface';
-import { Auth, createUserWithEmailAndPassword, UserCredential } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword,signInWithEmailAndPassword, UserCredential } from '@angular/fire/auth';
 
 @Injectable({ providedIn: 'root' })
 export class WorkerService {
@@ -36,5 +36,9 @@ export class WorkerService {
 
   register(email:string,password:string):Promise<UserCredential> {
     return createUserWithEmailAndPassword(this.auth, email, password);
+  }
+
+  login(email:string,password:string):Promise<UserCredential> {
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 }

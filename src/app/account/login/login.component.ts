@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Login Auth
-import { environment } from '../../../environments/environment';
 import { AuthenticationService } from '../../core/services/auth.service';
 import { AuthfakeauthenticationService } from '../../core/services/authfake.service';
-import { first } from 'rxjs/operators';
 import { ToastService } from './toast-service';
-import { Store } from '@ngrx/store';
-import { login } from 'src/app/store/Authentication/authentication.actions';
+import { WorkerService } from 'src/app/core/services/worker.service';
+import { FirebaseError } from 'firebase/app';
+import { SweetAlertUtil } from 'src/app/core/utils/sweet-alert.util';
+// Sweet Alert
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -34,9 +35,15 @@ export class LoginComponent implements OnInit {
   // set the current year
   year: number = new Date().getFullYear();
 
-  constructor(private formBuilder: UntypedFormBuilder, private authenticationService: AuthenticationService, private router: Router,
-    private authFackservice: AuthfakeauthenticationService, private route: ActivatedRoute, public toastService: ToastService,
-    private store: Store) {
+  constructor(
+    private readonly workerService: WorkerService,
+    private readonly formBuilder: UntypedFormBuilder,
+    private readonly authenticationService: AuthenticationService,
+    private readonly router: Router,
+    private readonly authFackservice: AuthfakeauthenticationService,
+    private readonly route: ActivatedRoute,
+    public toastService: ToastService,
+  ) {
     // redirect to home if already logged in
     if (this.authenticationService.currentUserValue) {
       this.router.navigate(['/']);
@@ -66,9 +73,11 @@ export class LoginComponent implements OnInit {
    */
   onSubmit() {
     this.submitted = true;
-
+    this.workerService.login(this.email.value, this.password.value)
+      .then(x => { console.log("res------->", x) })
+      .catch(x => this.verifErrorFirebase(x))
     // Login Api
-    this.store.dispatch(login({ email: this.f['email'].value, password: this.f['password'].value }));
+    //this.store.dispatch(login({ email: this.f['email'].value, password: this.f['password'].value }));
     // this.authenticationService.login(this.f['email'].value, this.f['password'].value).subscribe((data:any) => { 
     //   if(data.status == 'success'){
     //     sessionStorage.setItem('toast', 'true');
@@ -102,11 +111,50 @@ export class LoginComponent implements OnInit {
     // }
   }
 
+
+
+  verifErrorFirebase(error: FirebaseError): void {
+    console.log("error--->", error)
+
+    let config = SweetAlertUtil.getAlertConfig("3", "Error desconocido en proveedor de Autenticación")
+    switch (error.code) {
+      case "auth/user-not-found":
+        config = SweetAlertUtil.getAlertConfig("3", "El correo no está registrado")
+        break;
+      case "auth/wrong-password":
+        console.error("Contraseña incorrecta.");
+        config = SweetAlertUtil.getAlertConfig("3", "Contraseña incorrecta")
+
+        break;
+      case "auth/invalid-email":
+        console.error("El correo no es válido.");
+        config = SweetAlertUtil.getAlertConfig("3", "El correo no es válido")
+        break;
+      case "auth/invalid-credential":
+        config = SweetAlertUtil.getAlertConfig("3", "Usuario o contraseña incorrecto")
+        break;
+      default:
+        console.error("Error al iniciar sesión:", error.message);
+    }
+
+    Swal.fire(config).then(() => { });
+
+
+  }
+
   /**
    * Password Hide/Show
    */
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
+  }
+
+  get email(): AbstractControl {
+    return this.loginForm.controls["email"]
+  }
+
+  get password(): AbstractControl {
+    return this.loginForm.controls["password"]
   }
 
 }
