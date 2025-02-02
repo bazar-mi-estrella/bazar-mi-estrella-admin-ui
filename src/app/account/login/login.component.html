@@ -50,7 +50,7 @@
 
                   <div class="mb-3">
                     <div class="float-end">
-                      <a routerLink="/pass-reset/basic" class="text-muted">¿Has olvidado tu contraseña?</a>
+                      <a routerLink="/auth/pass-reset" class="text-muted">¿Has olvidado tu contraseña?</a>
                     </div>
                     <label class="form-label" for="password-input">Contraseña</label>
                     <div class="position-relative auth-pass-inputgroup mb-3">
@@ -60,10 +60,11 @@
                         }" />
                       <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
                         type="button" id="password-addon">
-                        <i class="mdi align-middle" [ngClass]="{
+                        <i class="mdi align-middle" (click)="toggleFieldTextType()" (keypress)="toggleFieldTextType()"
+                          [ngClass]="{
                             'mdi-eye-off-outline': !fieldTextType,
                             'mdi-eye-outline': fieldTextType
-                          }" (click)="toggleFieldTextType()"></i>
+                          }"></i>
                       </button>
                       @if (submitted && f['password'].errors) {
                       <div class="invalid-feedback">
@@ -81,9 +82,16 @@
                   </div>
 
                   <div class="mt-4">
+                    @if (isLoaderSubmit) {
+                    <button class="btn btn-dark w-100" type="button" [disabled]="true">
+                      Cargando...
+                    </button>
+                    }@else {
                     <button class="btn btn-dark w-100" type="submit">
                       Iniciar sesión
                     </button>
+                    }
+
                   </div>
 
                 </form>

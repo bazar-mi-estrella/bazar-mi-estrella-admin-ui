@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DashboardTopClient } from 'src/app/core/interfaces/dashboard-top-client.interface';
 
 @Component({
   selector: 'app-top-selling',
@@ -8,15 +9,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class TopSellingComponent implements OnInit {
 
   // Top Selling data
-  @Input() TopSelling: Array<{
-    image?: string;
-    pName?: string;
-    subtitle?: string;
-    type?: string;
-    stock?: string;
-    amount?: string;
-    percentage?: string;
-  }> | undefined;
+  @Input() TopSelling:DashboardTopClient[]=[]
 
   constructor() { }
 

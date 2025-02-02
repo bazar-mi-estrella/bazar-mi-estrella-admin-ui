@@ -5,26 +5,25 @@
             <td>
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0 me-2">
-                        <img src="{{data.image}}" alt="" class="avatar-sm p-2" />
+                        <img src="{{data.photo}}" alt="" class="avatar-sm p-2" />
                     </div>
                     <div>
-                        <h5 class="fs-14 my-1 fw-medium"><a href="ecommerce/seller-details" class="text-reset">{{data.pName}}</a></h5>
-                        <span class="text-muted">{{data.subtitle}}</span>
+                        <h5 class="fs-14 my-1 fw-medium">
+                            <a href="ecommerce/customers" class="text-reset">
+                                {{data.name}}
+                            </a>
+                        </h5>
+                        <span class="text-muted">{{data.email}}</span>
                     </div>
                 </div>
             </td>
+
             <td>
-                <span class="text-muted">{{data.type}}</span>
+                <span class="text-muted">S/ {{data.totalorders}}</span>
             </td>
             <td>
-                <p class="mb-0">{{data.stock}}</p>
-                <span class="text-muted">Stock</span>
-            </td>
-            <td>
-                <span class="text-muted">${{data.amount}}</span>
-            </td>
-            <td>
-                <h5 class="fs-14 mb-0">{{data.percentage}}%<i class="ri-bar-chart-fill text-success fs-16 align-middle mx-2"></i></h5>
+                <h5 class="fs-14 mb-0">{{data.quantityorders}} uni.
+                </h5>
             </td>
         </tr>}
     </tbody>

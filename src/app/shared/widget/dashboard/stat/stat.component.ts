@@ -24,7 +24,7 @@ export class StatComponent implements OnInit {
     startVal: this.num,
     useEasing: true,
     duration: 2,
-    decimalPlaces: 2,
+    decimalPlaces: 0,
   };
 
 }

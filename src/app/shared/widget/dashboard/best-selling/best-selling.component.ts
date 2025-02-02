@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DashboardBestSelling } from 'src/app/core/interfaces/dashboard-best-selling.interface';
 
 @Component({
   selector: 'app-best-selling',
@@ -8,15 +9,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class BestSellingComponent implements OnInit {
 
   // Best Selling data
-  @Input() BestSelling: Array<{
-    image?: string;
-    pName?: string;
-    date?: string;
-    price?: string;
-    orders?: string;
-    stock?: string;
-    amount?: string;
-  }> | undefined;
+  @Input() BestSelling: DashboardBestSelling[]=[]
 
   constructor() { }
 

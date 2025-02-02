@@ -10,16 +10,11 @@ import lottie from 'lottie-web';
 
 import { ToastsContainer } from './login/toasts-container.component';
 
-
 import { AccountRoutingModule } from './account-routing.module';
-import { SigninModule } from "./auth/signin/signin.module";
-import { SignupModule } from "./auth/signup/signup.module";
-import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
-    RegisterComponent,
     LoginComponent,
     ToastsContainer
   ],
@@ -29,7 +24,6 @@ import { LoginComponent } from './login/login.component';
     FormsModule,
     NgbToastModule,
     AccountRoutingModule,
-    SigninModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

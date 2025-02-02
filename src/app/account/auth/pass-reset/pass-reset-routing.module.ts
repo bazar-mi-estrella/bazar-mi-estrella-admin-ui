@@ -7,9 +7,9 @@ import { CoverComponent } from "./cover/cover.component";
 
 const routes: Routes = [
   {
-    path: "basic",
-    component: BasicComponent
-  },
+    path: '',
+    component: BasicComponent,
+  },  
   {
     path: "cover",
     component: CoverComponent

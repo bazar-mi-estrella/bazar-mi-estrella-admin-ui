@@ -4,7 +4,12 @@ import { ToastService } from './toast-service';
 import { circle, latLng, tileLayer } from 'leaflet';
 
 import { ChartType } from './dashboard.model';
-import { BestSelling, Recentelling, TopSelling, statData } from 'src/app/core/data';
+import { BestSelling, Recentelling } from 'src/app/core/data';
+import { DashboardService } from 'src/app/core/services/dashboard.service';
+import { DashboardUtil } from 'src/app/core/utils/dashboard.util';
+import { DashboardStat } from 'src/app/core/interfaces/dashboard-stat.interface';
+import { DashboardBestSelling } from 'src/app/core/interfaces/dashboard-best-selling.interface';
+import { DashboardTopClient } from 'src/app/core/interfaces/dashboard-top-client.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,20 +22,28 @@ import { BestSelling, Recentelling, TopSelling, statData } from 'src/app/core/da
  */
 export class DashboardComponent implements OnInit {
 
-  // bread crumb items
-  breadCrumbItems!: Array<{}>;
+  breadCrumbItems: Array<{}> = [
+    { label: 'Dashboards' },
+    { label: 'Dashboard', active: true }
+  ];
+  isLoaderInit: boolean = true;
+  isLoader: boolean = true;
+  name: string = sessionStorage.getItem('name') ?? ""
+
   analyticsChart!: ChartType;
-  BestSelling: any;
-  TopSelling: any;
+  BestSelling: DashboardBestSelling[] = [];
+  TopClients: DashboardTopClient[]=[];
   Recentelling: any;
   SalesCategoryChart!: ChartType;
-  statData!: any;
+  statData: DashboardStat[] = DashboardUtil.defect();
   currentDate: any;
   greetingDate: Date = new Date();
   // Current Date
   // currentDate: Date = new Date();
 
-  constructor(public toastService: ToastService) {
+  constructor(
+    private readonly dashboardService: DashboardService,
+    public toastService: ToastService) {
     var date = new Date();
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -38,13 +51,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * BreadCrumb
-     */
-    this.breadCrumbItems = [
-      { label: 'Dashboards' },
-      { label: 'Dashboard', active: true }
-    ];
+
 
     if (sessionStorage.getItem('toast')) {
       this.toastService.show('Logged in Successfull.', { classname: 'bg-success text-center text-white', delay: 5000 });
@@ -59,8 +66,19 @@ export class DashboardComponent implements OnInit {
     // Chart Color Data Get Function
     this._analyticsChart('["--vz-primary", "--vz-success", "--vz-danger"]');
     this._SalesCategoryChart('["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]');
+
+    this.getData()
   }
 
+  getData(): void {
+    this.isLoader = true;
+    this.dashboardService.getMain({}).subscribe(res => {
+      this.isLoader = false;
+      this.statData = DashboardUtil.stat(res)
+      this.BestSelling= res.listproducts
+      this.TopClients= res.listclients
+    })
+  }
 
   num: number = 0;
   option = {
@@ -301,10 +319,7 @@ export class DashboardComponent implements OnInit {
   * Fetches the data
   */
   private fetchData() {
-    this.BestSelling = BestSelling;
-    this.TopSelling = TopSelling;
     this.Recentelling = Recentelling;
-    this.statData = statData;
   }
 
   /**
@@ -320,12 +335,12 @@ export class DashboardComponent implements OnInit {
       })
     ],
     zoom: 1.1,
-    center: latLng(28, 1.5)
+    center: latLng(-15, -60), // Centro geográfico aproximado de Sudamérica
   };
   layers = [
-    circle([41.9, 12.45], { color: "#435fe3", opacity: 0.5, weight: 10, fillColor: "#435fe3", fillOpacity: 1, radius: 400000, }),
-    circle([12.05, -61.75], { color: "#435fe3", opacity: 0.5, weight: 10, fillColor: "#435fe3", fillOpacity: 1, radius: 400000, }),
-    circle([1.3, 103.8], { color: "#435fe3", opacity: 0.5, weight: 10, fillColor: "#435fe3", fillOpacity: 1, radius: 400000, }),
+    circle([-12.017, -77.24], { color: "#435fe3", opacity: 0.5, weight: 10, fillColor: "#435fe3", fillOpacity: 1, radius: 400000 }), // Lima, Perú
+    circle([-77.0428, -12.0464], { color: "#435fe3", opacity: 0.5, weight: 10, fillColor: "#435fe3", fillOpacity: 1, radius: 400000 }), // Lima, Perú
+    circle([-6, 103.8], { color: "#435fe3", opacity: 0.5, weight: 10, fillColor: "#435fe3", fillOpacity: 1, radius: 400000, }),
   ];
 
   /**

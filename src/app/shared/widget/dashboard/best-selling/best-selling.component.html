@@ -8,30 +8,33 @@
                         <img src="{{data.image}}" alt="" class="img-fluid d-block" />
                     </div>
                     <div>
-                        <h5 class="fs-14 my-1"><a href="ecommerce/product-detail/" class="text-reset">{{data.pName}}</a></h5>
-                        <span class="text-muted">{{data.date}}</span>
+                        <h5 class="fs-14 my-1"><a [href]="'ecommerce/product-detail/'+data.id" class="text-reset">
+                                {{data.name.slice(0, 16)}}
+                            </a>
+                        </h5>
+                        <span class="text-muted">{{data.datecreate}}</span>
                     </div>
                 </div>
             </td>
             <td>
-                <h5 class="fs-14 my-1 fw-normal">${{data.price}}</h5>
-                <span class="text-muted">Price</span>
+                <h5 class="fs-14 my-1 fw-normal">S/ {{data.price}}</h5>
+                <span class="text-muted">Precio uni</span>
             </td>
             <td>
-                <h5 class="fs-14 my-1 fw-normal">{{data.orders}}</h5>
-                <span class="text-muted">Orders</span>
+                <h5 class="fs-14 my-1 fw-normal">{{data.totalorders}}</h5>
+                <span class="text-muted">Total Pedidos</span>
             </td>
             <td>
-                @if(data.stock == 'Out of stock'){
-                <h5 class="fs-14 my-1 fw-normal"><span class="badge bg-danger-subtle text-danger">{{data.stock}}</span></h5>
-                }@else(){
-                <h5 class="fs-14 my-1 fw-normal">{{data.stock}}</h5>
-                }
-                <span class="text-muted">Stock</span>
+                @if(data.quantity <1){ <h5 class="fs-14 my-1 fw-normal"><span
+                        class="badge bg-danger-subtle text-danger">{{data.quantity}}</span></h5>
+                    }@else(){
+                    <h5 class="fs-14 my-1 fw-normal">{{data.quantity}}</h5>
+                    }
+                    <span class="text-muted">Stock</span>
             </td>
             <td>
-                <h5 class="fs-14 my-1 fw-normal">${{data.amount}}</h5>
-                <span class="text-muted">Amount</span>
+                <h5 class="fs-14 my-1 fw-normal">S/ {{data.total}}</h5>
+                <span class="text-muted">Total Ganancias</span>
             </td>
         </tr>
         }

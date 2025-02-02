@@ -4,7 +4,8 @@
         <div class="bg-overlay"></div>
 
         <div class="shape">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 0 1440 120">
                 <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
             </svg>
         </div>
@@ -33,24 +34,30 @@
 
                         <div class="card-body p-4">
                             <div class="text-center mt-2">
-                                <h5 class="text-primary">Forgot Password?</h5>
-                                <p class="text-muted">Reset password with velzon</p>
-                                <lord-icon src="https://cdn.lordicon.com/rhvddzym.json" trigger="loop" colors="primary:#0ab39c" class="avatar-xl">
+                                <h5 class="text-primary">¿Has olvidado tu contraseña?
+                                </h5>
+                                <p class="text-muted">
+                                    Restablecer contraseña con Cix Tech Mart
+                                </p>
+                                <lord-icon src="https://cdn.lordicon.com/rhvddzym.json" trigger="loop"
+                                    colors="primary:#0ab39c" class="avatar-xl">
                                 </lord-icon>
                             </div>
 
                             <div class="alert border-0 alert-warning text-center mb-2 mx-2" role="alert">
-                                Enter your email and instructions will be sent to you!
+                                ¡Introduce tu correo y te enviaremos instrucciones!
                             </div>
                             <div class="p-2">
                                 <form [formGroup]="passresetForm" (ngSubmit)="onSubmit()">
                                     <div class="mb-4">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" placeholder="Enter Email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
+                                        <label class="form-label" for="email">Correo</label>
+                                        <input type="email" class="form-control" id="email" placeholder="Enter Email"
+                                            formControlName="email"
+                                            [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
                                         @if (submitted && f['password'].errors) {
-                                        <div class="invalid-feedback" align="left">
+                                        <div class="invalid-feedback text-left">
                                             @if(f['password'].errors['required']){
-                                            <div>Email is required</div>
+                                            <div>Correo es requerido</div>
                                             }
                                         </div>
                                         }
@@ -67,7 +74,9 @@
                     <!-- end card -->
 
                     <div class="mt-4 text-center">
-                        <p class="mb-0">Wait, I remember my password... <a routerLink="/auth/signin/basic" class="fw-semibold text-primary text-decoration-underline"> Click here </a> </p>
+                        <p class="mb-0">Espera, ya recuerdo mi contraseña... 
+                            <a routerLink="/auth"
+                                class="fw-semibold text-primary text-decoration-underline"> Haz clic aquí </a> </p>
                     </div>
 
                 </div>
@@ -84,7 +93,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-center">
-                        <p class="mb-0 text-muted">&copy; <{{year}} Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                        <p class="mb-0 text-muted">&copy; <{{year}} Cix Tech Mart. Elaborado <i
+                                class="mdi mdi-heart text-danger"></i> por Equipo I.E.S Federal </p>
                     </div>
                 </div>
             </div>

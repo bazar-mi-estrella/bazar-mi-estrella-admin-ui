@@ -17,6 +17,7 @@ import { allNotification, messages } from './data'
 import { CartModel } from './topbar.model';
 import { cartData } from './data';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { WorkerService } from 'src/app/core/services/worker.service';
 
 @Component({
   selector: 'app-topbar',
@@ -24,6 +25,14 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./topbar.component.scss']
 })
 export class TopbarComponent implements OnInit {
+
+  name: string = sessionStorage.getItem('name') ?? ""
+  firstname: string = sessionStorage.getItem('firstname') ?? ""
+  lastname: string = sessionStorage.getItem('lastname') ?? ""
+  photo: string = sessionStorage.getItem('photo_url') ?? ""
+  typeName: string = sessionStorage.getItem('typeName') ?? ""
+
+
   messages: any
   element: any;
   mode: string | undefined;
@@ -44,7 +53,11 @@ export class TopbarComponent implements OnInit {
   @ViewChild('removenotification') removenotification !: TemplateRef<any>;
   notifyId: any;
 
-  constructor(@Inject(DOCUMENT) private document: any, private eventService: EventService, public languageService: LanguageService, private modalService: NgbModal,
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private readonly workerService: WorkerService,
+    private eventService: EventService,
+    public languageService: LanguageService, private modalService: NgbModal,
     public _cookiesService: CookieService, public translate: TranslateService, private authService: AuthenticationService, private authFackservice: AuthfakeauthenticationService,
     private router: Router, private TokenStorageService: TokenStorageService) { }
 
@@ -174,9 +187,9 @@ export class TopbarComponent implements OnInit {
   /**
    * Logout the user
    */
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/auth/login']);
+  logout(): void {
+    this.workerService.logout()
+    this.router.navigate(['/auth']);
   }
 
   windowScroll() {

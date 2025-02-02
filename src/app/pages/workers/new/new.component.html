@@ -132,9 +132,7 @@
                     <div class="col-lg-4 col-12">
                         <label for="email_id-field" class="form-label text-muted">Correo</label>
                         <input type="text" id="email_id-field" class="form-control" placeholder="Introducir correo"
-                            required formControlName="email" [ngClass]="{ 'is-invalid': submitted && email.errors }"
-                            (input)="ValidatorUtil.onInputValidate(email,[Constants.REGEX_NOT_START_BLANK],100)"
-                            (paste)="ValidatorUtil.onPasteValidate($event,email,[Constants.REGEX_NOT_START_BLANK],100)" />
+                            required formControlName="email" [ngClass]="{ 'is-invalid': submitted && email.errors }" />
                         @if(submitted && email.errors){
                         <div class="invalid-feedback" style="text-align: left;">
                             @if(email.errors['required']){
@@ -159,9 +157,9 @@
                     <div class="col-lg-4 col-12">
                         <label for="phone-field" class="form-label text-muted">Teléfono</label>
                         <input type="text" id="phone-field" class="form-control" placeholder="Introducir número"
-                            formControlName="phone" [ngClass]="{ 'is-invalid': submitted && phone.errors }" 
-                            (input)="ValidatorUtil.onInputValidate(phone,[Constants.REGEX_NOT_START_BLANK],100)"
-                            (paste)="ValidatorUtil.onPasteValidate($event,phone,[Constants.REGEX_NOT_START_BLANK],100)"/>
+                            formControlName="phone" [ngClass]="{ 'is-invalid': submitted && phone.errors }"
+                            (input)="ValidatorUtil.onInputValidate(phone,[Constants.REGEX_ONLY_NUMBERS],20)"
+                            (paste)="ValidatorUtil.onPasteValidate($event,phone,[Constants.REGEX_ONLY_NUMBERS],20)" />
                         @if(submitted && phone.errors){
                         <div class="invalid-feedback" style="text-align: left;">
                             @if(phone.errors['required']){
@@ -174,9 +172,9 @@
                     <div class="col-lg-4 col-12">
                         <label for="address-field" class="form-label text-muted">Dirección</label>
                         <input type="text" id="address-field" class="form-control" placeholder="Introducir Número"
-                            formControlName="address" [ngClass]="{ 'is-invalid': submitted && address.errors }" 
+                            formControlName="address" [ngClass]="{ 'is-invalid': submitted && address.errors }"
                             (input)="ValidatorUtil.onInputValidate(address,[Constants.REGEX_NOT_START_BLANK],200)"
-                            (paste)="ValidatorUtil.onPasteValidate($event,address,[Constants.REGEX_NOT_START_BLANK],200)"/>
+                            (paste)="ValidatorUtil.onPasteValidate($event,address,[Constants.REGEX_NOT_START_BLANK],200)" />
                         @if(submitted && address.errors){
                         <div class="invalid-feedback" style="text-align: left;">
                             @if(address.errors['required']){

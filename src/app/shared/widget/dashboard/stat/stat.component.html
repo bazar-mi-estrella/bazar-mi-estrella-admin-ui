@@ -7,8 +7,10 @@
                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{title}}</p>
                 </div>
                 <div class="flex-shrink-0">
-                    <h5 class="fs-14 mb-0" [ngClass]=" {'text-success': profit === 'up', 'text-danger': profit === 'down', 'text-muted': profit === 'equal'}">
-                        <i class="fs-13 align-middle float-start" [ngClass]=" {'ri-arrow-right-up-line': profit === 'up', 'ri-arrow-right-down-line': profit === 'down'}"></i>
+                    <h5 class="fs-14 mb-0"
+                        [ngClass]=" {'text-success': profit === 'up', 'text-danger': profit === 'down', 'text-muted': profit === 'equal'}">
+                        <i class="fs-13 align-middle float-start"
+                            [ngClass]=" {'ri-arrow-right-up-line': profit === 'up', 'ri-arrow-right-down-line': profit === 'down'}"></i>
                         @if(profit == 'up' || profit == 'equal'){
                         <span>+</span>}
                         @else{ <span>-</span>
@@ -20,23 +22,23 @@
             <div class="d-flex align-items-end justify-content-between mt-4">
                 <div>
                     <h4 class="fs-22 fw-semibold ff-secondary mb-4">
-                        @if(title == 'TOTAL EARNINGS' || title == 'MY BALANCE'){
-                            <span>$</span>
-                            }
-                            <span [countUp]="value" class="counter-value" [options]="option"></span>
-                            @if(title == 'TOTAL EARNINGS' || title == 'MY BALANCE'){
-                            <span>K</span>
-                            }
-                            @if(title == 'CUSTOMERS'){
-                            <span>M</span>
-                            }
+                        @if(value!==null && title == 'Ganancias totales'){
+                        <span>PEN </span>
+                        }
+                        @if (value===null) {
+                        <ngx-skeleton-loader count="1" appearance="line" />
+                        }@else {
+                        <span [countUp]="value" class="counter-value" [options]="option"></span>
+                        }
                     </h4>
 
                     <a href="javascript:void(0);" class="text-decoration-underline">{{link}}</a>
                 </div>
                 <div class="avatar-sm flex-shrink-0">
-                    <span class="avatar-title rounded fs-3" [ngClass]=" { 'bg-success-subtle': icon === 'bx-dollar-circle', 'bg-info-subtle': icon === 'bx-shopping-bag', 'bg-warning-subtle ': icon === 'bx-user-circle', 'bg-primary-subtle ': icon === 'bx-wallet'}">
-                        <i class="bx {{icon}}" [ngClass]=" { 'text-success': icon === 'bx-dollar-circle', 'text-info': icon === 'bx-shopping-bag', 'text-warning ': icon === 'bx-user-circle', 'text-primary ': icon === 'bx-wallet'}"></i>
+                    <span class="avatar-title rounded fs-3"
+                        [ngClass]=" { 'bg-success-subtle': icon === 'bx-dollar-circle', 'bg-info-subtle': icon === 'bx-shopping-bag', 'bg-warning-subtle ': icon === 'bx-user-circle', 'bg-primary-subtle ': icon === 'bx-wallet'}">
+                        <i class="bx {{icon}}"
+                            [ngClass]=" { 'text-success': icon === 'bx-dollar-circle', 'text-info': icon === 'bx-shopping-bag', 'text-warning ': icon === 'bx-user-circle', 'text-primary ': icon === 'bx-wallet'}"></i>
                     </span>
                 </div>
             </div>

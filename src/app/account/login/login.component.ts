@@ -32,6 +32,8 @@ export class LoginComponent implements OnInit {
 
   toast!: false;
 
+  isLoaderSubmit: boolean = false;
+
   // set the current year
   year: number = new Date().getFullYear();
 
@@ -71,10 +73,38 @@ export class LoginComponent implements OnInit {
   /**
    * Form submit
    */
+
+  initLogin(): void {
+
+    this.isLoaderSubmit = false;
+    this.workerService.findByEmail(this.email.value).subscribe({
+      next: res => {
+        sessionStorage.setItem('user_id', res.id)
+        sessionStorage.setItem('email', res.email ?? "")
+        sessionStorage.setItem('photo_url', res.photo ?? "")
+        sessionStorage.setItem('auth_id', res.authid ?? "")
+        sessionStorage.setItem('name', res.name ?? "")
+        sessionStorage.setItem('firstname', res.firstname ?? "")
+        sessionStorage.setItem('lastname', res.lastname ?? "")
+
+        sessionStorage.setItem('typeName', res.typeName ?? "")
+        sessionStorage.setItem('fullname', res.fullname ?? "")
+
+        this.router.navigate(['/']);
+
+      },
+      error: () => {
+        let config = SweetAlertUtil.getAlertConfig("3", "Error desconocido en Autenticación")
+        Swal.fire(config).then(() => this.isLoaderSubmit = false);
+      }
+    })
+  }
+
   onSubmit() {
     this.submitted = true;
+    this.isLoaderSubmit = true;
     this.workerService.login(this.email.value, this.password.value)
-      .then(x => { console.log("res------->", x) })
+      .then(() => this.initLogin())
       .catch(x => this.verifErrorFirebase(x))
     // Login Api
     //this.store.dispatch(login({ email: this.f['email'].value, password: this.f['password'].value }));
@@ -114,8 +144,6 @@ export class LoginComponent implements OnInit {
 
 
   verifErrorFirebase(error: FirebaseError): void {
-    console.log("error--->", error)
-
     let config = SweetAlertUtil.getAlertConfig("3", "Error desconocido en proveedor de Autenticación")
     switch (error.code) {
       case "auth/user-not-found":
@@ -137,7 +165,7 @@ export class LoginComponent implements OnInit {
         console.error("Error al iniciar sesión:", error.message);
     }
 
-    Swal.fire(config).then(() => { });
+    Swal.fire(config).then(() => this.isLoaderSubmit = false);
 
 
   }

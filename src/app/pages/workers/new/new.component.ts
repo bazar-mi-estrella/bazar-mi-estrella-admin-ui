@@ -148,8 +148,6 @@ export class NewComponent implements OnInit {
   }
 
   verifErrorFirebase(error: FirebaseError): void {
-    console.log("error--->", error)
-
     let config = SweetAlertUtil.getAlertConfig("3", "Error desconocido en proveedor de Autenticación")
     switch (error.code) {
       case "auth/email-already-in-use":

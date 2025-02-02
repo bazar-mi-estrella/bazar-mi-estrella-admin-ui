@@ -7,7 +7,10 @@ import { Observable } from 'rxjs';
 import { WorkerFilter } from '../interfaces/worker-filter.interface';
 import { WorkerPost } from '../interfaces/worker-post.interface';
 import { Response } from '../interfaces/response.interface';
-import { Auth, createUserWithEmailAndPassword,signInWithEmailAndPassword, UserCredential } from '@angular/fire/auth';
+import {
+  Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, UserCredential
+} from '@angular/fire/auth';
+import { WorkerGet } from '../interfaces/worker-get.interface';
 
 @Injectable({ providedIn: 'root' })
 export class WorkerService {
@@ -34,11 +37,20 @@ export class WorkerService {
     return this.http.post<Response<WorkerPost>>(this.API, worker);
   }
 
-  register(email:string,password:string):Promise<UserCredential> {
+  register(email: string, password: string): Promise<UserCredential> {
     return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
-  login(email:string,password:string):Promise<UserCredential> {
+  login(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.auth, email, password);
+  }
+
+  logout(): Promise<void> {
+    sessionStorage.clear()
+    return signOut(this.auth);
+  }
+
+  findByEmail(email: string): Observable<WorkerGet> {
+    return this.http.get<WorkerGet>(this.API.concat("/findemail/").concat(email))
   }
 }

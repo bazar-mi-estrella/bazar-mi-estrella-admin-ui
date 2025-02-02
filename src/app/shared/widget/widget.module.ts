@@ -28,6 +28,7 @@ import { ActiveProjectComponent } from './projects/active-project/active-project
 import { MyTaskComponent } from './projects/my-task/my-task.component';
 import { TeamMembersComponent } from './projects/team-members/team-members.component';
 import { NftStatComponent } from './nft/nft-stat/nft-stat.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { NftStatComponent } from './nft/nft-stat/nft-stat.component';
     NftStatComponent,
   ],
   imports: [
+    NgxSkeletonLoaderModule,
     CommonModule,
     NgbTooltipModule,
     NgbProgressbarModule,

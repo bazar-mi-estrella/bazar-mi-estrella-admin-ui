@@ -5,6 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Page } from '../interfaces/page.interface';
 import { ProductPost } from '../interfaces/product-post.interface';
 import { Order } from '../interfaces/order.interface';
+import { Dashboard } from '../interfaces/dashboard.interface';
 
 
 @Injectable({
@@ -12,7 +13,7 @@ import { Order } from '../interfaces/order.interface';
 })
 export class DashboardService {
 
-    API = environment.API.concat("/order")
+    API = environment.API.concat("/dashboard")
 
     public filter_offcanvas: boolean = false;
 
@@ -24,18 +25,18 @@ export class DashboardService {
         return this.httpClient.post<ProductPost>(this.API, data)
     }
 
-    public getMain(params:any): Observable<Page<Order>> {
+    public getMain(params:any): Observable<Dashboard> {
 
         let httpParams = Object.entries(params)
             .filter(([_, value]) => value !== null && value !== undefined && value !== "") // Filtra los valores definidos
             .reduce((acc, [key, value]) => acc.append(key, value as string), new HttpParams()); // Crea HttpParams directamente
 
-        return this.httpClient.get<Page<Order>>(this.API, { params: httpParams })
+        return this.httpClient.get<Dashboard>(this.API, { params: httpParams })
     }
 
     // Get Products By id
-    public getById(id: string): Observable<Order> {
-        return this.httpClient.get<Order>(this.API.concat("/").concat(id))
+    public getById(id: string): Observable<Dashboard> {
+        return this.httpClient.get<Dashboard>(this.API.concat("/").concat(id))
     }
 
 
