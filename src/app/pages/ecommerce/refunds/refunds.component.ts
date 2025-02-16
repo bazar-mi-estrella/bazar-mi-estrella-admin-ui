@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormGroup, UntypedFormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
 import { Master } from 'src/app/core/interfaces/master.interface';
 import { MasterService } from 'src/app/core/services/master.service';
@@ -12,6 +12,7 @@ import { ValidatorUtil } from 'src/app/core/utils/validator.util';
 import { Spanish } from 'flatpickr/dist/l10n/es.js';
 import { OrderRefund } from 'src/app/core/interfaces/order-refund.interface';
 import { RefundService } from 'src/app/core/services/refund.service';
+import { RefundEvaluateComponent } from '../refund-evaluate/refund-evaluate.component';
 
 @Component({
   selector: 'app-refunds',
@@ -56,10 +57,9 @@ export class RefundsComponent {
   initForm(): void {
     this.form = this.formBuilder.group({
       personfullname: [''],
-      code: [''],
+      orderCode: [''],
       orderDate: ['25-01-2023'],
       stateId: [''],
-      statepagoId: [''],
       datestart: [''],
       dateend: [''],
     });
@@ -68,7 +68,7 @@ export class RefundsComponent {
 
   initValues(): void {
     forkJoin({
-      stateList: this.masterService.findByPrefixAndCorrelatives(Constants.PREFIX_STATE_PAYMENT),
+      stateList: this.masterService.findByPrefixAndCorrelatives(Constants.PREFIX_STATE_REFUND),
     }).subscribe({
       next: (response) => {
         this.stateList = response.stateList;
@@ -88,9 +88,16 @@ export class RefundsComponent {
 
   }
 
-  navigateEvaluate(id:string):void{
-
+  openModal(id: string): void {
+    const options: NgbModalOptions = { centered: true, backdrop: 'static', size: 'lg' }
+    const modalRef = this.modalService.open(RefundEvaluateComponent, options);
+    modalRef.componentInstance.id = id; // Mensaje dinámico
+    modalRef.result.then(
+      (res) => res ? this.getData() : console.log("close"),
+      () => { }
+    );
   }
+
 
   clear(): void {
     this.initForm()
@@ -124,7 +131,7 @@ export class RefundsComponent {
   }
 
   get code(): AbstractControl {
-    return this.form.controls['code']
+    return this.form.controls['orderCode']
   }
 
   get stateId(): AbstractControl {

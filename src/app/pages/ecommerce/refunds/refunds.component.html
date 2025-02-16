@@ -14,7 +14,7 @@
                         <label for="iconInput" class="form-label">Código</label>
                         <div class="form-icon">
                             <input type="text" class="form-control form-control-icon" placeholder="Buscar por código"
-                                formControlName="code"
+                                formControlName="orderCode"
                                 (input)="ValidatorUtil.onInputValidate(code,[Constants.REGEX_NOT_START_BLANK],100)"
                                 (paste)="ValidatorUtil.onPasteValidate($event,code,[Constants.REGEX_NOT_START_BLANK],100)">
                             <i class="ri-search-line search-icon"></i>
@@ -33,10 +33,10 @@
                     </div>
 
                     <div class="col-xxl-3 col-sm-12">
-                        <label for="iconInput" class="form-label">Estado del Pago</label>
+                        <label for="iconInput" class="form-label">Estado </label>
                         <div class="form-icon">
 
-                            <select cl class="form-control form-control-icon" formControlName="statepagoId">
+                            <select cl class="form-control form-control-icon" formControlName="stateId">
                                 <option value="">TODOS</option>
                                 @for (item of stateList; track $index){
                                 <option [value]="item.id">{{item.name}}</option>
@@ -80,8 +80,8 @@
                 <div>
                     <div class="table-responsive table-card mb-1">
                         <table class="table">
-                            <thead class="table-light text-muted">
-                                <tr>
+                            <thead>
+                                <tr class="bg-light text-muted text-uppercase">
                                     <th class="sort" (click)="onSort('orderCode')" (keypress)="onSort('orderCode')">
                                         Código de Orden
                                     </th>
@@ -97,6 +97,9 @@
                                     <th class="sort" (click)="onSort('stateName')" (keypress)="onSort('stateName')">
                                         Estado
                                     </th>
+                                    <th>
+                                        Acciones
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -104,21 +107,33 @@
                                 <tr id="c_{{data.id}}">
                                     <td>{{data.orderCode}}</td>
                                     <td>{{data.reasonName}}</td>
-                                    <td>{{data.datecreate}}</td>
-                                    <td>{{data.resultName}}</td>
-                                    <td>{{data.stateName}}</td>
+                                    <td>{{data.datecreate | date:'d \'de\' MMMM \'de\' y, h:mm a'}}</td>
+                                    <td class="status">
+                                        <span class="badge text-uppercase" [ngClass]="{
+                                                            'bg-danger-subtle text-danger':
+                                                            data.resultId === Constants.STATE_RESULT_REFUND_DISAPPROVED,
+                                                            'bg-info-subtle text-success':
+                                                              data.resultId === Constants.STATE_RESULT_REFUND_APPROVED,
+                                                          }">
+                                            {{ data.resultName }}
+                                        </span>
+                                    </td>
+                                    <td class="status">
+                                        <span class="badge text-uppercase" [ngClass]="{
+                                                            'bg-danger-subtle text-warning':
+                                                            data.stateId === Constants.STATE_REFUND_SEND,
+                                                            'bg-info-subtle text-info':
+                                                              data.stateId === Constants.STATE_REFUND_EVALUATED,
+                                                          }">
+                                            {{ data.stateName }}
+                                        </span>
+                                    </td>
                                     <td>
+                                        <button (click)="openModal(data.id)" class="btn btn-outline-success"
+                                            [disabled]="data.stateId===Constants.STATE_REFUND_EVALUATED">
+                                            <i class="ri-pencil-fill fs-8"></i>
+                                        </button>
 
-                                        <ul class="list-inline hstack gap-2 mb-0">
-                                            <li class="list-inline-item edit" data-bs-toggle="tooltip"
-                                                data-bs-trigger="hover" ngbTooltip="Editar" placement="top">
-                                                <a href="javascript:void(0);" data-bs-toggle="modal"
-                                                    class="text-primary d-inline-block edit-item-btn"
-                                                    data-bs-toggle="modal" id="create-btn" data-bs-target="#showModal">
-                                                    <i class="ri-pencil-fill fs-16"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
                                     </td>
 
                                 </tr>

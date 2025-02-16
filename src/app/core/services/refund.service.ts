@@ -5,6 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Page } from '../interfaces/page.interface';
 import { ProductPost } from '../interfaces/product-post.interface';
 import { OrderRefund } from '../interfaces/order-refund.interface';
+import { Response } from '../interfaces/response.interface';
 
 
 @Injectable({
@@ -20,8 +21,8 @@ export class RefundService {
     constructor(private readonly httpClient: HttpClient) { }
 
 
-    save(data: ProductPost): Observable<ProductPost> {
-        return this.httpClient.post<ProductPost>(this.API, data)
+    save(data: ProductPost): Observable<Response<number>> {
+        return this.httpClient.post<Response<number>>(this.API.concat("/evaluate"), data)
     }
 
 

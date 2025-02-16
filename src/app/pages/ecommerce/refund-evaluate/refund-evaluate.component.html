@@ -1,0 +1,65 @@
+<!-- Contacts Create Model -->
+<div class="modal-content">
+
+    <div class="modal-header bg-info-subtle p-3">
+        <h5 class="modal-title" id="exampleModalLabel">Evaluar Reembolso</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+            (click)="close()"></button>
+    </div>
+    <form (ngSubmit)="save()" [formGroup]="form" class="tablelist-form" autocomplete="off">
+        <div class="modal-body">
+            <input type="hidden" id="id-field" />
+            <div class="row g-3">
+
+                <div class="col-12">
+                    <div>
+                        <label for="name-field" class="form-label">Respuesta</label>
+                        <input type="text" id="customername-field" class="form-control"
+                            placeholder="Introducir comentario" required formControlName="reply"
+                            [ngClass]="{ 'is-invalid': submitted && reply.errors }"
+                            (input)="ValidatorUtil.onInputValidate(reply,[Constants.REGEX_NOT_START_BLANK],200)"
+                            (paste)="ValidatorUtil.onPasteValidate($event,reply,[Constants.REGEX_NOT_START_BLANK],200)" />
+                        @if(submitted && reply.errors){
+                        <div class="invalid-feedback" style="text-align: left;">
+                            @if(reply.errors['required']){
+                            <div>Respuesta es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div>
+                        <label for="taginput-choices" class="form-label font-size-13 text-muted">Resultado</label>
+                        @if(isLoaderInitial){
+                        <ngx-skeleton-loader count="1" appearance="line" />
+                        }@else {
+                        <ng-select [items]="resultList" formControlName="result" bindLabel="name" bindValue="id"
+                            [ngClass]="{ 'is-invalid': submitted && result.errors }"></ng-select>
+                        }
+                        @if(submitted && result.errors){
+                        <div class="invalid-feedback" style="text-align: left;">
+                            @if(result.errors['required']){
+                            <div>Resultado es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="hstack gap-2 justify-content-end">
+                @if (isLoaderSave) {
+                <button type="button" class="btn btn-success" [disabled]="true">Guardando...</button>
+                }@else {
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="close()">Close</button>
+                <button type="submit" class="btn btn-success" id="add-btn">Guardar</button>
+                }
+
+            </div>
+        </div>
+    </form>
+</div>
