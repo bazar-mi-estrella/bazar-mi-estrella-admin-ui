@@ -1,11 +1,11 @@
 //const HOST = "https://cix-tech-mart-api.onrender.com";
-const HOST = "http://localhost:8081";
+const HOST = "https://cix-tech-mart-api-0uki.onrender.com";
 
 export const environment = {
   API: HOST + "/cix-tech-mart-api/v1",
 
   API_IMGBB: "https://api.imgbb.com/1",
-  API_KEY_IMGBB: "bdf9e0028dd8a2dd40976cdff5f58b44",
+  API_KEY_IMGBB: "50f687b8e7e2c39d7de8e7ad813ca6ff",
 
   production: true,
   defaultauth: 'fakebackend',
