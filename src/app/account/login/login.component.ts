@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
    */
 
   initLogin(): void {
-
+    console.log("desde el login")
     this.isLoaderSubmit = false;
     this.workerService.findByEmail(this.email.value).subscribe({
       next: res => {
@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
     this.submitted = true;
     this.isLoaderSubmit = true;
     this.workerService.login(this.email.value, this.password.value)
-      .then(() => this.initLogin())
+      .then(() => this.router.navigate(['/']))
       .catch(x => this.verifErrorFirebase(x))
     // Login Api
     //this.store.dispatch(login({ email: this.f['email'].value, password: this.f['password'].value }));

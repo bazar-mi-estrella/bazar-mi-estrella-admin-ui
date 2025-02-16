@@ -50,8 +50,10 @@
                                                 class="img-fluid d-block">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <h5 class="mb-0 fs-12"><a [routerLink]="'/ecommerce/product-detail/'+id"
-                                                    class="link-primary">{{item.productName}}</a></h5>
+                                            <h5 class="mb-0 fs-12">
+                                                <a [routerLink]="'/ecommerce/product-detail/'+item.productId"
+                                                    class="link-primary">{{item.productName}}</a>
+                                            </h5>
                                             <p class="text-muted mb-0 small">Tipo:
                                                 <span class="fw-medium">{{item.productTypeName}}</span>
                                             </p>
@@ -119,9 +121,9 @@
             </div>
             <div class="card-body">
                 <div class="profile-timeline order-status">
-                 @if (isLoader) {
+                    @if (isLoader) {
                     <ngx-skeleton-loader count="5" appearance="line" />
-                 }@else {
+                    }@else {
                     <div ngbAccordion #accordion="ngbAccordion">
                         <div ngbAccordionItem [collapsed]="false">
                             <h2 ngbAccordionHeader>
@@ -229,7 +231,7 @@
                             </div>
                         </div>
                     </div>
-                 }
+                    }
                 </div>
             </div>
         </div>

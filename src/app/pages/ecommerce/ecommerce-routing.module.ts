@@ -12,6 +12,7 @@ import { CartComponent } from "./cart/cart.component";
 import { CheckoutComponent } from "./checkout/checkout.component";
 import { SellersComponent } from "./sellers/sellers.component";
 import { SellerDetailsComponent } from "./seller-details/seller-details.component";
+import { RefundsComponent } from './refunds/refunds.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: "orders",
     component: OrdersComponent
+  },
+  {
+    path: "refunds",
+    component: RefundsComponent
   },
   {
     path: "order-details/:id",

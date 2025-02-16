@@ -24,9 +24,8 @@ import lottie from 'lottie-web';
 import { PagesRoutingModule } from "./pages-routing.module";
 import { SharedModule } from "../shared/shared.module";
 import { WidgetModule } from '../shared/widget/widget.module';
-import { DashboardComponent } from './dashboards/dashboard/dashboard.component';
-import { ToastsContainer } from './dashboards/dashboard/toasts-container.component';
-import { DashboardsModule } from "./dashboards/dashboards.module";
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ToastsContainer } from './dashboard/toasts-container.component';
 import { EcommerceModule } from "./ecommerce/ecommerce.module";
 import { PipesModule } from '../core/pipes/pipes.module';
 
@@ -54,7 +53,6 @@ import { PipesModule } from '../core/pipes/pipes.module';
     WidgetModule,
     SlickCarouselModule,
     LightboxModule,
-    DashboardsModule,
     EcommerceModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

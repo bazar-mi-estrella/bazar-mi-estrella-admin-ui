@@ -186,7 +186,8 @@
       "TEXT": "Pedidos",
       "LIST": {
         "TRAY": "Bandeja de Pedidos",
-        "NEW": "Nuevo Pedido"
+        "NEW": "Nuevo Pedido",
+        "REFUND": "Bandeja de Reembolsos"
       }
     },
     "COMPONENTS": {

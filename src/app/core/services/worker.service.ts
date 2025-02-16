@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Page } from '../interfaces/page.interface';
@@ -8,7 +8,8 @@ import { WorkerFilter } from '../interfaces/worker-filter.interface';
 import { WorkerPost } from '../interfaces/worker-post.interface';
 import { Response } from '../interfaces/response.interface';
 import {
-  Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, UserCredential
+  Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, 
+  signOut, UserCredential, confirmPasswordReset, verifyPasswordResetCode
 } from '@angular/fire/auth';
 import { WorkerGet } from '../interfaces/worker-get.interface';
 
@@ -50,7 +51,21 @@ export class WorkerService {
     return signOut(this.auth);
   }
 
+  
+  verifyPasswordResetCode(code:string): Promise<string> {
+    return verifyPasswordResetCode(this.auth,code)
+  }
+
   findByEmail(email: string): Observable<WorkerGet> {
     return this.http.get<WorkerGet>(this.API.concat("/findemail/").concat(email))
   }
+
+  // Crear el EventEmitter para emitir cambios
+  sessionUpdated = new EventEmitter<void>();
+
+  // Método para disparar el evento
+  notifySessionUpdate() {
+    this.sessionUpdated.emit(); // Emite el evento cuando cambian los datos
+  }
+
 }

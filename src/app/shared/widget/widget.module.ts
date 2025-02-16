@@ -13,46 +13,19 @@ import { BestSellingComponent } from './dashboard/best-selling/best-selling.comp
 import { TopSellingComponent } from './dashboard/top-selling/top-selling.component';
 import { RecentOrdersComponent } from './dashboard/recent-orders/recent-orders.component';
 import { StatComponent } from './dashboard/stat/stat.component';
-import { TopPagesComponent } from './analytics/top-pages/top-pages.component';
-import { AnalaticsStatComponent } from './analytics/analatics-stat/analatics-stat.component';
-import { CrmStatComponent } from './crm/crm-stat/crm-stat.component';
-import { DealsStatusComponent } from './crm/deals-status/deals-status.component';
-import { UpcomingActivitiesComponent } from './crm/upcoming-activities/upcoming-activities.component';
-import { ClosingDealsComponent } from './crm/closing-deals/closing-deals.component';
-import { CryptoStatComponent } from './crypto/crypto-stat/crypto-stat.component';
-import { CurrenciesComponent } from './crypto/currencies/currencies.component';
-import { TopPerformersComponent } from './crypto/top-performers/top-performers.component';
-import { NewsFeedComponent } from './crypto/news-feed/news-feed.component';
-import { ProjectsStatComponent } from './projects/projects-stat/projects-stat.component';
-import { ActiveProjectComponent } from './projects/active-project/active-project.component';
-import { MyTaskComponent } from './projects/my-task/my-task.component';
-import { TeamMembersComponent } from './projects/team-members/team-members.component';
-import { NftStatComponent } from './nft/nft-stat/nft-stat.component';
+
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
     BestSellingComponent,
     TopSellingComponent,
     RecentOrdersComponent,
-    TopPagesComponent,
     StatComponent,
-    AnalaticsStatComponent,
-    CrmStatComponent,
-    DealsStatusComponent,
-    UpcomingActivitiesComponent,
-    ClosingDealsComponent,
-    CryptoStatComponent,
-    CurrenciesComponent,
-    TopPerformersComponent,
-    NewsFeedComponent,
-    ProjectsStatComponent,
-    ActiveProjectComponent,
-    MyTaskComponent,
-    TeamMembersComponent,
-    NftStatComponent,
   ],
   imports: [
+    RouterModule,
     NgxSkeletonLoaderModule,
     CommonModule,
     NgbTooltipModule,
@@ -62,7 +35,6 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     FeatherModule.pick(allIcons),
     NgApexchartsModule,
   ],
-  exports: [BestSellingComponent, TopSellingComponent, RecentOrdersComponent, TopPagesComponent, StatComponent, AnalaticsStatComponent, CrmStatComponent, DealsStatusComponent, UpcomingActivitiesComponent, ClosingDealsComponent, CryptoStatComponent, CurrenciesComponent, TopPerformersComponent, NewsFeedComponent, ProjectsStatComponent, ActiveProjectComponent, MyTaskComponent, TeamMembersComponent,
-    NftStatComponent]
+  exports: [BestSellingComponent, TopSellingComponent, RecentOrdersComponent, StatComponent,RouterModule ]
 })
 export class WidgetModule { }

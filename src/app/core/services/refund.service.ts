@@ -4,15 +4,15 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Page } from '../interfaces/page.interface';
 import { ProductPost } from '../interfaces/product-post.interface';
-import { Order } from '../interfaces/order.interface';
+import { OrderRefund } from '../interfaces/order-refund.interface';
 
 
 @Injectable({
     providedIn: 'root'
 })
-export class OrderService {
+export class RefundService {
 
-    API = environment.API.concat("/order")
+    API = environment.API.concat("/refund")
 
     public filter_offcanvas: boolean = false;
 
@@ -24,15 +24,6 @@ export class OrderService {
         return this.httpClient.post<ProductPost>(this.API, data)
     }
 
-    public getAllByfilter(params: any): Observable<Page<Order>> {
-
-        let httpParams = this.buildParams(params)
-
-        if (!params.size) httpParams = httpParams.append("size", 20)
-        if (!params.page) httpParams = httpParams.append("page", 0)
-
-        return this.httpClient.get<Page<Order>>(this.API.concat("/bandeja"), { params: httpParams })
-    }
 
     private buildParams(params: any): HttpParams {
         let httpParams = Object.entries(params)
@@ -41,12 +32,16 @@ export class OrderService {
         return httpParams
     }
 
+    public getRefunds(params: any): Observable<Page<OrderRefund>> {
 
+        let httpParams = this.buildParams(params)
 
-    // Get Products By id
-    public getById(id: string): Observable<Order> {
-        return this.httpClient.get<Order>(this.API.concat("/").concat(id))
+        if (!params.size) httpParams = httpParams.append("size", 20)
+        if (!params.page) httpParams = httpParams.append("page", 0)
+
+        return this.httpClient.get<Page<OrderRefund>>(this.API.concat("/bandeja"), { params: httpParams })
     }
+
 
 
 }

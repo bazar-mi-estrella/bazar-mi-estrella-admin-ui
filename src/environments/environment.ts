@@ -12,9 +12,9 @@ export const environment = {
   production: false,
   defaultauth: 'fakebackend',
   firebase: {
-    apiKey: "AIzaSyAEGQs70EvgHpJUm9tZhk8RApx6EkMVvoc",
-    authDomain: "cix-tech-mart-2c1dc.firebaseapp.com",
-    projectId: "cix-tech-mart-2c1dc",
+    apiKey: "AIzaSyCFqKKX9TH3At_5bRG5VIKrm5jbE5KaeWQ",
+    authDomain: "cix-tech-mart-2025.firebaseapp.com",
+    projectId: "cix-tech-mart-2025",
   },
   firebaseConfig:{}
 };

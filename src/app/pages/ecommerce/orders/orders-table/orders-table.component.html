@@ -1,124 +1,123 @@
-  <div class="table-responsive table-card mb-0">
-                  <table class="table">
-                    <thead>
-                      <tr class="bg-light text-muted text-uppercase">
+<div class="table-responsive table-card mb-0">
+  <table class="table">
+    <thead>
+      <tr class="bg-light text-muted text-uppercase">
 
-                        <th class="sort" (click)="onSort('code')" (keypress)="onSort('code')">
-                          Código
-                        </th>
-                        <th class="sort" (click)="onSort('datecreate')" (keypress)="onSort('datecreate')">
-                          Fecha de registro
-                        </th>
-                        <th class="sort" (click)="onSort('personfullname')" (keypress)="onSort('personfullname')">
-                          Nombre Persona
-                        </th>
-                        <th class="sort" (click)="onSort('igv')" (keypress)="onSort('igv')">
-                          IGV
-                        </th>
-                        <th class="sort" (click)="onSort('subtotal')" (keypress)="onSort('subtotal')">
-                          Subtotal
-                        </th>
-                        <th class="sort" (click)="onSort('total')" (keypress)="onSort('total')">
-                          Total
-                        </th>
+        <th class="sort" (click)="onSort('code')" (keypress)="onSort('code')">
+          Código
+        </th>
+        <th class="sort" (click)="onSort('datecreate')" (keypress)="onSort('datecreate')">
+          Fecha de registro
+        </th>
+        <th class="sort" (click)="onSort('personfullname')" (keypress)="onSort('personfullname')">
+          Nombre Persona
+        </th>
+        <th class="sort" (click)="onSort('igv')" (keypress)="onSort('igv')">
+          IGV
+        </th>
+        <th class="sort" (click)="onSort('subtotal')" (keypress)="onSort('subtotal')">
+          Subtotal
+        </th>
+        <th class="sort" (click)="onSort('total')" (keypress)="onSort('total')">
+          Total
+        </th>
 
-                        <th class="sort" (click)="onSort('statepagoName')" (keypress)="onSort('statepagoName')">
-                          Estado del Pago
-                        </th>
-                        <th class="sort" (click)="onSort('stateName')" (keypress)="onSort('stateName')">
-                          Estado del Pedido
-                        </th>
-                        <th class="sort">Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (data of allorderes; track $index) {
-                      <tr id="o_{{ data.id }}">
-                        <td>
-                          <a [routerLink]="getPathNavigateView(data.id)">
-                            {{data.code}}
-                          </a>
-                        </td>
-                        <td>
-                          {{data.datecreate | date:'d \'de\' MMMM \'de\' y, h:mm a'}}
-                        </td>
-                        <td>
-                          {{data.personfullname}}
-                        </td>
-                        <td>
-                          {{data.subtotal | number:'1.2-2'}}
-                        </td>
-                        <td>
-                          {{data.igv | number:'1.2-2'}}
-                        </td>
-                        <td>
-                          {{data.total | number:'1.2-2'}}
-                        </td>
-                        <td class="status">
-                          <span class="badge text-uppercase" [ngClass]="{
+        <th class="sort" (click)="onSort('statepagoName')" (keypress)="onSort('statepagoName')">
+          Estado del Pago
+        </th>
+        <th class="sort" (click)="onSort('stateName')" (keypress)="onSort('stateName')">
+          Estado del Pedido
+        </th>
+        <th class="sort">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (data of allorderes; track $index) {
+      <tr id="o_{{ data.id }}">
+        <td>
+          <a [routerLink]="getPathNavigateView(data.id)">
+            {{data.code}}
+          </a>
+        </td>
+        <td>
+          {{data.datecreate | date:'d \'de\' MMMM \'de\' y, h:mm a'}}
+        </td>
+        <td>
+          {{data.personfullname}}
+        </td>
+        <td>
+          {{data.subtotal | number:'1.2-2'}}
+        </td>
+        <td>
+          {{data.igv | number:'1.2-2'}}
+        </td>
+        <td>
+          {{data.total | number:'1.2-2'}}
+        </td>
+        <td class="status">
+          <span class="badge text-uppercase" [ngClass]="{
                             'bg-danger-subtle text-danger':
                               data.statepagoId === Constants.STATE_PAYMENT_PENDING,
                             'bg-success-subtle text-success':
                               data.statepagoId !== Constants.STATE_PAYMENT_PENDING,
-                       
-                          }">{{ data.statepagoName }}</span>
-                        </td>
-                        <td class="status">
-                          <span class="badge text-uppercase" [ngClass]="{
+                          }">
+            {{ data.statepagoName }}</span>
+        </td>
+        <td class="status">
+          <span class="badge text-uppercase" [ngClass]="{
                               'bg-warning-subtle text-warning':
                                 data.stateId === Constants.STATE_ORDER_PREPARING_SHIPMENT,
                               'bg-danger-subtle text-danger':
-                                data.stateId === 'Cancelled',
+                              data.stateId === Constants.STATE_ORDER_DEVOLUTION,
                               'bg-secondary-subtle text-secondary':
-                                data.stateId === 'Inprogress',
+                                data.stateId === Constants.STATE_ORDER_GENERATE,
                               'bg-info-subtle text-info':
-                                data.stateId === 'Pickups',
+                                data.stateId === Constants.STATE_ORDER_CANCELED,
                               'bg-primary-subtle text-primary':
                                 data.stateId === 'Returns',
                               'bg-success-subtle text-success':
                                 data.stateId === 'Delivered'
                             }">{{ data.stateName }}</span>
-                        </td>
-                        <td>
-                          <ul class="list-inline hstack gap-2 mb-0">
-                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="Ver" placement="top">
-                              <a [routerLink]="getPathNavigateView(data.id)" class="text-primary d-inline-block">
-                                <i class="ri-eye-fill fs-16"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              ngbTooltip="Edit" placement="top">
-                              <a href="javascript:void(0);" data-bs-toggle="modal"
-                                class="text-primary d-inline-block edit-item-btn" data-bs-toggle="modal" id="create-btn"
-                                data-bs-target="#showModal">
-                                <i class="ri-pencil-fill fs-16"></i>
-                              </a>
-                            </li>
+        </td>
+        <td>
+          <ul class="list-inline hstack gap-2 mb-0">
+            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" ngbTooltip="Ver"
+              placement="top">
+              <a [routerLink]="getPathNavigateView(data.id)" class="text-primary d-inline-block">
+                <i class="ri-eye-fill fs-16"></i>
+              </a>
+            </li>
+            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" ngbTooltip="Edit"
+              placement="top">
+              <a href="javascript:void(0);" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn"
+                data-bs-toggle="modal" id="create-btn" data-bs-target="#showModal">
+                <i class="ri-pencil-fill fs-16"></i>
+              </a>
+            </li>
 
-                          </ul>
-                        </td>
-                      </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-                <div class="row justify-content-md-between align-items-md-center gy-2">
-                  <div class="col col-sm-6">
-                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
-                      Mostrando
-                      {{ service.startIndex }} a {{ service.endIndex }} de
-                      {{ allorderes.length }}
-                      entradas
-                    </div>
-                  </div>
-                  <!-- Pagination -->
-                  <div class="col col-sm-6">
-                    <div class="text-sm-right float-end listjs-pagination">
-                      <ngb-pagination [collectionSize]="allorderes.length" [(page)]="service.page"
-                        [pageSize]="service.pageSize" (pageChange)="changePage()">
-                      </ngb-pagination>
-                    </div>
-                  </div>
-                  <!-- End Pagination -->
-                </div>
+          </ul>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+<div class="row justify-content-md-between align-items-md-center gy-2">
+  <div class="col col-sm-6">
+    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+      Mostrando
+      {{ service.startIndex }} a {{ service.endIndex }} de
+      {{ allorderes.length }}
+      entradas
+    </div>
+  </div>
+  <!-- Pagination -->
+  <div class="col col-sm-6">
+    <div class="text-sm-right float-end listjs-pagination">
+      <ngb-pagination [collectionSize]="allorderes.length" [(page)]="service.page" [pageSize]="service.pageSize"
+        (pageChange)="changePage()">
+      </ngb-pagination>
+    </div>
+  </div>
+  <!-- End Pagination -->
+</div>

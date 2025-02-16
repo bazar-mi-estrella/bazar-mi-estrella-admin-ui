@@ -7,25 +7,6 @@ export const MENU: MenuItem[] = [
     isTitle: true
   },
   {
-    id: 1,
-    label: 'MENUITEMS.USERS.TEXT',
-    icon: ' ri-team-line',
-    subItems: [
-      {
-        id: 1,
-        label: 'MENUITEMS.USERS.LIST.LIST',
-        link: '/users',
-        parentId: 1
-      },
-      {
-        id: 2,
-        label: 'MENUITEMS.USERS.LIST.NEW',
-        link: '/users/new',
-        parentId: 1
-      },]
-  },
-
-  {
     id: 2,
     label: 'MENUITEMS.WORKERS.TEXT',
     icon: ' ri-team-line',
@@ -44,61 +25,20 @@ export const MENU: MenuItem[] = [
       },]
   },
 
-
   {
-    id: 21332,
+    id: 3,
     label: 'MENUITEMS.DASHBOARD.TEXT',
     icon: 'ri-dashboard-2-line',
     isCollapsed: true,
     subItems: [
-      {
-        id: 3,
-        label: 'MENUITEMS.DASHBOARD.LIST.ANALYTICS',
-        link: '/analytics',
-        parentId: 2
-      },
-      {
-        id: 4,
-        label: 'MENUITEMS.DASHBOARD.LIST.CRM',
-        link: '/crm',
-        parentId: 2
-      },
+   
       {
         id: 5,
         label: 'MENUITEMS.DASHBOARD.LIST.ECOMMERCE',
         link: '/',
-        parentId: 2
+        parentId: 3
       },
-      {
-        id: 6,
-        label: 'MENUITEMS.DASHBOARD.LIST.CRYPTO',
-        link: '/crypto',
-        parentId: 2
-      },
-      {
-        id: 7,
-        label: 'MENUITEMS.DASHBOARD.LIST.PROJECTS',
-        link: '/projects',
-        parentId: 2
-      },
-      {
-        id: 7,
-        label: 'MENUITEMS.DASHBOARD.LIST.NFT',
-        link: '/nft',
-        parentId: 2,
-      },
-      {
-        id: 8,
-        label: 'MENUITEMS.DASHBOARD.LIST.JOB',
-        link: '/job',
-        parentId: 2,
-      },
-      {
-        id: 9,
-        label: 'MENUITEMS.PAGES.LIST.BLOG',
-        link: '/dashboard-blog',
-        parentId: 2,
-      }
+      
     ]
   },
   {
@@ -445,6 +385,12 @@ export const MENU: MenuItem[] = [
         id: 86,
         label: 'MENUITEMS.ORDERS.LIST.TRAY',
         link: '/ecommerce/orders',
+        parentId: 133
+      },
+      {
+        id: 87,
+        label: 'MENUITEMS.ORDERS.LIST.REFUND',
+        link: '/ecommerce/refunds',
         parentId: 133
       },
     

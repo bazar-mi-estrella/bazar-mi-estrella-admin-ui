@@ -1,0 +1,158 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Bandeja de Reembolsos" [breadcrumbItems]="breadCrumbItems">
+
+</app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card" id="orderList">
+            <div class="card-header border-0">
+
+                <form [formGroup]="form" class="row g-2 mb-3">
+                    <div class="col-xxl-3 col-sm-12">
+                        <label for="iconInput" class="form-label">Código</label>
+                        <div class="form-icon">
+                            <input type="text" class="form-control form-control-icon" placeholder="Buscar por código"
+                                formControlName="code"
+                                (input)="ValidatorUtil.onInputValidate(code,[Constants.REGEX_NOT_START_BLANK],100)"
+                                (paste)="ValidatorUtil.onPasteValidate($event,code,[Constants.REGEX_NOT_START_BLANK],100)">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-3 col-sm-12">
+                        <label for="iconInput" class="form-label">Nombre Persona</label>
+                        <div class="form-icon">
+                            <input type="text" class="form-control form-control-icon"
+                                placeholder="Buscar por nombre del cliente" formControlName="personfullname"
+                                (input)="ValidatorUtil.onInputValidate(client,[Constants.REGEX_NOT_START_BLANK],100)"
+                                (paste)="ValidatorUtil.onPasteValidate($event,client,[Constants.REGEX_NOT_START_BLANK],100)">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-3 col-sm-12">
+                        <label for="iconInput" class="form-label">Estado del Pago</label>
+                        <div class="form-icon">
+
+                            <select cl class="form-control form-control-icon" formControlName="statepagoId">
+                                <option value="">TODOS</option>
+                                @for (item of stateList; track $index){
+                                <option [value]="item.id">{{item.name}}</option>
+                                }
+
+                            </select>
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-xxl-3 col-sm-12">
+                        <label for="iconInput" class="form-label">Fecha de creación</label>
+                        <div class="form-icon">
+                            <input class="form-control bg-light border-light" type="text" mwlFlatpickr [altInput]="true"
+                                [convertModelValue]="true" [options]="startOptions" formControlName="orderDate"
+                                (flatpickrValueUpdate)="onDateChange($event)">
+                        </div>
+                    </div>
+                    <!--end row-->
+                </form>
+
+                <div class="d-flex flex-wrap align-items-center justify-content-between">
+                    <h4 class="card-title mb-2 mb-md-0 flex-grow-1">Lista</h4>
+                    <div class="d-flex flex-wrap gap-2 justify-content-md-end justify-content-center">
+                        <a class="btn btn-danger" (click)="clear()">
+                            <i class="ri-delete-bin-2-line align-bottom me-1"></i>
+                            Limpiar filtros
+                        </a>
+                        <a class="btn btn-primary" (click)="getData()">
+                            <i class="ri-equalizer-fill align-bottom me-1"></i>
+                            Aplicar filtros
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-body">
+                @if(isLoader){
+                <ngx-skeleton-loader count="5" appearance="line" />
+                }@else{
+                <div>
+                    <div class="table-responsive table-card mb-1">
+                        <table class="table">
+                            <thead class="table-light text-muted">
+                                <tr>
+                                    <th class="sort" (click)="onSort('orderCode')" (keypress)="onSort('orderCode')">
+                                        Código de Orden
+                                    </th>
+                                    <th class="sort" (click)="onSort('reasonName')" (keypress)="onSort('reasonName')">
+                                        Detalle
+                                    </th>
+                                    <th class="sort" (click)="onSort('datecreate')" (keypress)="onSort('datecreate')">
+                                        Fecha creación
+                                    </th>
+                                    <th class="sort" (click)="onSort('resultName')" (keypress)="onSort('resultName')">
+                                        Resultado
+                                    </th>
+                                    <th class="sort" (click)="onSort('stateName')" (keypress)="onSort('stateName')">
+                                        Estado
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for( data of refunds;track $index){
+                                <tr id="c_{{data.id}}">
+                                    <td>{{data.orderCode}}</td>
+                                    <td>{{data.reasonName}}</td>
+                                    <td>{{data.datecreate}}</td>
+                                    <td>{{data.resultName}}</td>
+                                    <td>{{data.stateName}}</td>
+                                    <td>
+
+                                        <ul class="list-inline hstack gap-2 mb-0">
+                                            <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                                data-bs-trigger="hover" ngbTooltip="Editar" placement="top">
+                                                <a href="javascript:void(0);" data-bs-toggle="modal"
+                                                    class="text-primary d-inline-block edit-item-btn"
+                                                    data-bs-toggle="modal" id="create-btn" data-bs-target="#showModal">
+                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row justify-content-md-between align-items-md-center">
+                        <div class="col col-sm-5">
+                            <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                                Mostrando
+                                {{service.startIndex}} a
+                                {{service.endIndex}} de {{refunds.length}}
+                                entradas
+                            </div>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="col col-sm-5">
+                            <div class="text-sm-right float-sm-end listjs-pagination">
+                                <ngb-pagination [collectionSize]="refunds.length" [(page)]="service.page"
+                                    [pageSize]="service.pageSize" (pageChange)="changePage()">
+                                </ngb-pagination>
+                            </div>
+                        </div>
+                        <!-- End Pagination -->
+                    </div>
+                </div>
+                }
+
+            </div>
+        </div>
+        <!--end col-->
+    </div>
+    <!--end row-->
+
+
+</div>

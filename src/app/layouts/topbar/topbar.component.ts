@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Inject, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Inject, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { EventService } from '../../core/services/event.service';
 
@@ -18,19 +18,21 @@ import { CartModel } from './topbar.model';
 import { cartData } from './data';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkerService } from 'src/app/core/services/worker.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss']
 })
-export class TopbarComponent implements OnInit {
+export class TopbarComponent implements OnInit,OnDestroy {
 
   name: string = sessionStorage.getItem('name') ?? ""
   firstname: string = sessionStorage.getItem('firstname') ?? ""
   lastname: string = sessionStorage.getItem('lastname') ?? ""
   photo: string = sessionStorage.getItem('photo_url') ?? ""
   typeName: string = sessionStorage.getItem('typeName') ?? ""
+  private subscription!: Subscription;
 
 
   messages: any
@@ -62,6 +64,7 @@ export class TopbarComponent implements OnInit {
     private router: Router, private TokenStorageService: TokenStorageService) { }
 
   ngOnInit(): void {
+    this.initSession()
     this.userData = this.TokenStorageService.getUser();
     this.element = document.documentElement;
 
@@ -85,6 +88,23 @@ export class TopbarComponent implements OnInit {
       var item_price = item.quantity * item.price
       this.total += item_price
     });
+  }
+
+  initSession(): void {
+
+    // Suscribirse al evento de actualización
+    this.subscription = this.workerService.sessionUpdated.subscribe(() => {
+      this.name = sessionStorage.getItem('name') ?? "";
+      this.firstname = sessionStorage.getItem('firstname') ?? "";
+      this.lastname = sessionStorage.getItem('lastname') ?? "";
+      this.photo = sessionStorage.getItem('photo_url') ?? "";
+      this.typeName = sessionStorage.getItem('typeName') ?? "";
+    });
+  }
+
+  ngOnDestroy() {
+    //  cancelar la suscripción cuando el componente se destruya
+    if (this.subscription) this.subscription.unsubscribe();
   }
 
   /**

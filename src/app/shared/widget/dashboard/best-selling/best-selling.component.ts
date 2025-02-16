@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DashboardBestSelling } from 'src/app/core/interfaces/dashboard-best-selling.interface';
 
 @Component({
@@ -6,14 +6,9 @@ import { DashboardBestSelling } from 'src/app/core/interfaces/dashboard-best-sel
   templateUrl: './best-selling.component.html',
   styleUrls: ['./best-selling.component.scss']
 })
-export class BestSellingComponent implements OnInit {
+export class BestSellingComponent {
 
   // Best Selling data
-  @Input() BestSelling: DashboardBestSelling[]=[]
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  @Input() BestSelling: DashboardBestSelling[] = []
 
 }

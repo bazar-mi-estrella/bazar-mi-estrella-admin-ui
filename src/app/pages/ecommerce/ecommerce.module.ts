@@ -46,6 +46,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { SellersComponent } from './sellers/sellers.component';
 import { SellerDetailsComponent } from './seller-details/seller-details.component';
 import { OrdersTableComponent } from './orders/orders-table/orders-table.component';
+import { RefundsComponent } from './refunds/refunds.component';
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -62,6 +63,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     OrdersComponent,
     OrdersTableComponent,
     OrdersDetailsComponent,
+    RefundsComponent,
     CustomersComponent,
     CartComponent,
     CheckoutComponent,

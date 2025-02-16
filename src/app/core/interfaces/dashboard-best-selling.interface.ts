@@ -6,5 +6,6 @@ export interface DashboardBestSelling {
   totalorders: number;
   quantity: number;
   total: number;
-  image:string;
+  imgurl:string;
+  stock:number;
 }

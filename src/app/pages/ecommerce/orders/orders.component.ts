@@ -30,6 +30,7 @@ export class OrdersComponent {
   isLoader: boolean = true
   stateList: Master[] = []
   form!: FormGroup;
+  locale = Spanish
 
   // bread crumb items
   breadCrumbItems!: Array<{}>;
@@ -80,7 +81,6 @@ export class OrdersComponent {
     this.getData()
 
   }
-  locale = Spanish
 
 
   flatpickrOptions: any = {
