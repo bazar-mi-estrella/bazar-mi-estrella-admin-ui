@@ -21,10 +21,10 @@
                                 class="btn btn-soft-info arrow-none" ngbDropdownToggle><i
                                     class="ri-more-2-fill"></i></button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1" ngbDropdownMenu>
-                                <li><a class="dropdown-item" href="javascript:void(0);">All</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);">Last Week</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);">Last Month</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);">Last Year</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);">Todo</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);">La semana pasada</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);">Mes pasado</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);">El año pasado</a></li>
                             </ul>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
                                 <tr class="bg-light">
                                     <th class="sort" (click)="onSort('fullname')">Nombre</th>
                                     <th class="sort" (click)="onSort('numerodoc')">Número documento</th>
-                                    <th class="sort" (click)="onSort('email')">Email ID</th>
+                                    <th class="sort" (click)="onSort('email')">ID de correo electrónico</th>
                                     <th class="sort" (click)="onSort('typeName')">Rol</th>
                                     <th class="sort" (click)="onSort('datecreate')">Fecha creación</th>
                                     <th>Acciones</th>
@@ -240,7 +240,7 @@
                                 <td class="designation">{{worker.stateName}}</td>
                             </tr>
                             <tr>
-                                <td class="fw-medium">Email</td>
+                                <td class="fw-medium">Correo electrónico</td>
                                 <td class="email">{{worker.email}}</td>
                             </tr>
                             <tr>
