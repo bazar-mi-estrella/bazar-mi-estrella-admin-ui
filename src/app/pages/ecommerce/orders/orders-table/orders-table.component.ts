@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Order } from 'src/app/core/interfaces/order.interface';
+import { OrderService } from 'src/app/core/services/order.service';
 import { PaginationService } from 'src/app/core/services/pagination.service';
 import { Constants } from 'src/app/core/utils/constants';
 
@@ -14,6 +15,7 @@ export class OrdersTableComponent {
 
   constructor(
     public service: PaginationService,
+    private readonly orderService: OrderService
   ) { }
 
   onSort(column: string): void {
@@ -27,4 +29,23 @@ export class OrdersTableComponent {
   changePage() {
     this.allorderes = this.service.changePage(this.allorderes)
   }
+  loadingRows = new Set<string>();
+
+  sendOrder(data: Order) {
+    this.loadingRows.add(data.id); // Agrega la fila al conjunto de carga
+    this.orderService.send(data.id).subscribe({
+      next: () => {
+        this.loadingRows.delete(data.id); // Quita la fila después de la operación
+        data.stateId = Constants.STATE_ORDER_IN_TRANSIT; // Deshabilita el botón de envío
+        data.stateName="En Tránsito"
+      },
+      error: () => {
+        this.loadingRows.delete(data.id); // Quita la fila en caso de error
+      }
+    })
+    // Simulación de una petición asincrónica
+    setTimeout(() => {
+    }, 3000);
+  }
+  
 }

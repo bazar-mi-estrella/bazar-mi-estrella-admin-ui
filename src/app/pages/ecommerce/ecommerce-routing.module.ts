@@ -13,11 +13,16 @@ import { CheckoutComponent } from "./checkout/checkout.component";
 import { SellersComponent } from "./sellers/sellers.component";
 import { SellerDetailsComponent } from "./seller-details/seller-details.component";
 import { RefundsComponent } from './refunds/refunds.component';
+import { OffersComponent } from './offers/offers.component';
 
 const routes: Routes = [
   {
     path: "products",
     component: ProductsComponent
+  },
+  {
+    path: "offers",
+    component: OffersComponent
   },
   {
     path: "product-detail/:id",

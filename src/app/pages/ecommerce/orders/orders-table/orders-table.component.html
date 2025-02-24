@@ -33,7 +33,7 @@
     </thead>
     <tbody>
       @for (data of allorderes; track $index) {
-      <tr id="o_{{ data.id }}">
+      <tr id="o_{{ data.id }}" [ngClass]="{'loading': loadingRows.has(data.id)}">
         <td>
           <a [routerLink]="getPathNavigateView(data.id)">
             {{data.code}}
@@ -67,17 +67,17 @@
           <span class="badge text-uppercase" [ngClass]="{
                               'bg-warning-subtle text-warning':
                                 data.stateId === Constants.STATE_ORDER_PREPARING_SHIPMENT,
+                                'bg-success-subtle text-success':
+                                data.stateId === Constants.STATE_ORDER_IN_TRANSIT,
                               'bg-danger-subtle text-danger':
                               data.stateId === Constants.STATE_ORDER_DEVOLUTION,
                               'bg-secondary-subtle text-secondary':
                                 data.stateId === Constants.STATE_ORDER_GENERATE,
                               'bg-info-subtle text-info':
-                                data.stateId === Constants.STATE_ORDER_CANCELED,
-                              'bg-primary-subtle text-primary':
-                                data.stateId === 'Returns',
-                              'bg-success-subtle text-success':
-                                data.stateId === 'Delivered'
-                            }">{{ data.stateName }}</span>
+                                data.stateId === Constants.STATE_ORDER_CANCELED
+                                }">
+            {{data.stateName }}
+          </span>
         </td>
         <td>
           <ul class="list-inline hstack gap-2 mb-0">
@@ -87,13 +87,15 @@
                 <i class="ri-eye-fill fs-16"></i>
               </a>
             </li>
-            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" ngbTooltip="Editar"
-              placement="top">
-              <a href="javascript:void(0);" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn"
-                data-bs-toggle="modal" id="create-btn" data-bs-target="#showModal">
-                <i class="ri-pencil-fill fs-16"></i>
+            @if (data.stateId===Constants.STATE_ORDER_PREPARING_SHIPMENT) {
+            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover"
+              ngbTooltip="Enviar Pedido" placement="top">
+              <a class="text-primary d-inline-block edit-item-btn cursor-pointer" (click)="sendOrder(data)"
+                data-bs-toggle="modal">
+                <i class=" ri-send-plane-fill fs-16"></i>
               </a>
             </li>
+            }
 
           </ul>
         </td>

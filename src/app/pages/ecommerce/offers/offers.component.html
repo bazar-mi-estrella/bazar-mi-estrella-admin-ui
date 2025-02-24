@@ -1,0 +1,210 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Bandeja de Ofertas" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <div class="flex-grow-1">
+                        <button class="btn btn-info add-btn" data-bs-toggle="modal" data-bs-target="#showModal"
+                            (click)="openModal()"><i class="ri-add-fill me-1 align-bottom"></i>
+                            Agregar Oferta
+                        </button>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="hstack text-nowrap gap-2" ngbDropdown>
+
+                            <button class="btn btn-soft-success" (click)="csvFileExport()">Exportar CSV</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-12 col-lg-12">
+        <div>
+            <div class="card">
+                <div class="card-header border-0">
+
+                    <form [formGroup]="form" class="row g-2 mb-3">
+                        <div class="col-xxl-4 col-sm-12">
+                            <label for="iconInput" class="form-label">Nombre</label>
+                            <div class="form-icon">
+                                <input type="text" class="form-control form-control-icon"
+                                    placeholder="Buscar por nombre Producto" formControlName="productName"
+                                    (input)="ValidatorUtil.onInputValidate(name,[Constants.REGEX_NOT_START_BLANK],100)"
+                                    (paste)="ValidatorUtil.onPasteValidate($event,name,[Constants.REGEX_NOT_START_BLANK],100)">
+                                <i class="ri-search-line search-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="col-xxl-4 col-sm-12">
+                            <label for="iconInput" class="form-label">Tipo</label>
+                            <div class="form-icon">
+
+                                <select cl class="form-control form-control-icon" formControlName="typeId">
+                                    <option value="">TODOS</option>
+                                    @for (item of stateList; track $index){
+                                    <option [value]="item.id">{{item.name}}</option>
+                                    }
+
+                                </select>
+                                <i class="ri-search-line search-icon"></i>
+                            </div>
+                        </div>
+
+
+
+                        <!--end row-->
+                    </form>
+
+                    <div class="d-flex align-items-center">
+                        <h4 class="card-title mb-0 flex-grow-1">Lista</h4>
+                        <div class="flex-shrink-0 d-flex gap-2 flex-wrap">
+                            <a class="btn btn-danger" (click)="clear()">
+                                <i class="ri-delete-bin-2-line align-bottom me-1"></i>
+                                Limpiar filtros
+                            </a>
+                            <a class="btn btn-primary" (click)="getData(paginator)">
+                                <i class="ri-equalizer-fill align-bottom me-1"></i>
+                                Aplicar filtros
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    @if(isLoader){
+                    <ngx-skeleton-loader count="5" appearance="line" />
+                    }@else{
+                    <div class="table-card gridjs-border-none">
+                        <div class="table-responsive">
+                            <table class="table align-middle custom-datatable" id="datatableexample">
+                                <thead>
+                                    <tr class="bg-light text-muted">
+                                        <th scope="col">#</th>
+                                        <th scope="col" class="sort" (click)="onSort('productName')"
+                                            (keypress)="onSort('productName')">
+                                            Producto
+                                        </th>
+                                        <th scope="col" class="sort" (click)="onSort('datecreate')"
+                                            (keypress)="onSort('datecreate')">
+                                            Fecha creación
+                                        </th>
+                                        <th scope="col" class="sort" (click)="onSort('discount')"
+                                            (keypress)="onSort('discount')">
+                                            Precio Descuento
+                                        </th>
+
+                                        <th scope="col" class="sort" (click)="onSort('datestart')"
+                                            (keypress)="onSort('datestart')">
+                                            Fecha inicio
+                                        </th>
+                                        <th scope="col" class="sort" (click)="onSort('dateend')"
+                                            (keypress)="onSort('dateend')">
+                                            Fecha fin
+                                        </th>
+                                        <th scope="col" (keypress)="onSort('name')">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for(data of offers; track $index){
+                                    <tr id=" p_{{ data.id }}">
+                                        <td>
+                                            <input class="form-check-input" type="checkbox" name="checkAll"
+                                                value="{{ data.id }}" />
+                                        </td>
+                                        <td>
+                                            <span>
+                                                <div class="d-flex align-items-center">
+
+                                                    <div class="flex-grow-1">
+                                                        <h5 class="fs-14 mb-1">
+                                                            <a [routerLink]="'/ecommerce/product-detail/'+data.productId"
+                                                                class="text-body">
+                                                                {{ data.productName}}
+                                                            </a>
+                                                        </h5>
+
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            {{ data.datecreate | date : "dd-MM-yyyy" }}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-body fs-12 fw-medium">{{ data.discount }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{ data.datestart | date : "dd-MM-yyyy" }}
+                                        </td>
+                                        <td>
+                                            <span>
+                                                {{data.dateend | date : "dd-MM-yyyy"}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                <div class="dropdown" ngbDropdown>
+                                                    <button class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                                        type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                                        ngbDropdownToggle>
+                                                        <i class="ri-more-fill"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                                                        <li>
+                                                            <a class="dropdown-item" (click)="edit(data)"><i
+                                                                    class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                                Ver
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="px-3">
+                            <div class="row justify-content-md-between align-items-md-center g-0 pagination">
+                                <div class="col-sm-12 col-md-5">
+                                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status"
+                                        aria-live="polite">
+                                        Mostrando
+                                        {{ paginator.startIndex }} a
+                                        {{ paginator.endIndex }} de {{ paginator.totalElement }}
+                                        entradas
+                                    </div>
+                                </div>
+                                <!-- Pagination -->
+                                <div class="col-sm-12 col-md-5">
+                                    <div class="text-md-right float-md-end pagination-rounded gridjs-pagination mb-3">
+                                        <ngb-pagination [collectionSize]="paginator.totalElement"
+                                            [page]="paginator.number" [pageSize]="paginator.size" [maxSize]="5"
+                                            (pageChange)="changePage($event)" [rotate]="true">
+                                        </ngb-pagination>
+                                    </div>
+                                </div>
+                                <!-- End Pagination -->
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+        <!-- end card -->
+    </div>
+</div>
+<!-- end col -->

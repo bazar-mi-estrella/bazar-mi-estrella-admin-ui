@@ -23,6 +23,7 @@ import { MasterService } from 'src/app/core/services/master.service';
 import { TypeMarcaModelService } from 'src/app/core/services/typemarcmodel.service';
 import { Master } from 'src/app/core/interfaces/master.interface';
 import { TypeMarcModel } from 'src/app/core/interfaces/typemarcmodel.interface';
+import { Paginator } from 'src/app/core/interfaces/paginator.interface';
 
 @Component({
   selector: 'app-products',
@@ -34,6 +35,8 @@ import { TypeMarcModel } from 'src/app/core/interfaces/typemarcmodel.interface';
  * Products Components
  */
 export class ProductsComponent {
+
+  paginator: Paginator = { size: 20, number: 0 } as Paginator;
 
   // bread crumb items
   breadCrumbItems!: Array<{}>;
@@ -48,31 +51,10 @@ export class ProductsComponent {
 
   products: Product[] = [];
   user = [];
-  Brand: any = [];
-  Rating: any = [];
-  discountRates: number[] = [];
   form!: FormGroup;
-  total: any;
-  totalbrand: any;
-  totalrate: any;
-  totaldiscount: any;
-
-  allproducts: any;
-  activeindex = '1';
-  allpublish: any;
-  grocery: any = 0;
-  fashion: any = 0;
-  watches: any = 0;
-  electronics: any = 0;
-  furniture: any = 0;
-  accessories: any = 0;
-  appliance: any = 0;
-  kids: any = 0;
-  totalpublish: any = 0;
 
   searchTerm: string = ""
   isLoader: boolean = true;
-
 
   constructor(
     private readonly modalService: NgbModal,
@@ -88,9 +70,7 @@ export class ProductsComponent {
   ) { }
 
   ngOnInit(): void {
-    /**
-    * BreadCrumb
-    */
+
     this.breadCrumbItems = [
       { label: 'Productos' },
       { label: 'Bandeja', active: true }
@@ -98,28 +78,29 @@ export class ProductsComponent {
 
     this.initForm()
     this.initValues()
-    this.getData()
+    this.getData(this.paginator)
   }
 
   initForm(): void {
     this.form = this.formBuilder.group({
       id: [''],
       name: [''],
-      type: [''],
-      marca: ['']
+      typeId: [''],
+      marcaId: ['']
     });
   }
 
   clear(): void {
     this.initForm()
-    this.getData()
+    this.getData(this.paginator)
+    this.marcList = []
   }
 
-  getData() {
+  getData(paginator: Paginator) {
     this.isLoader = true;
-    this.productService.getAllByfilter(this.form.value as ProductFilter).subscribe((response) => {
-
-      this.products = this.service.changePage(response.content)
+    this.productService.getAllByfilter(this.form.value, paginator).subscribe((response) => {
+      this.products = response.content
+      this.paginator = this.service.buildPagination(response)
       this.isLoader = false;
     })
 
@@ -149,17 +130,15 @@ export class ProductsComponent {
 
   onSelectionChangeType(event: Event) {
     const value = (event.target as HTMLSelectElement).value;
-    //this.getMarcas(value)
+    this.getMarcas(value)
   }
 
 
-  changePage() {
-    this.products = this.service.changePage(this.products)
+  changePage(index: number) {
+    this.getData({ size: this.paginator.size, number: index - 1 } as Paginator)
   }
 
-  /**
-* change navigation
-*/
+
 
   /**
   * Sort table data

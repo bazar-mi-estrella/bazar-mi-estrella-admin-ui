@@ -169,12 +169,9 @@ export class OrdersComponent {
         this.stateId.setValue(Constants.STATE_ORDER_IN_TRANSIT);
         this.getData();
       },
-      4: () => {
-        this.orderes = this.allorderes.filter((order: any) => order.status === 'Returns');
-      },
       5: () => {
-        this.orderes = this.allorderes.filter((order: any) => order.status === 'Cancelled');
-      },
+        this.stateId.setValue(Constants.STATE_ORDER_CANCELED);
+        this.getData();      },
       6: () => {
         this.stateId.setValue(Constants.STATE_ORDER_PREPARING_SHIPMENT);
         this.getData();

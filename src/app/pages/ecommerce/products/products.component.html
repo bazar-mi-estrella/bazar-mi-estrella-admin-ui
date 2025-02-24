@@ -24,10 +24,11 @@
               <label for="iconInput" class="form-label">Tipo</label>
               <div class="form-icon">
 
-                <select cl class="form-control form-control-icon" formControlName="type"
+                <select cl class="form-control form-control-icon" formControlName="typeId"
                   (change)="onSelectionChangeType($event)">
+                  <option value="">TODOS</option>
                   @for (item of typesList; track $index){
-                  <option [value]="item.name">{{item.name}}</option>
+                  <option [value]="item.id">{{item.name}}</option>
                   }
 
                 </select>
@@ -39,9 +40,10 @@
               <label for="iconInput" class="form-label">Marca</label>
               <div class="form-icon">
 
-                <select cl class="form-control form-control-icon" formControlName="type">
+                <select cl class="form-control form-control-icon" formControlName="marcaId">
+                  <option value="">TODOS</option>
                   @for (item of marcList; track $index){
-                  <option [value]="item.name">{{item.name}}</option>
+                  <option [value]="item.id">{{item.name}}</option>
                   }
 
                 </select>
@@ -59,7 +61,7 @@
                 <i class="ri-delete-bin-2-line align-bottom me-1"></i>
                 Limpiar filtros
               </a>
-              <a class="btn btn-primary" (click)="getData()">
+              <a class="btn btn-primary" (click)="getData(paginator)">
                 <i class="ri-equalizer-fill align-bottom me-1"></i>
                 Aplicar filtros
               </a>
@@ -120,9 +122,7 @@
                             </h5>
                             <p class="text-muted mb-0">
                               Tipo :
-                              <span class="fw-medium">{{
-                                data.typeName
-                                }}</span>
+                              <span class="fw-medium">{{data.typeName}}</span>
                             </p>
                           </div>
                         </div>
@@ -188,16 +188,16 @@
                 <div class="col-sm-12 col-md-5">
                   <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
                     Mostrando
-                    {{ service.startIndex }} a
-                    {{ service.endIndex }} de {{ products.length }}
+                    {{ paginator.startIndex }} a
+                    {{ paginator.endIndex }} de {{ paginator.totalElement }}
                     entradas
                   </div>
                 </div>
                 <!-- Pagination -->
                 <div class="col-sm-12 col-md-5">
                   <div class="text-md-right float-md-end pagination-rounded gridjs-pagination mb-3">
-                    <ngb-pagination [collectionSize]="products.length" [(page)]="service.page"
-                      [pageSize]="service.pageSize" (pageChange)="changePage()">
+                    <ngb-pagination [collectionSize]="paginator.totalElement" [page]="paginator.number"
+                      [pageSize]="paginator.size" [maxSize]="5" (pageChange)="changePage($event)" [rotate]="true" >
                     </ngb-pagination>
                   </div>
                 </div>

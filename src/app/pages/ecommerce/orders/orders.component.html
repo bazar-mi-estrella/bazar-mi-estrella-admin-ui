@@ -102,6 +102,20 @@
                 }
               </ng-template>
             </li>
+
+            <li [ngbNavItem]="3">
+              <a ngbNavLink>
+                <i class="ri-truck-line me-1 align-bottom"></i> En Tránsito
+              </a>
+              <ng-template ngbNavContent>
+                @if(isLoader){
+                <ngx-skeleton-loader count="5" appearance="line" />
+                }@else{
+                <app-orders-table [allorderes]="allorderes"></app-orders-table>
+                }
+              </ng-template>
+            </li>
+
             <li [ngbNavItem]="2">
               <a ngbNavLink>
                 <i class="ri-checkbox-circle-line me-1 align-bottom"></i>
@@ -115,31 +129,8 @@
                 }
               </ng-template>
             </li>
-            <li [ngbNavItem]="3">
-              <a ngbNavLink>
-                <i class="ri-truck-line me-1 align-bottom"></i> En Tránsito
-              </a>
-              <ng-template ngbNavContent>
-                @if(isLoader){
-                <ngx-skeleton-loader count="5" appearance="line" />
-                }@else{
-                <app-orders-table [allorderes]="allorderes"></app-orders-table>
-                }
-              </ng-template>
-            </li>
-            <li [ngbNavItem]="4">
-              <a ngbNavLink>
-                <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>
-                Devuelto
-              </a>
-              <ng-template ngbNavContent>
-                @if(isLoader){
-                <ngx-skeleton-loader count="5" appearance="line" />
-                }@else{
-                <app-orders-table [allorderes]="allorderes"></app-orders-table>
-                }
-              </ng-template>
-            </li>
+          
+  
             <li [ngbNavItem]="5">
               <a ngbNavLink>
                 <i class="ri-close-circle-line me-1 align-bottom"></i> Cancelado

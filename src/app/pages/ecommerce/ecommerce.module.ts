@@ -48,6 +48,8 @@ import { SellerDetailsComponent } from './seller-details/seller-details.componen
 import { OrdersTableComponent } from './orders/orders-table/orders-table.component';
 import { RefundsComponent } from './refunds/refunds.component';
 import { RefundEvaluateComponent } from './refund-evaluate/refund-evaluate.component';
+import { OffersComponent } from './offers/offers.component';
+import { AddOfferComponent } from './add-offer/add-offer.component';
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -61,9 +63,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ProductsComponent,
     ProductDetailComponent,
     AddProductComponent,
+    AddOfferComponent,
     OrdersComponent,
     OrdersTableComponent,
     OrdersDetailsComponent,
+    OffersComponent,
     RefundEvaluateComponent,
     RefundsComponent,
     CustomersComponent,

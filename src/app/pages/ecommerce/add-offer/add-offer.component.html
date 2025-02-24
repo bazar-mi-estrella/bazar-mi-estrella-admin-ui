@@ -1,0 +1,63 @@
+<!-- Contacts Create Model -->
+<div class="modal-content">
+
+    <div class="modal-header bg-info-subtle p-3">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar Oferta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+            (click)="close()"></button>
+    </div>
+    <form (ngSubmit)="save()" [formGroup]="form" class="tablelist-form" autocomplete="off">
+        <div class="modal-body">
+            <input type="hidden" id="id-field" />
+            <div class="row g-3">
+
+                <div class="col-12">
+                        <div class="mt-3">
+                            <label for="product-select" class="form-label">Busca un producto y selecciona</label>
+                            <ng-select id="product-select" appearance="outline" labelForId="heroId" (search)="onSearch($event)">
+                                @for ( data of products; track $index) {
+                                <ng-option value="batman">
+                                    <img src="{{data.imgurl}}" alt="country flag" class="options-flagimg" height="20">
+                                    {{data.name}}
+                                    <span class="countrylist-codeno text-muted"> S/ {{data.price}}</span>
+                                </ng-option>
+                                }
+                            </ng-select>
+                        </div>
+                </div>
+
+                <div class="col-12">
+                    <div>
+                        <label for="name-field" class="form-label">Motivo o Comentario</label>
+                        <input type="text" id="customername-field" class="form-control"
+                            placeholder="Introducir comentario" required formControlName="reason"
+                            [ngClass]="{ 'is-invalid': submitted && reason.errors }"
+                            (input)="ValidatorUtil.onInputValidate(reason,[Constants.REGEX_NOT_START_BLANK],200)"
+                            (paste)="ValidatorUtil.onPasteValidate($event,reason,[Constants.REGEX_NOT_START_BLANK],200)" />
+                        @if(submitted && reason.errors){
+                        <div class="invalid-feedback" style="text-align: left;">
+                            @if(reason.errors['required']){
+                            <div>Respuesta es requerido</div>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="hstack gap-2 justify-content-end">
+                @if (isLoaderSave) {
+                <button type="button" class="btn btn-success" [disabled]="true">Guardando...</button>
+                }@else {
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="close()">Cerrar</button>
+                <button type="submit" class="btn btn-success" id="add-btn">Guardar</button>
+                }
+
+            </div>
+        </div>
+    </form>
+</div>
