@@ -39,4 +39,5 @@ export interface Order {
     numbercard: string; // Número de tarjeta enmascarado
     totalmount: number; // Monto total de la transacción
 
+
 }

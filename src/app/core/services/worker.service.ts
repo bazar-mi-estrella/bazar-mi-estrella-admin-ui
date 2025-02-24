@@ -37,6 +37,11 @@ export class WorkerService {
   save(worker: WorkerPost): Observable<Response<WorkerPost>> {
     return this.http.post<Response<WorkerPost>>(this.API, worker);
   }
+  
+  getById(id:string): Observable<WorkerGet> {
+    return this.http.get<WorkerGet>(this.API.concat("/").concat(id))
+  }
+
 
   register(email: string, password: string): Promise<UserCredential> {
     return createUserWithEmailAndPassword(this.auth, email, password);

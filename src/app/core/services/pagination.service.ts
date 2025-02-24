@@ -1,5 +1,7 @@
 // pagination.service.ts
 import { Injectable } from '@angular/core';
+import { Paginator } from '../interfaces/paginator.interface';
+import { Page } from '../interfaces/page.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -10,6 +12,29 @@ export class PaginationService {
     direction: any = 'asc';
     startIndex: number = 1;
     endIndex: number = 9;
+
+    buildPagination(data: Page<any>): Paginator {
+        return {
+            number: data.number + 1,
+            totalElement: data.totalElements,
+            totalPages: data.totalPages,
+            size: data.size,
+            startIndex: this.buildStartIndex(data),
+            endIndex: this.buildEndIndex(data)
+
+        }
+    }
+
+    private buildStartIndex(data: Page<any>): number {
+        return ((data.number + 1) * (data.size)) + 1 - data.size;
+    }
+
+
+    private buildEndIndex(data: Page<any>): number {
+        const endIndex = (data.number + 1) * data.size;
+        return endIndex > data.totalElements ? data.totalElements : endIndex;
+    }
+    
 
     // Pagination
     changePage(alldata: any[]) {

@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ProductFilter } from '../interfaces/product-filter';
 import { Product } from '../interfaces/product.interface';
 import { Page } from '../interfaces/page.interface';
 import { ProductPost } from '../interfaces/product-post.interface';
+import { Paginator } from '../interfaces/paginator.interface';
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -29,15 +31,14 @@ export class ProductService {
     return this.httpClient.post<ProductPost>(this.API, data)
   }
 
-  public getAllByfilter(params: ProductFilter): Observable<Page<Product>> {
-
+  public getAllByfilter(params: ProductFilter, paginator: Paginator): Observable<Page<Product>> {
 
     let httpParams = Object.entries(params)
-      .filter(([_, value]) => value !== null && value !== undefined && value !=="") // Filtra los valores definidos
+      .filter(([_, value]) => value !== null && value !== undefined && value !== "") // Filtra los valores definidos
       .reduce((acc, [key, value]) => acc.append(key, value as string), new HttpParams()); // Crea HttpParams directamente
 
-    if (!params.size) httpParams = httpParams.append("size", 20)
-    if (!params.page) httpParams = httpParams.append("page", 0)
+    if (!params.size) httpParams = httpParams.append("size", paginator.size)
+    if (!params.page) httpParams = httpParams.append("page", paginator.number)
 
     return this.httpClient.get<Page<Product>>(this.API.concat("/bandeja"), { params: httpParams })
   }
@@ -47,55 +48,30 @@ export class ProductService {
     return this.httpClient.get<Product>(this.API.concat("/").concat(id))
   }
 
-  /*
-    ---------------------------------------------
-    ------------- Product Pagination  -----------
-    ---------------------------------------------
-  */
-  public getPager(totalItems: number, currentPage: number = 1, pageSize: number = 9) {
-    // calculate total pages
-    let totalPages = Math.ceil(totalItems / pageSize);
+  public localProducts: Product[] = [];
 
-    // Paginate Range
-    let paginateRange = 3;
+  autocomplete(name: string): Observable<Product[]> {
 
-    // ensure current page isn't out of range
-    if (currentPage < 1) {
-      currentPage = 1;
-    } else if (currentPage > totalPages) {
-      currentPage = totalPages;
+    // Buscar en la lista local
+    const filteredLocal = this.localProducts.filter(p =>
+      p.name.toLowerCase().includes(name.toLowerCase())
+    );
+
+    if (filteredLocal.length > 0) {
+      return of(filteredLocal);
     }
 
-    let startPage: number, endPage: number;
-    if (totalPages <= 5) {
-      startPage = 1;
-      endPage = totalPages;
-    } else if (currentPage < paginateRange - 1) {
-      startPage = 1;
-      endPage = startPage + paginateRange - 1;
-    } else {
-      startPage = currentPage - 1;
-      endPage = currentPage + 1;
-    }
+    // Si no hay coincidencias en la lista local, hacer la petición HTTP
+    let httpParams = new HttpParams()
+      .set('size', '10')
+      .set('page', '0')
+      .set('name', name);
 
-    // calculate start and end item indexes
-    let startIndex = (currentPage - 1) * pageSize;
-    let endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
-
-    // create an array of pages to ng-repeat in the pager control
-    let pages = Array.from(Array((endPage + 1) - startPage).keys()).map(i => startPage + i);
-
-    // return object with all pager properties required by the view
-    return {
-      totalItems: totalItems,
-      currentPage: currentPage,
-      pageSize: pageSize,
-      totalPages: totalPages,
-      startPage: startPage,
-      endPage: endPage,
-      startIndex: startIndex,
-      endIndex: endIndex,
-      pages: pages
-    };
+    return this.httpClient
+      .get<Page<Product>>(`${this.API}/bandeja`, { params: httpParams })
+      .pipe(
+        map((page: Page<Product>) => page.content));
   }
+
+
 }

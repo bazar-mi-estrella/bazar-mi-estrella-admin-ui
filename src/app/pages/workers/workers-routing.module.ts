@@ -13,7 +13,13 @@ const routes: Routes = [
 
   {
     path: "new",
-    component: NewComponent
+    component: NewComponent,
+    data: { title: 'Nuevo', mode: 'new' }
+  },
+  {
+    path: "edit/:id",
+    component: NewComponent,
+    data: { title: 'Editar', mode: 'edit' }
   },
 ];
 

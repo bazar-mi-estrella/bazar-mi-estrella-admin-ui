@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { Master } from 'src/app/core/interfaces/master.interface';
 import { ImgbbService } from 'src/app/core/services/imgbb.service';
@@ -13,6 +13,7 @@ import { FirebaseError } from "firebase/app"; // Importa FirebaseError
 
 // Sweet Alert
 import Swal from 'sweetalert2';
+import { WorkerGet } from 'src/app/core/interfaces/worker-get.interface';
 
 @Component({
   selector: 'app-new',
@@ -31,8 +32,14 @@ export class NewComponent implements OnInit {
   submitted = false;
   isLoaderInit: boolean = true;
   isLoader: boolean = false;
+  breadCrumbItems!: Array<{}>;
+
+  title: string = ''
+  mode: string = ''
+  id: string = this.activatedRoute.snapshot.params["id"]
 
   constructor(
+    private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
     private readonly workerService: WorkerService,
@@ -41,16 +48,22 @@ export class NewComponent implements OnInit {
 
   ) { }
 
-
-  breadCrumbItems = [
-    { label: 'Trabajadores' },
-    { label: 'Nuevo', active: true }
-  ];
-
   ngOnInit(): void {
-
+    this.initDataRoute()
     this.initForm();
     this.initValues();
+  }
+
+  initDataRoute() {
+    this.activatedRoute.data.subscribe(data => {
+      this.title = data['title'];
+      this.mode = data['mode'];
+    });
+
+    this.breadCrumbItems = [
+      { label: 'Trabajadores' },
+      { label: this.title, active: true }
+    ];
   }
 
   initValues(): void {
@@ -64,6 +77,8 @@ export class NewComponent implements OnInit {
         this.isLoaderInit = false;
         this.typeDocumentList = response.typeDocumentList;
         this.roleList = response.roleList
+        if (this.mode === 'edit') this.getById()
+
       },
       error: (error) => {
         this.isLoaderInit = false
@@ -89,6 +104,13 @@ export class NewComponent implements OnInit {
       phone: ['', Validators.required],
     });
   }
+
+  
+    getById(): void {
+      this.workerService.getById(this.id).subscribe((res: WorkerGet) => {
+        this.form.patchValue(res)
+      })
+    }
 
   // File Upload
   imageURL: string | undefined;

@@ -24,6 +24,10 @@ export class OrderService {
         return this.httpClient.post<ProductPost>(this.API, data)
     }
 
+    send(order:string): Observable<void> {
+        return this.httpClient.put<void>(this.API.concat("/send/").concat(order), {})
+    }
+
     public getAllByfilter(params: any): Observable<Page<Order>> {
 
         let httpParams = this.buildParams(params)

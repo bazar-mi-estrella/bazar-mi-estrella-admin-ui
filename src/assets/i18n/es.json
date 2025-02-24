@@ -172,6 +172,7 @@
       "TEXT": "Productos",
       "LIST": {
         "TRAY": "Bandeja de Productos",
+        "OFFERS": "Bandeja de Ofertas",
         "NEW": "Nuevo Producto"
       }
     },

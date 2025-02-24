@@ -151,7 +151,8 @@ export class ListComponent {
     this.worker = this.workers.find(x => x.id === id) || {} as WorkerTray;
   }
 
-  editDataGet(id: any, content: any) {
+  editDataGet(id: string): void {
+    this.router.navigate(["/workers/edit/" + id])
   }
 
   /**
