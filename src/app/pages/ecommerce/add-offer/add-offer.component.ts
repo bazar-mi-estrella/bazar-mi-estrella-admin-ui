@@ -10,9 +10,11 @@ import { OfferService } from 'src/app/core/services/offer.service';
 import { ProductService } from 'src/app/core/services/product.service';
 import { RefundService } from 'src/app/core/services/refund.service';
 import { Constants } from 'src/app/core/utils/constants';
+import { DateFormatUtil } from 'src/app/core/utils/date-format.util';
 import { SweetAlertUtil } from 'src/app/core/utils/sweet-alert.util';
 import { ValidatorUtil } from 'src/app/core/utils/validator.util';
 import Swal from 'sweetalert2';
+import { Spanish } from 'flatpickr/dist/l10n/es.js';
 
 @Component({
   selector: 'app-add-offer',
@@ -21,7 +23,6 @@ import Swal from 'sweetalert2';
 })
 export class AddOfferComponent {
 
-  @Input() id: string | undefined; // Recibe los datos del modal
 
   isLoaderInitial: boolean = true
   isLoaderSave: boolean = false;
@@ -43,7 +44,7 @@ export class AddOfferComponent {
     private readonly refundService: RefundService,
     private readonly masterService: MasterService,
     private readonly productService: ProductService,
-    private readonly offerService:OfferService
+    private readonly offerService: OfferService
   ) { }
 
   ngOnInit(): void {
@@ -60,9 +61,8 @@ export class AddOfferComponent {
       reason: ['', Validators.required],
       datestart: ['', Validators.required],
       dateend: ['', Validators.required],
-
+      orderDate: [''],
     });
-    this.refundId.setValue(this.id)
   }
 
 
@@ -85,6 +85,8 @@ export class AddOfferComponent {
       next: (response) => {
         this.products = response
         this.productService.localProducts = response
+        console.log("products-->", this.productId)
+
       },
       error: (error) => { console.error('Error al obtener datos:', error); }
     })
@@ -94,6 +96,7 @@ export class AddOfferComponent {
 
     if (this.form.invalid) {
       this.submitted = true;
+      console.log("form-->", this.form)
       return
     }
 
@@ -113,18 +116,46 @@ export class AddOfferComponent {
     })
   }
 
+  startOptions: any = {
+    locale: Spanish,
+    mode: 'range',
+    dateFormat: 'd M, Y',
+    altFormat: 'd M, Y',
+    minDate: new Date(),
+  };
+
+  onDateChange(event: any) {
+    let selectDates: any[] = event.selectedDates
+    let dateStart: string = DateFormatUtil.start(selectDates[0])
+    let dateEnd: string = DateFormatUtil.end(selectDates[1])
+
+    this.datestart.setValue(dateStart)
+    this.dateEnd.setValue(dateEnd)
+
+  }
+
   close(value?: string) {
     this.activeModal.close(value);
   }
-  get result(): AbstractControl {
-    return this.form.controls['result'];
+
+  get productId(): AbstractControl {
+    return this.form.controls['productId']
   }
 
   get reason(): AbstractControl {
     return this.form.controls['reason'];
   }
 
-  get refundId(): AbstractControl {
-    return this.form.controls['refundId'];
+  get datestart(): AbstractControl {
+    return this.form.controls['datestart']
   }
+
+  get dateEnd(): AbstractControl {
+    return this.form.controls['dateend']
+  }
+
+  get discount(): AbstractControl {
+    return this.form.controls['discount']
+  }
+
 }
