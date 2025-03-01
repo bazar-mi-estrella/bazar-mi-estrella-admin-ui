@@ -1,5 +1,5 @@
 //const HOST = "https://cix-tech-mart-api.onrender.com";
-const HOST = "https://cix-tech-mart-api-0uki.onrender.com";
+const HOST = "https://cix-tech-mart-api-wfc2.onrender.com";
 
 export const environment = {
   API: HOST + "/cix-tech-mart-api/v1",
