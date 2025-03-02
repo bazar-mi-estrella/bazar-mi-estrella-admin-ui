@@ -37,7 +37,7 @@ export class OrdersTableComponent {
       next: () => {
         this.loadingRows.delete(data.id); // Quita la fila después de la operación
         data.stateId = Constants.STATE_ORDER_IN_TRANSIT; // Deshabilita el botón de envío
-        data.stateName="En Tránsito"
+        data.stateName = "En Tránsito"
       },
       error: () => {
         this.loadingRows.delete(data.id); // Quita la fila en caso de error
@@ -47,5 +47,21 @@ export class OrdersTableComponent {
     setTimeout(() => {
     }, 3000);
   }
-  
+
+  saveDelivery(data: Order) {
+    this.loadingRows.add(data.id); // Agrega la fila al conjunto de carga
+    this.orderService.delivered(data.id).subscribe({
+      next: () => {
+        this.loadingRows.delete(data.id); // Quita la fila después de la operación
+        data.stateId = Constants.STATE_ORDER_DELIVERED; // Deshabilita el botón de envío
+        data.stateName = "Entregado"
+      },
+      error: () => {
+        this.loadingRows.delete(data.id); // Quita la fila en caso de error
+      }
+    })
+
+  }
+
+
 }
