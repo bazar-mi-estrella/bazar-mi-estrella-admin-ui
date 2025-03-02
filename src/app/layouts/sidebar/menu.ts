@@ -25,22 +25,7 @@ export const MENU: MenuItem[] = [
       },]
   },
 
-  {
-    id: 3,
-    label: 'MENUITEMS.DASHBOARD.TEXT',
-    icon: 'ri-dashboard-2-line',
-    isCollapsed: true,
-    subItems: [
-
-      {
-        id: 5,
-        label: 'MENUITEMS.DASHBOARD.LIST.ECOMMERCE',
-        link: '/',
-        parentId: 3
-      },
-
-    ]
-  },
+ 
   
   {
     id: 54,
