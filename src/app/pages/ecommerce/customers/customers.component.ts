@@ -30,11 +30,11 @@ import { Client } from 'src/app/core/interfaces/client.interface';
 export class CustomersComponent {
   ValidatorUtil = ValidatorUtil
   Constants = Constants
-  form!:FormGroup
+  form!: FormGroup
   stateList: Master[] = []
   isLoader: boolean = true;
 
-  customers: Client[]=[];
+  customers: Client[] = [];
 
   // bread crumb items
   breadCrumbItems!: Array<{}>;
@@ -42,14 +42,14 @@ export class CustomersComponent {
 
 
   constructor(
-     public service: PaginationService,
+    public service: PaginationService,
     private readonly masterService: MasterService,
     private readonly router: Router,
 
-    private  readonly customerService:CustomerService,
+    private readonly customerService: CustomerService,
 
     private readonly formBuilder: UntypedFormBuilder,
- ) {
+  ) {
   }
 
   ngOnInit(): void {
@@ -67,7 +67,7 @@ export class CustomersComponent {
 
   }
 
-  initForm():void{
+  initForm(): void {
     this.form = this.formBuilder.group({
       id: [''],
       fullname: ['', [Validators.required]],
@@ -90,21 +90,21 @@ export class CustomersComponent {
     });
   }
 
-  
-    clear(): void {
-      this.initForm()
-      this.getData()
-    }
-  
-    getData() {
-      this.isLoader = true;
-      this.customerService.getAllByfilter(this.form.value as ClientFilter).subscribe((response) => {
-  
-        this.customers = this.service.changePage(response.content)
-        this.isLoader = false;
-      })
-  
-    }
+
+  clear(): void {
+    this.initForm()
+    this.getData()
+  }
+
+  getData() {
+    this.isLoader = true;
+    this.customerService.getAllByfilter(this.form.value as ClientFilter).subscribe((response) => {
+
+      this.customers = this.service.changePage(response.content)
+      this.isLoader = false;
+    })
+
+  }
 
   changePage() {
     this.customers = this.service.changePage(this.customers)

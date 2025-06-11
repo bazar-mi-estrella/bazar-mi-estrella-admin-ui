@@ -159,8 +159,8 @@
                         <label for="phone-field" class="form-label text-muted">Teléfono</label>
                         <input type="text" id="phone-field" class="form-control" placeholder="Introducir número"
                             formControlName="phone" [ngClass]="{ 'is-invalid': submitted && phone.errors }"
-                            (input)="ValidatorUtil.onInputValidate(phone,[Constants.REGEX_ONLY_NUMBERS],20)"
-                            (paste)="ValidatorUtil.onPasteValidate($event,phone,[Constants.REGEX_ONLY_NUMBERS],20)" />
+                            (input)="ValidatorUtil.onInputValidate(phone,[Constants.REGEX_ONLY_NUMBERS],12)"
+                            (paste)="ValidatorUtil.onPasteValidate($event,phone,[Constants.REGEX_ONLY_NUMBERS],12)" />
                         @if(submitted && phone.errors){
                         <div class="invalid-feedback" style="text-align: left;">
                             @if(phone.errors['required']){

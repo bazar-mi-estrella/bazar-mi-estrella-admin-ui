@@ -1,0 +1,61 @@
+<!-- Contacts Create Model -->
+<div class="modal-content">
+
+    <div class="modal-header bg-info-subtle p-3">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar Tipo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+            (click)="close()">
+        </button>
+
+    </div>
+
+    <div class="modal-body">
+
+        <div class="card">
+            <div class="card-body">
+
+                @if (format=="type") {
+                <form [formGroup]="form">
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" formControlName="name"
+                            placeholder="Ingrese el nombre del tipo"
+                            [ngClass]="{ 'is-invalid': name.touched && name.errors }"
+                            (input)="ValidatorUtil.onInputValidate(name,[Constants.REGEX_NOT_START_BLANK],100)"
+                            (paste)="ValidatorUtil.onPasteValidate($event,name,[Constants.REGEX_NOT_START_BLANK],100)">
+                        <div class="invalid-feedback">Este campo es requerido</div>
+
+                    </div>
+
+                    <button type="button" class="btn btn-primary" [disabled]="name.invalid" (click)="saveType()">
+                        Guardar
+                    </button>
+                </form>
+                }
+
+                @else if (format=="make") {
+                <form [formGroup]="formMake">
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" formControlName="name"
+                            placeholder="Ingrese el nombre del modelo"
+                            [ngClass]="{ 'is-invalid': nameMake.touched && nameMake.errors }"
+                            (input)="ValidatorUtil.onInputValidate(nameMake,[Constants.REGEX_NOT_START_BLANK],100)"
+                            (paste)="ValidatorUtil.onPasteValidate($event,nameMake,[Constants.REGEX_NOT_START_BLANK],100)">
+                        <div class="invalid-feedback">Este campo es requerido</div>
+
+                    </div>
+
+                    <button type="button" class="btn btn-primary" [disabled]="nameMake.invalid" (click)="saveMake()">
+                        Guardar
+                    </button>
+                </form>
+                }
+            </div>
+
+        </div>
+
+    </div>
+</div>

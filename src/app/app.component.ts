@@ -11,7 +11,7 @@ import { SweetAlertUtil } from './core/utils/sweet-alert.util';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Cix Tech Mart';
+  title = 'Bazar Mi Estrella';
   constructor(
     private readonly auth: Auth,
     private readonly workerService: WorkerService

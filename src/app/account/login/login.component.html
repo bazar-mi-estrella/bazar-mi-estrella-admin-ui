@@ -27,7 +27,7 @@
             <div class="card-body p-4">
               <div class="text-center mt-2">
                 <h5 class="text-primary">BIENVENIDO A</h5>
-                <img src="assets/images/logo-cix.jpeg" alt="150" height="140" />
+                <img src="assets/images/logo.svg" alt="150" height="140" />
                 <p class="text-muted">Iniciar sesión para comenzar</p>
               </div>
               <div class="p-2 mt-4">
@@ -83,11 +83,11 @@
 
                   <div class="mt-4">
                     @if (isLoaderSubmit) {
-                    <button class="btn btn-dark w-100" type="button" [disabled]="true">
+                    <button class="btn btn-primary w-100" type="button" [disabled]="true">
                       Cargando...
                     </button>
                     }@else {
-                    <button class="btn btn-dark w-100" type="submit">
+                    <button class="btn btn-primary w-100" type="submit">
                       Iniciar sesión
                     </button>
                     }

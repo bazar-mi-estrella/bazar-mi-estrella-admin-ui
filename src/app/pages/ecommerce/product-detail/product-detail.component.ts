@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 // Products Services
 
-import { productList } from 'src/app/core/data/product';
 import { SlickCarouselComponent } from 'ngx-slick-carousel';
-import { productListModel } from 'src/app/store/Ecommerce/ecommerce_model';
 import { ProductService } from '../../../core/services/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from 'src/app/core/interfaces/product.interface';

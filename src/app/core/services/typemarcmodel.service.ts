@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TypeMarcModel } from '../interfaces/typemarcmodel.interface';
+import { Response } from '../interfaces/response.interface';
 
 
 @Injectable({
@@ -35,6 +36,23 @@ export class TypeMarcaModelService {
     public types(): Observable<TypeMarcModel[]> {
         return this.httpClient
             .get<TypeMarcModel[]>(this.API.concat("/types"))
+    }
+
+    public saveType(type: TypeMarcModel): Observable<Response<TypeMarcModel>> {
+        return this.httpClient.post<Response<TypeMarcModel>>(this.API.concat("/types"), type)
+    }
+
+    public saveMake(make: TypeMarcModel): Observable<Response<TypeMarcModel>> {
+        return this.httpClient.post<Response<TypeMarcModel>>(this.API.concat("/makes"), make)
+    }
+
+    public deleteType(id:string): Observable<Response<void>> {
+        return this.httpClient.delete<Response<void>>(this.API.concat("/types/").concat(id))
+    }
+
+    public makes(): Observable<TypeMarcModel[]> {
+        return this.httpClient
+            .get<TypeMarcModel[]>(this.API.concat("/makes"))
     }
 
     public marcas(typeId: string): Observable<TypeMarcModel[]> {

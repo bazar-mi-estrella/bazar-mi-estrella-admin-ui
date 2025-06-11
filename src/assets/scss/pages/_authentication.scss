@@ -32,12 +32,12 @@
 }
 
 .auth-one-bg {
-    background-image: url("../../images/login.jpeg");
+    //background-image: url("../../images/login.jpeg");
     background-position: center;
     background-size: cover;
 
     .bg-overlay {
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)); // Degradado negro
+  background: #05342A; // Degradado negro
   opacity: 0.9; // Transparencia
 }
 

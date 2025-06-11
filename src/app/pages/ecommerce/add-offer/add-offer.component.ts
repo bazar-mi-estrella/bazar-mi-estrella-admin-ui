@@ -1,9 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin } from 'rxjs';
-import { chatMessagesData } from 'src/app/core/data';
-import { Master } from 'src/app/core/interfaces/master.interface';
 import { Product } from 'src/app/core/interfaces/product.interface';
 import { MasterService } from 'src/app/core/services/master.service';
 import { OfferService } from 'src/app/core/services/offer.service';
@@ -33,7 +30,6 @@ export class AddOfferComponent {
   submitted = false;
 
 
-  public Default = chatMessagesData;
   selectedAccount = 'This is a placeholder';
 
   products: Product[] = []
@@ -85,7 +81,6 @@ export class AddOfferComponent {
       next: (response) => {
         this.products = response
         this.productService.localProducts = response
-        console.log("products-->", this.productId)
 
       },
       error: (error) => { console.error('Error al obtener datos:', error); }

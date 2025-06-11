@@ -1,0 +1,24 @@
+
+<ul class="list-group">
+    @for (item of data; track $index) {
+    <li class="list-group-item">
+        <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+                <div class="d-flex">
+                    
+                    <div class="flex-shrink-0 ms-2">
+                        <h6 class="fs-14 mb-0"> {{item.name}}</h6>
+
+                        <small class="text-muted">Fecha creación: {{item.datecreate | date:'dd/MM/yyyy'}}</small>
+
+                    </div>
+                </div>
+            </div>
+            <div class="flex-shrink-0">
+                <button class="text-danger btn" (click)="deleteItem(item)">Eliminar</button>
+            </div>
+        </div>
+    </li>
+    }
+   
+</ul>

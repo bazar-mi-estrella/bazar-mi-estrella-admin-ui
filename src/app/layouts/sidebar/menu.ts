@@ -99,5 +99,22 @@ export const MENU: MenuItem[] = [
     ]
   },
 
+    {
+    id: 134,
+    label: 'MENUITEMS.SETTINGS.TEXT',
+    icon: ' ri-settings-3-line',
+    isCollapsed: true,
+    subItems: [
+      {
+        id: 86,
+        label: 'MENUITEMS.SETTINGS.LIST.TYPEMARCMODEL',
+        link: '/settings/type-marc-model',
+        parentId: 134
+      },
+   
+
+    ]
+  },
+
 
 ];

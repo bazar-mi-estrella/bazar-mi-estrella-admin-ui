@@ -21,10 +21,8 @@ const routes: Routes = [
   {
     path: 'invoices', loadChildren: () => import('./invoices/invoices.module').then(m => m.InvoicesModule)
   },
-  
-
   {
-    path: 'marletplace', loadChildren: () => import('./nft-marketplace/nft-marketplace.module').then(m => m.NftMarketplaceModule)
+    path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)
   },
 ];
 

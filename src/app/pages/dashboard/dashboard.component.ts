@@ -4,7 +4,6 @@ import { ToastService } from './toast-service';
 import { circle, latLng, tileLayer } from 'leaflet';
 
 import { ChartType } from './dashboard.model';
-import { BestSelling, Recentelling } from 'src/app/core/data';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { DashboardUtil } from 'src/app/core/utils/dashboard.util';
 import { DashboardStat } from 'src/app/core/interfaces/dashboard-stat.interface';
@@ -319,7 +318,7 @@ export class DashboardComponent implements OnInit {
   * Fetches the data
   */
   private fetchData() {
-    this.Recentelling = Recentelling;
+    this.Recentelling = [];
   }
 
   /**
