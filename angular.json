@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cix-tech-mart-admin": {
+    "bazar-mi-estrella-admin-ui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/cix-tech-mart-admin",
+            "outputPath": "dist/bazar-mi-estrella-admin-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -138,10 +138,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "cix-tech-mart-admin:build:production"
+              "buildTarget": "bazar-mi-estrella-admin-ui:build:production"
             },
             "development": {
-              "buildTarget": "cix-tech-mart-admin:build:development"
+              "buildTarget": "bazar-mi-estrella-admin-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -149,7 +149,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "cix-tech-mart-admin:build"
+            "buildTarget": "bazar-mi-estrella-admin-ui:build"
           }
         },
         "test": {
